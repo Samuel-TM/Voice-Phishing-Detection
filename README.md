@@ -73,4 +73,10 @@ Audio is converted into **MFCC features**, processed by 1D CNN layers to extract
 
 ## References
 - **Data**: Financial Supervisory Service (Korea), AI Hub  
-- **Related Code**: [so-vits-svc-fork](https://github.com/voicepaw/so-vits-svc-fork)  
+- **Related Code**: [so-vits-svc-fork](https://github.com/voicepaw/so-vits-svc-fork)
+- 
+
+## Specifications
+- **GPU**: RTX 3090 (24GB)  
+- **System**: Windows 11  
+- **PyTorch**: 1.10.1  
