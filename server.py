@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import sys
+import json
 import logging
 import warnings
 from pathlib import Path
@@ -19,7 +20,7 @@ os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 import torch
 import numpy as np  # NumPy 类型检查用
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, Response, jsonify, request, render_template, stream_with_context
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
@@ -41,20 +42,20 @@ try:
     from .deepvoice_detection.predict_deepvoice import deepvoice_predict
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
     from .speaker_analysis.whisper_stt import transcribe_segment
-    from .streaming_analysis.window_pipeline import analyze_audio_stream
+    from .streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
 except Exception:
     try:
         from ML.KoBERTModel.ensemble_utils import ensemble_inference
         from ML.deepvoice_detection.predict_deepvoice import deepvoice_predict
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from ML.speaker_analysis.whisper_stt import transcribe_segment
-        from ML.streaming_analysis.window_pipeline import analyze_audio_stream
+        from ML.streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
     except Exception:
         from KoBERTModel.ensemble_utils import ensemble_inference
         from deepvoice_detection.predict_deepvoice import deepvoice_predict
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from speaker_analysis.whisper_stt import transcribe_segment
-        from streaming_analysis.window_pipeline import analyze_audio_stream
+        from streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
 
 # -----------------------------------------------------------------------------
 # Flask APP
@@ -182,7 +183,7 @@ def predict_text_route():
 @app.route("/api/stream_audio_analysis", methods=["POST"])
 def api_stream_audio_analysis():
     """
-    上传录音后按滑动窗口模拟实时分析，返回风险时间线。
+    上传录音后按滑动窗口模拟实时分析，以 NDJSON 逐窗口返回风险点。
     第一版不做实时说话人分离，符合 simulated streaming 原型范围。
     """
     if "audio_file" not in request.files:
@@ -196,30 +197,54 @@ def api_stream_audio_analysis():
     audio_path = (UPLOAD_DIR / f"stream_{filename}").resolve()
     audio_file.save(audio_path.as_posix())
 
-    try:
-        deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
-        result = analyze_audio_stream(
-            audio_path=audio_path.as_posix(),
-            deepvoice_model_path=DEEPVOICE_MODEL_PATH.as_posix() if deepvoice_ok else None,
-            deepvoice_config_path=DEEPVOICE_CONFIG_PATH.as_posix() if deepvoice_ok else None,
-            text_inference=ensemble_inference,
-            deepvoice_inference=deepvoice_predict,
-            transcribe_segment=transcribe_segment,
-            window_seconds=request.form.get("window_seconds", 10),
-            step_seconds=request.form.get("step_seconds", 5),
-        )
-        if not deepvoice_ok:
-            result["warning"] = "Voice model or config is missing. Voice scores are set to zero."
-        return jsonify(result), 200
-    except Exception:
-        app.logger.error("滑动窗口音频分析失败", exc_info=True)
-        return jsonify({"error": "A server error occurred during streaming audio analysis."}), 500
-    finally:
+    deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
+    window_seconds = request.form.get("window_seconds", 10)
+    step_seconds = request.form.get("step_seconds", 5)
+
+    def encode_event(payload: Dict[str, Any]) -> str:
+        return json.dumps(payload, ensure_ascii=False) + "\n"
+
+    @stream_with_context
+    def generate_events():
         try:
-            if audio_path.exists():
-                audio_path.unlink(missing_ok=True)
-        except Exception as e_remove:
-            app.logger.error(f"Error cleaning up audio file {audio_path}: {e_remove}")
+            if not deepvoice_ok:
+                yield encode_event({
+                    "event": "warning",
+                    "warning": "Voice model or config is missing. Voice scores are set to zero.",
+                })
+
+            for event in iter_audio_stream_analysis(
+                audio_path=audio_path.as_posix(),
+                deepvoice_model_path=DEEPVOICE_MODEL_PATH.as_posix() if deepvoice_ok else None,
+                deepvoice_config_path=DEEPVOICE_CONFIG_PATH.as_posix() if deepvoice_ok else None,
+                text_inference=ensemble_inference,
+                deepvoice_inference=deepvoice_predict,
+                transcribe_segment=transcribe_segment,
+                window_seconds=window_seconds,
+                step_seconds=step_seconds,
+            ):
+                yield encode_event(event)
+        except Exception:
+            app.logger.error("滑动窗口音频分析失败", exc_info=True)
+            yield encode_event({
+                "event": "error",
+                "error": "A server error occurred during streaming audio analysis.",
+            })
+        finally:
+            try:
+                if audio_path.exists():
+                    audio_path.unlink(missing_ok=True)
+            except Exception as e_remove:
+                app.logger.error(f"Error cleaning up audio file {audio_path}: {e_remove}")
+
+    return Response(
+        generate_events(),
+        mimetype="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @app.route("/api/audio_result", methods=["POST"])

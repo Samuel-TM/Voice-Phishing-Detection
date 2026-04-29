@@ -4,11 +4,13 @@ from __future__ import annotations
 import logging
 import tempfile
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, Iterator, List, Optional
 
 from pydub import AudioSegment
 
 logger = logging.getLogger(__name__)
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+STREAM_WINDOW_CACHE_DIR = PROJECT_DIR / ".cache" / "stream_windows"
 
 
 def risk_level(score: float) -> str:
@@ -60,8 +62,64 @@ def analyze_audio_stream(
     """
     使用滑动窗口模拟实时通话流分析。
 
-    后端一次性返回完整 timeline，前端按时间顺序播放，从而形成实时风险演变效果。
+    兼容旧调用：内部消费流式窗口结果并一次性返回完整 timeline。
+    需要实时展示时应使用 iter_audio_stream_analysis。
     """
+    timeline: List[Dict[str, Any]] = []
+    full_transcript = ""
+    metadata: Dict[str, Any] = {}
+
+    for event in iter_audio_stream_analysis(
+        audio_path=audio_path,
+        deepvoice_model_path=deepvoice_model_path,
+        deepvoice_config_path=deepvoice_config_path,
+        text_inference=text_inference,
+        deepvoice_inference=deepvoice_inference,
+        transcribe_segment=transcribe_segment,
+        window_seconds=window_seconds,
+        step_seconds=step_seconds,
+        text_weight=text_weight,
+        voice_weight=voice_weight,
+        smoothing_previous_weight=smoothing_previous_weight,
+    ):
+        if event.get("event") == "point":
+            timeline.append(event["point"])
+            full_transcript = event.get("full_transcript", full_transcript)
+        elif event.get("event") == "done":
+            metadata = event
+
+    return {
+        "timeline": timeline,
+        "full_transcript": full_transcript,
+        "final_score": metadata.get("final_score", 0.0),
+        "max_score": metadata.get("max_score", 0.0),
+        "final_label": metadata.get("final_label", final_label_from_score(0.0)),
+        "highest_risk_window": metadata.get("highest_risk_window"),
+        "window_seconds": metadata.get("window_seconds", window_seconds),
+        "step_seconds": metadata.get("step_seconds", step_seconds),
+        "weights": metadata.get("weights", {
+            "text": text_weight,
+            "voice": voice_weight,
+            "smoothing_previous": smoothing_previous_weight,
+            "smoothing_current": 1.0 - smoothing_previous_weight,
+        }),
+    }
+
+
+def iter_audio_stream_analysis(
+    audio_path: str,
+    deepvoice_model_path: Optional[str],
+    deepvoice_config_path: Optional[str],
+    text_inference: Callable[[str], Dict[str, Any]],
+    deepvoice_inference: Callable[[str, str, str], float],
+    transcribe_segment: Callable[[str], str],
+    window_seconds: Any = 10,
+    step_seconds: Any = 5,
+    text_weight: float = 0.8,
+    voice_weight: float = 0.2,
+    smoothing_previous_weight: float = 0.65,
+) -> Iterator[Dict[str, Any]]:
+    """逐窗口分析音频，并在每个窗口完成后立即 yield 风险点。"""
     source_path = Path(audio_path)
     if not source_path.exists():
         raise FileNotFoundError(f"Audio file not found: {audio_path}")
@@ -73,7 +131,8 @@ def analyze_audio_stream(
     audio = AudioSegment.from_file(source_path.as_posix())
     duration_ms = len(audio)
     if duration_ms <= 0:
-        return {
+        yield {
+            "event": "done",
             "timeline": [],
             "full_transcript": "",
             "final_score": 0.0,
@@ -83,6 +142,7 @@ def analyze_audio_stream(
             "window_seconds": window_seconds,
             "step_seconds": step_seconds,
         }
+        return
 
     window_ms = int(window_seconds * 1000)
     step_ms = int(step_seconds * 1000)
@@ -96,7 +156,8 @@ def analyze_audio_stream(
     transcript_parts: List[str] = []
     previous_smoothed: Optional[float] = None
 
-    with tempfile.TemporaryDirectory(prefix="stream_windows_") as temp_dir:
+    STREAM_WINDOW_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="stream_windows_", dir=STREAM_WINDOW_CACHE_DIR.as_posix()) as temp_dir:
         temp_path = Path(temp_dir)
 
         for index, start_ms in enumerate(starts):
@@ -183,11 +244,17 @@ def analyze_audio_stream(
                 point["text_model_error"] = text_result["error"]
 
             timeline.append(point)
+            yield {
+                "event": "point",
+                "point": point,
+                "full_transcript": " ".join(transcript_parts).strip(),
+            }
 
     max_point = max(timeline, key=lambda item: item["smoothed_score"], default=None)
     final_score = timeline[-1]["smoothed_score"] if timeline else 0.0
 
-    return {
+    yield {
+        "event": "done",
         "timeline": timeline,
         "full_transcript": " ".join(transcript_parts).strip(),
         "final_score": round(final_score, 2),

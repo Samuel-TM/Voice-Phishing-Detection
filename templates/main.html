@@ -419,6 +419,10 @@
         }
 
         function resetDisplay() {
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
             latestTimeline = [];
             document.getElementById("finalDecision").textContent = "-";
             document.getElementById("finalRisk").textContent = "0";
@@ -504,22 +508,90 @@
                     method: "POST",
                     body: formData
                 });
-                const data = await response.json();
-                if (!response.ok || data.error) {
-                    throw new Error(data.error || "Audio stream analysis failed.");
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || "Audio stream analysis failed.");
                 }
 
-                latestTimeline = data.timeline || [];
-                renderSummary(data);
-                renderTimeline(latestTimeline);
-                drawChart(latestTimeline);
-                document.getElementById("replayButton").disabled = latestTimeline.length === 0;
-                setStatus("Playing", "#2563eb");
-                playTimeline();
+                setStatus("Analyzing", "#2563eb");
+                await readAudioStream(response);
             } catch (error) {
                 setStatus("Error", "#dc2626");
                 document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
             }
+        }
+
+        async function readAudioStream(response) {
+            if (!response.body) {
+                throw new Error("This browser does not support streaming responses.");
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+            let completed = false;
+
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split("\n");
+                buffer = lines.pop() || "";
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (trimmed) {
+                        completed = handleStreamEvent(JSON.parse(trimmed)) || completed;
+                    }
+                }
+            }
+
+            buffer += decoder.decode();
+            if (buffer.trim()) {
+                completed = handleStreamEvent(JSON.parse(buffer.trim())) || completed;
+            }
+
+            if (!completed) {
+                setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+                document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+            }
+        }
+
+        function handleStreamEvent(event) {
+            if (event.event === "warning") {
+                setStatus("Analyzing", "#d97706");
+                return false;
+            }
+            if (event.event === "error") {
+                throw new Error(event.error || "Audio stream analysis failed.");
+            }
+            if (event.event === "point" && event.point) {
+                addTimelinePoint(event.point);
+                return false;
+            }
+            if (event.event === "done") {
+                renderSummary(event);
+                document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+                setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+                return true;
+            }
+            return false;
+        }
+
+        function addTimelinePoint(point) {
+            latestTimeline.push(point);
+            appendTimelineRow(point);
+            showPoint(point);
+            drawChart(latestTimeline, latestTimeline.length - 1);
+            markRow(point.index);
+
+            const peak = latestTimeline.reduce((max, item) => (
+                Number(item.smoothed_score || 0) > Number(max.smoothed_score || 0) ? item : max
+            ), latestTimeline[0]);
+            document.getElementById("finalDecision").textContent = "Analyzing";
+            document.getElementById("finalRisk").textContent = formatScore(point.smoothed_score);
+            document.getElementById("peakRisk").textContent = formatScore(peak.smoothed_score);
         }
 
         function renderSummary(data) {
@@ -540,6 +612,20 @@
                     <td>${formatScore(point.smoothed_score)}</td>
                 </tr>
             `).join("");
+        }
+
+        function appendTimelineRow(point) {
+            const body = document.getElementById("timelineBody");
+            body.insertAdjacentHTML("beforeend", `
+                <tr id="row-${point.index}">
+                    <td>${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
+                    <td>${escapeHtml(point.risk_level)}</td>
+                    <td>${formatScore(point.text_score)}</td>
+                    <td>${formatScore(point.voice_score)}</td>
+                    <td>${formatScore(point.fused_score)}</td>
+                    <td>${formatScore(point.smoothed_score)}</td>
+                </tr>
+            `);
         }
 
         function playTimeline() {
