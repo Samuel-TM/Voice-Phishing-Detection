@@ -1,9 +1,9 @@
-# 파일명: ML/KoBERTModel/ensemble_utils.py
+# 文件名: KoBERTModel/ensemble_utils.py
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 
-import os
 import logging
+import os
 from pathlib import Path
 from typing import Tuple, Dict, Any, List, Optional
 
@@ -17,17 +17,22 @@ logger = logging.getLogger(__name__)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # ---------------------------------------------------------------------
-# 경로 고정: 이 파일 기준으로 모델 가중치 위치를 잡아 실행 위치(CWD) 영향 제거
+# 路径固定：以当前文件为基准定位权重，避免受启动目录影响
 # ---------------------------------------------------------------------
-THIS_DIR = Path(__file__).resolve().parent               # .../ML/KoBERTModel
-MODEL_PATH = THIS_DIR / "model" / "train.pt"             # .../ML/KoBERTModel/model/train.pt
+THIS_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = THIS_DIR.parent
+os.environ.setdefault("HF_HOME", (PROJECT_DIR / ".cache" / "huggingface").as_posix())
+os.environ.setdefault("TRANSFORMERS_CACHE", (PROJECT_DIR / ".cache" / "huggingface" / "hub").as_posix())
+MODEL_PATH = THIS_DIR / "model" / "train.pt"
 MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
+CHINESE_BERT_MODEL_NAME = "bert-base-chinese"
+MAX_LEN = 256
 
 # ---------------------------------------------------------------------
-# (train.py와 호환) 분류기 정의
+# 与中文 BERT 训练脚本兼容的分类器定义
 # ---------------------------------------------------------------------
-class KoBERTClassifier(nn.Module):
-    def __init__(self, bert_model, hidden_size: int = 768, num_classes: int = 2, dr_rate: float = 0.4):
+class ChineseBERTClassifier(nn.Module):
+    def __init__(self, bert_model, hidden_size: int = 768, num_classes: int = 2, dr_rate: float = 0.3):
         super().__init__()
         self.bert = bert_model
         self.dropout = nn.Dropout(p=dr_rate)
@@ -41,10 +46,9 @@ class KoBERTClassifier(nn.Module):
             output_attentions=True,
             return_dict=True
         )
-        # 일부 모델은 pooler_output이 없을 수 있으므로 방어
+        # 部分模型可能没有 pooler_output，这里回退到 CLS 向量
         pooled_output = getattr(outputs, "pooler_output", None)
         if pooled_output is None:
-            # [CLS] 토큰 임베딩 사용
             last_hidden = outputs.last_hidden_state  # [B, T, H]
             pooled_output = last_hidden[:, 0, :]     # [B, H]
         attentions = outputs.attentions
@@ -53,8 +57,8 @@ class KoBERTClassifier(nn.Module):
         logits = self.classifier(x)
         return logits, attentions
 
-class KoBERTDataset(Dataset):
-    def __init__(self, texts: List[str], labels: Optional[List[int]], tokenizer, max_len: int = 128):
+class ChineseBERTDataset(Dataset):
+    def __init__(self, texts: List[str], labels: Optional[List[int]], tokenizer, max_len: int = MAX_LEN):
         self.texts = [str(t) for t in texts]
         self.labels = labels if labels is not None else [0] * len(self.texts)
         self.tokenizer = tokenizer
@@ -80,7 +84,7 @@ class KoBERTDataset(Dataset):
             "attention_mask": encoding["attention_mask"].squeeze(0),
             "labels": torch.tensor(label, dtype=torch.long),
         }
-        # kobert 토크나이저는 token_type_ids가 있을 수도/없을 수도 있음 → 방어
+        # BERT 系列通常有 token_type_ids；保留防御逻辑便于替换模型
         if "token_type_ids" in encoding:
             result["token_type_ids"] = encoding["token_type_ids"].squeeze(0)
         else:
@@ -88,54 +92,78 @@ class KoBERTDataset(Dataset):
         return result
 
 # ---------------------------------------------------------------------
-# 전역 로딩(토크나이저/베이스모델/학습된 분류기)
+# 全局加载：中文 BERT tokenizer / base model / 已训练分类器
 # ---------------------------------------------------------------------
-kobert_tokenizer_global: Optional[AutoTokenizer] = None
-kobert_trained_classifier_global: Optional[KoBERTClassifier] = None
-kobert_model_load_error_global: Optional[str] = None
+bert_tokenizer_global: Optional[AutoTokenizer] = None
+bert_trained_classifier_global: Optional[ChineseBERTClassifier] = None
+bert_model_load_error_global: Optional[str] = None
 
-try:
-    logger.info("[ensemble_utils] Loading KoBERT tokenizer...")
-    kobert_tokenizer_global = AutoTokenizer.from_pretrained(
-        "monologg/kobert", trust_remote_code=True
-    )
 
-    logger.info("[ensemble_utils] Loading KoBERT base (output_attentions=True)...")
-    bert_base_for_classifier = AutoModel.from_pretrained(
-        "monologg/kobert", trust_remote_code=True, output_attentions=True
-    )
+def load_text_model_once() -> bool:
+    """懒加载中文 BERT 模型，避免服务导入时因依赖或权重问题直接崩溃。"""
+    global bert_tokenizer_global, bert_trained_classifier_global, bert_model_load_error_global
 
-    if MODEL_PATH.exists():
-        logger.info(f"[ensemble_utils] Loading trained classifier: {MODEL_PATH}")
-        model = KoBERTClassifier(bert_base_for_classifier).to(device)
+    if bert_tokenizer_global is not None and bert_trained_classifier_global is not None:
+        return True
+    if bert_model_load_error_global:
+        return False
+
+    try:
+        logger.info("[ensemble_utils] Loading Chinese BERT tokenizer...")
+        try:
+            bert_tokenizer_global = AutoTokenizer.from_pretrained(CHINESE_BERT_MODEL_NAME, local_files_only=True)
+        except Exception:
+            logger.warning("Local Chinese BERT tokenizer cache is missing; falling back to online download.")
+            bert_tokenizer_global = AutoTokenizer.from_pretrained(CHINESE_BERT_MODEL_NAME)
+
+        logger.info("[ensemble_utils] Loading Chinese BERT base...")
+        try:
+            bert_base_for_classifier = AutoModel.from_pretrained(
+                CHINESE_BERT_MODEL_NAME, output_attentions=True, local_files_only=True
+            )
+        except Exception:
+            logger.warning("Local Chinese BERT base cache is missing; falling back to online download.")
+            bert_base_for_classifier = AutoModel.from_pretrained(
+                CHINESE_BERT_MODEL_NAME, output_attentions=True
+            )
+
+        if not MODEL_PATH.exists():
+            bert_model_load_error_global = f"Chinese BERT classifier file not found at: {MODEL_PATH}"
+            logger.critical(bert_model_load_error_global)
+            return False
+
+        logger.info(f"[ensemble_utils] Loading trained Chinese BERT classifier: {MODEL_PATH}")
+        model = ChineseBERTClassifier(bert_base_for_classifier).to(device)
         state = torch.load(MODEL_PATH.as_posix(), map_location=device)
-        model.load_state_dict(state)
+        missing_keys, unexpected_keys = model.load_state_dict(state, strict=False)
+        if missing_keys:
+            logger.warning(f"Chinese BERT state_dict missing keys: {missing_keys}")
+        if unexpected_keys:
+            logger.warning(f"Chinese BERT state_dict unexpected keys: {unexpected_keys}")
         model.eval()
-        kobert_trained_classifier_global = model
-        logger.info("✅ [ensemble_utils] KoBERT trained classifier loaded successfully.")
-    else:
-        kobert_model_load_error_global = f"KoBERT trained classifier file not found at: {MODEL_PATH}"
-        logger.critical(kobert_model_load_error_global)
-
-except Exception as e_load:
-    kobert_model_load_error_global = f"Error loading KoBERT model: {e_load}"
-    logger.critical(kobert_model_load_error_global, exc_info=True)
+        bert_trained_classifier_global = model
+        logger.info("[ensemble_utils] Chinese BERT classifier loaded successfully.")
+        return True
+    except Exception as e_load:
+        bert_model_load_error_global = f"Error loading Chinese BERT model: {e_load}"
+        logger.critical(bert_model_load_error_global, exc_info=True)
+        return False
 
 # ---------------------------------------------------------------------
-# 내부 예측 함수
+# 内部预测函数
 # ---------------------------------------------------------------------
 @torch.no_grad()
-def kobert_predict_internal(text: str) -> Tuple[float, Any]:
+def bert_predict_internal(text: str) -> Tuple[float, Any]:
     """
     Returns:
         phishing_probability (float in [0,1]),
         attentions (Any or None)
     """
-    if kobert_model_load_error_global or kobert_tokenizer_global is None or kobert_trained_classifier_global is None:
-        logger.error(f"KoBERT model not loaded. Error: {kobert_model_load_error_global}")
+    if not load_text_model_once():
+        logger.error(f"Chinese BERT model not loaded. Error: {bert_model_load_error_global}")
         return 0.0, None
 
-    dataset = KoBERTDataset([text], [0], kobert_tokenizer_global, max_len=128)
+    dataset = ChineseBERTDataset([text], [0], bert_tokenizer_global, max_len=MAX_LEN)
     loader = DataLoader(dataset, batch_size=1, shuffle=False)
 
     batch = next(iter(loader))
@@ -143,42 +171,41 @@ def kobert_predict_internal(text: str) -> Tuple[float, Any]:
     attention_mask = batch["attention_mask"].to(device)
     token_type_ids = batch["token_type_ids"].to(device)
 
-    logits, attentions = kobert_trained_classifier_global(input_ids, attention_mask, token_type_ids)
+    logits, attentions = bert_trained_classifier_global(input_ids, attention_mask, token_type_ids)
     probs = F.softmax(logits, dim=-1)
     phishing_prob = float(probs[0, 1].detach().cpu().item())  # class 1 = phishing
     return phishing_prob, attentions
 
 # ---------------------------------------------------------------------
-# 서버가 기대하는 키로 맞춘 공개 함수
+# 服务端使用的公开函数
 # ---------------------------------------------------------------------
 def _label_from_score(score_0_100: float) -> str:
-    """UI 규칙에 맞춘 간단 라벨링."""
+    """按照统一风险等级生成中文标签，供旧接口兼容使用。"""
     if score_0_100 >= 90:
-        return "확정"
+        return "极高危"
     if score_0_100 >= 70:
-        return "위험"
+        return "高危"
     if score_0_100 > 50:
-        return "의심"
-    return "아님"
+        return "可疑"
+    return "正常"
 
 def ensemble_inference(text: str) -> Dict[str, Any]:
     """
-    server.py가 기대하는 딕셔너리 형식으로 반환:
+    返回 server.py 和滑动窗口管线需要的字典格式：
     {
         "text": str,
         "llm_score": float(0~100),
-        "final_label": str,                 # "확정"/"위험"/"의심"/"아님"
-        "phishing_detected": bool,          # (llm_score > 50 기준)
-        "attentions": Any (옵션)
-        # 필요시 추가 필드 가능
+        "final_label": str,
+        "phishing_detected": bool,
+        "attentions": Any
     }
     """
-    phishing_prob, attentions = kobert_predict_internal(text)
+    phishing_prob, attentions = bert_predict_internal(text)
     llm_score = round(phishing_prob * 100.0, 2)
     final_label = _label_from_score(llm_score)
     phishing_detected = llm_score > 50.0
 
-    # 모델 미로딩 등의 근본 오류를 클라이언트에서도 파악할 수 있게 error 필드 추가(선택)
+    # 模型未加载等根因错误透传给调用方，便于前端展示和排查
     payload: Dict[str, Any] = {
         "text": text,
         "llm_score": llm_score,
@@ -186,6 +213,6 @@ def ensemble_inference(text: str) -> Dict[str, Any]:
         "phishing_detected": phishing_detected,
         "attentions": attentions,
     }
-    if kobert_model_load_error_global:
-        payload["error"] = kobert_model_load_error_global
+    if bert_model_load_error_global:
+        payload["error"] = bert_model_load_error_global
     return payload

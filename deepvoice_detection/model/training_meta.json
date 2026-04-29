@@ -1,0 +1,10 @@
+{
+  "dataset": "ASVspoof 2019 LA",
+  "train_samples": 25380,
+  "val_samples": 24844,
+  "best_val_f1": 0.9044336855159913,
+  "best_epoch": 11,
+  "total_epochs_run": 13,
+  "model_architecture": "AudioCNNLSTM (CNN-BiLSTM)",
+  "feature": "MFCC-13"
+}

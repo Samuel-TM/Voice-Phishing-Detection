@@ -1,4 +1,4 @@
-# 수치 연산 및 데이터 처리
+# 数值计算与数据处理
 numpy==1.24.3
 pandas==2.0.3
 scikit-learn==1.3.2
@@ -6,32 +6,36 @@ scipy==1.10.1
 tqdm==4.67.1
 matplotlib==3.7.2
 
-# 오디오 처리
+# 音频处理
 librosa==0.11.0
 SpeechRecognition==3.10.4
 soundfile==0.13.1
 pydub==0.25.1
+openai-whisper==20230124
 
-# KoBERT 기반 텍스트 분류 (HuggingFace 구조)
+# 中文 BERT 文本分类
+transformers==4.28.1
+sentencepiece==0.2.0
 packaging==25.0
 regex==2024.11.6
 sacremoses==0.1.1
 PyYAML==6.0.2
 
-# Flask API 및 CORS
+# Flask API、CORS 与生产启动
 Flask==3.0.3
 flask-cors==5.0.0
 werkzeug==3.0.6
+gunicorn==23.0.0
 
-# 🇰🇷 형태소 분석기 (단어 강조 기능용)
+# 兼容旧版词法分析功能
 konlpy==0.6.0
 jpype1==1.5.2
 
-# 화자 분리 및 STT 관련
+# 说话人分离与 STT 相关
 resemblyzer==0.1.4
 webrtcvad==2.0.10
 
-# 기타
+# 其他
 requests==2.32.3
 markupsafe==2.1.5
 jinja2==3.1.6

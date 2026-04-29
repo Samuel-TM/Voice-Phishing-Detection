@@ -1,128 +1,701 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>보이스피싱 탐지</title>
-</head>
-<body>
-    <h1>보이스피싱 탐지 시스템</h1>
-
-    <p>입력 방식을 선택하세요:</p>
-    <input type="radio" id="textOption" name="inputType" value="text" checked>
-    <label for="textOption">텍스트 입력</label>
-    <input type="radio" id="audioOption" name="inputType" value="audio">
-    <label for="audioOption">오디오 파일 업로드</label>
-
-    <div id="textInputSection" style="margin-top: 20px;">
-        <textarea id="inputText" rows="4" cols="50" placeholder="보이스피싱 문장을 입력하세요"></textarea>
-    </div>
-
-    <div id="audioInputSection" style="margin-top: 20px; display: none;">
-        <input type="file" id="audioFile" accept="audio/*">
-    </div>
-
-    <br>
-    <button onclick="predictPhishing()">탐지하기</button>
-
-    <div id="result" style="margin-top: 30px;"></div>
-
-    <script>
-        // 입력 방식에 따라 UI 전환
-        document.getElementsByName('inputType').forEach(radio => {
-            radio.addEventListener('change', function () {
-                const textInput = document.getElementById('textInputSection');
-                const audioInput = document.getElementById('audioInputSection');
-
-                if (this.value === 'text') {
-                    textInput.style.display = 'block';
-                    audioInput.style.display = 'none';
-                } else {
-                    textInput.style.display = 'none';
-                    audioInput.style.display = 'block';
-                }
-            });
-        });
-
-        function predictPhishing() {
-            const inputType = document.querySelector('input[name="inputType"]:checked').value;
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "예측 중입니다...";
-
-            if (inputType === 'text') {
-                const text = document.getElementById("inputText").value;
-                if (!text.trim()) {
-                    alert("텍스트를 입력해주세요.");
-                    resultDiv.innerHTML = "";
-                    return;
-                }
-
-                fetch("/predict", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: text })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    displayResult(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    resultDiv.innerHTML = "오류가 발생했습니다. 다시 시도해주세요.";
-                });
-
-            } else if (inputType === 'audio') {
-                const fileInput = document.getElementById("audioFile");
-                if (fileInput.files.length === 0) {
-                    alert("오디오 파일을 선택해주세요.");
-                    resultDiv.innerHTML = "";
-                    return;
-                }
-
-                let formData = new FormData();
-                formData.append("audio_file", fileInput.files[0]);
-
-                fetch("/predict_audio", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    displayResult(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    resultDiv.innerHTML = "오류가 발생했습니다. 다시 시도해주세요.";
-                });
-            }
+    <title>Dynamic Voice Fraud Risk Tracking</title>
+    <style>
+        :root {
+            --bg: #f5f7fb;
+            --panel: #ffffff;
+            --ink: #152033;
+            --muted: #64748b;
+            --line: #d7deea;
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --warn: #d97706;
+            --ok: #15803d;
         }
 
-        function displayResult(data) {
-            const resultDiv = document.getElementById("result");
+        * {
+            box-sizing: border-box;
+        }
 
-            if (!data || data.error) {
-                resultDiv.innerHTML = `<h3 style="color: orange;">오류: ${data.error || "응답이 올바르지 않습니다."}</h3>`;
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 0;
+        }
+
+        main {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 28px 0 42px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: flex-end;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+            line-height: 1.15;
+        }
+
+        p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .status-pill {
+            min-width: 150px;
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--panel);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .panel h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        textarea,
+        input[type="file"],
+        input[type="number"] {
+            width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--ink);
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 132px;
+            padding: 10px;
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        input[type="number"] {
+            padding: 9px 10px;
+        }
+
+        .number-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tabs button,
+        .primary-button,
+        .secondary-button {
+            min-height: 40px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            background: #fff;
+            color: var(--ink);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .tabs button.active,
+        .primary-button {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .primary-button,
+        .secondary-button {
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .secondary-button {
+            background: #fff;
+            color: var(--primary);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .metric {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            background: #fbfdff;
+        }
+
+        .metric span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .metric strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        canvas {
+            width: 100%;
+            height: 280px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .current-window {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .score-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #edf1f7;
+            padding-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .transcript {
+            min-height: 120px;
+            max-height: 220px;
+            overflow: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 12px;
+            background: #fff;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .timeline {
+            margin-top: 16px;
+            max-height: 260px;
+            overflow: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th,
+        td {
+            padding: 9px 10px;
+            border-bottom: 1px solid #edf1f7;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            color: #334155;
+        }
+
+        tr.active-row {
+            background: #eff6ff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        @media (max-width: 880px) {
+            header,
+            .layout,
+            .current-window {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .metric-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <div>
+                <h1>Dynamic Voice Fraud Risk Tracking</h1>
+                <p>Sliding-window multimodal analysis for simulated in-event telecom fraud detection.</p>
+            </div>
+            <div id="statusPill" class="status-pill">Idle</div>
+        </header>
+
+        <section class="layout">
+            <aside class="panel">
+                <h2>Input</h2>
+                <div class="tabs" role="tablist">
+                    <button id="audioTab" class="active" type="button">Audio Stream</button>
+                    <button id="textTab" type="button">Text Check</button>
+                </div>
+
+                <div id="audioSection">
+                    <div class="field">
+                        <label for="audioFile">Audio file</label>
+                        <input type="file" id="audioFile" accept="audio/*">
+                    </div>
+                    <div class="number-grid">
+                        <div class="field">
+                            <label for="windowSeconds">Window (sec)</label>
+                            <input type="number" id="windowSeconds" min="2" max="60" value="10">
+                        </div>
+                        <div class="field">
+                            <label for="stepSeconds">Step (sec)</label>
+                            <input type="number" id="stepSeconds" min="1" max="60" value="5">
+                        </div>
+                    </div>
+                    <button class="primary-button" type="button" onclick="analyzeAudioStream()">Analyze Stream</button>
+                    <button class="secondary-button" type="button" onclick="playTimeline()" id="replayButton" disabled>Replay Timeline</button>
+                </div>
+
+                <div id="textSection" class="hidden">
+                    <div class="field">
+                        <label for="inputText">Chinese dialogue or transcript</label>
+                        <textarea id="inputText" placeholder="请输入中文通话文本，例如：请把验证码告诉我，我帮你处理账户异常。"></textarea>
+                    </div>
+                    <button class="primary-button" type="button" onclick="analyzeText()">Analyze Text</button>
+                </div>
+            </aside>
+
+            <section class="panel">
+                <h2>Risk Evolution</h2>
+                <div class="metric-grid">
+                    <div class="metric">
+                        <span>Final Decision</span>
+                        <strong id="finalDecision">-</strong>
+                    </div>
+                    <div class="metric">
+                        <span>Final Risk</span>
+                        <strong id="finalRisk">0</strong>
+                    </div>
+                    <div class="metric">
+                        <span>Peak Risk</span>
+                        <strong id="peakRisk">0</strong>
+                    </div>
+                    <div class="metric">
+                        <span>Current Level</span>
+                        <strong id="currentLevel">-</strong>
+                    </div>
+                </div>
+
+                <canvas id="riskCanvas" width="900" height="280"></canvas>
+
+                <div class="current-window">
+                    <div class="score-list">
+                        <div class="score-row"><span>Window</span><strong id="currentWindow">-</strong></div>
+                        <div class="score-row"><span>Text Risk</span><strong id="textScore">0</strong></div>
+                        <div class="score-row"><span>Voice Risk</span><strong id="voiceScore">0</strong></div>
+                        <div class="score-row"><span>Fused Risk</span><strong id="fusedScore">0</strong></div>
+                        <div class="score-row"><span>Smoothed Risk</span><strong id="smoothScore">0</strong></div>
+                    </div>
+                    <div>
+                        <label>Current Window Transcript</label>
+                        <div id="windowTranscript" class="transcript">No transcript yet.</div>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Level</th>
+                                <th>Text</th>
+                                <th>Voice</th>
+                                <th>Fused</th>
+                                <th>Smoothed</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timelineBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        let latestTimeline = [];
+        let playbackTimer = null;
+
+        const audioTab = document.getElementById("audioTab");
+        const textTab = document.getElementById("textTab");
+        const audioSection = document.getElementById("audioSection");
+        const textSection = document.getElementById("textSection");
+
+        // 输入模式切换，界面文本保持英文，模型输入内容保持中文
+        audioTab.addEventListener("click", () => switchMode("audio"));
+        textTab.addEventListener("click", () => switchMode("text"));
+
+        function switchMode(mode) {
+            const isAudio = mode === "audio";
+            audioTab.classList.toggle("active", isAudio);
+            textTab.classList.toggle("active", !isAudio);
+            audioSection.classList.toggle("hidden", !isAudio);
+            textSection.classList.toggle("hidden", isAudio);
+        }
+
+        function setStatus(text, color) {
+            const pill = document.getElementById("statusPill");
+            pill.textContent = text;
+            pill.style.color = color || "";
+        }
+
+        function resetDisplay() {
+            latestTimeline = [];
+            document.getElementById("finalDecision").textContent = "-";
+            document.getElementById("finalRisk").textContent = "0";
+            document.getElementById("peakRisk").textContent = "0";
+            document.getElementById("currentLevel").textContent = "-";
+            document.getElementById("currentWindow").textContent = "-";
+            document.getElementById("textScore").textContent = "0";
+            document.getElementById("voiceScore").textContent = "0";
+            document.getElementById("fusedScore").textContent = "0";
+            document.getElementById("smoothScore").textContent = "0";
+            document.getElementById("windowTranscript").textContent = "No transcript yet.";
+            document.getElementById("timelineBody").innerHTML = "";
+            document.getElementById("replayButton").disabled = true;
+            drawChart([]);
+        }
+
+        async function analyzeText() {
+            const text = document.getElementById("inputText").value.trim();
+            if (!text) {
+                alert("Please enter Chinese text.");
                 return;
             }
 
-            const labelColor = {
-                "아님": "green",
-                "의심": "orange",
-                "위험": "darkorange",
-                "확정": "red"
-            };
+            resetDisplay();
+            setStatus("Analyzing", "#2563eb");
 
-            const label = data.final_label || "알 수 없음";
-            const color = labelColor[label] || "black";
+            try {
+                const response = await fetch("/predict", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                });
+                const data = await response.json();
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || "Text analysis failed.");
+                }
 
-            resultDiv.innerHTML = `
-                <h3 style="color: ${color};">탐지 결과: ${label}</h3>
-                <p>텍스트(STT) 결과: <i>${data.text}</i></p>
-                <p>LLM 점수: <strong>${data.llm_score}</strong> / 100</p>
-                <p>딥페이크 점수: <strong>${data.voice_score}</strong> / 30 (${data.deepfake_score})</p>
-                <p>총점: <strong>${data.total_score}</strong> / 130</p>
-            `;
+                const score = Number(data.llm_score || 0);
+                const point = {
+                    index: 0,
+                    start_sec: 0,
+                    end_sec: 0,
+                    text,
+                    text_score: score,
+                    voice_score: 0,
+                    fused_score: score,
+                    smoothed_score: score,
+                    risk_level: levelFromScore(score)
+                };
+                latestTimeline = [point];
+                renderSummary({
+                    final_label: score >= 70 ? "Fraud Risk Detected" : "No High Risk Detected",
+                    final_score: score,
+                    max_score: score
+                });
+                renderTimeline(latestTimeline);
+                showPoint(point);
+                drawChart(latestTimeline, 0);
+                setStatus("Done", levelColor(point.risk_level));
+            } catch (error) {
+                setStatus("Error", "#dc2626");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+            }
         }
+
+        async function analyzeAudioStream() {
+            const fileInput = document.getElementById("audioFile");
+            if (fileInput.files.length === 0) {
+                alert("Please select an audio file.");
+                return;
+            }
+
+            resetDisplay();
+            setStatus("Uploading", "#2563eb");
+
+            const formData = new FormData();
+            formData.append("audio_file", fileInput.files[0]);
+            formData.append("window_seconds", document.getElementById("windowSeconds").value || "10");
+            formData.append("step_seconds", document.getElementById("stepSeconds").value || "5");
+
+            try {
+                const response = await fetch("/api/stream_audio_analysis", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || "Audio stream analysis failed.");
+                }
+
+                latestTimeline = data.timeline || [];
+                renderSummary(data);
+                renderTimeline(latestTimeline);
+                drawChart(latestTimeline);
+                document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+                setStatus("Playing", "#2563eb");
+                playTimeline();
+            } catch (error) {
+                setStatus("Error", "#dc2626");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+            }
+        }
+
+        function renderSummary(data) {
+            document.getElementById("finalDecision").textContent = data.final_label || "-";
+            document.getElementById("finalRisk").textContent = formatScore(data.final_score);
+            document.getElementById("peakRisk").textContent = formatScore(data.max_score);
+        }
+
+        function renderTimeline(timeline) {
+            const body = document.getElementById("timelineBody");
+            body.innerHTML = timeline.map((point) => `
+                <tr id="row-${point.index}">
+                    <td>${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
+                    <td>${escapeHtml(point.risk_level)}</td>
+                    <td>${formatScore(point.text_score)}</td>
+                    <td>${formatScore(point.voice_score)}</td>
+                    <td>${formatScore(point.fused_score)}</td>
+                    <td>${formatScore(point.smoothed_score)}</td>
+                </tr>
+            `).join("");
+        }
+
+        function playTimeline() {
+            if (!latestTimeline.length) {
+                return;
+            }
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+            }
+
+            let index = 0;
+            showPoint(latestTimeline[index]);
+            drawChart(latestTimeline, index);
+            markRow(latestTimeline[index].index);
+
+            playbackTimer = setInterval(() => {
+                index += 1;
+                if (index >= latestTimeline.length) {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                    setStatus("Done", levelColor(latestTimeline[latestTimeline.length - 1].risk_level));
+                    return;
+                }
+                showPoint(latestTimeline[index]);
+                drawChart(latestTimeline, index);
+                markRow(latestTimeline[index].index);
+            }, 900);
+        }
+
+        function showPoint(point) {
+            document.getElementById("currentWindow").textContent = `${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s`;
+            document.getElementById("textScore").textContent = formatScore(point.text_score);
+            document.getElementById("voiceScore").textContent = formatScore(point.voice_score);
+            document.getElementById("fusedScore").textContent = formatScore(point.fused_score);
+            document.getElementById("smoothScore").textContent = formatScore(point.smoothed_score);
+            document.getElementById("currentLevel").textContent = point.risk_level;
+            document.getElementById("currentLevel").style.color = levelColor(point.risk_level);
+            document.getElementById("windowTranscript").textContent = point.text || "No transcript in this window.";
+        }
+
+        function markRow(index) {
+            document.querySelectorAll("tr.active-row").forEach((row) => row.classList.remove("active-row"));
+            const row = document.getElementById(`row-${index}`);
+            if (row) {
+                row.classList.add("active-row");
+                row.scrollIntoView({ block: "nearest" });
+            }
+        }
+
+        function drawChart(timeline, activeIndex) {
+            const canvas = document.getElementById("riskCanvas");
+            const ctx = canvas.getContext("2d");
+            const width = canvas.width;
+            const height = canvas.height;
+            const pad = 38;
+
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, width, height);
+
+            // 风险阈值带
+            drawBand(ctx, width, height, pad, 90, 100, "rgba(220, 38, 38, 0.08)");
+            drawBand(ctx, width, height, pad, 70, 90, "rgba(217, 119, 6, 0.08)");
+            drawBand(ctx, width, height, pad, 50, 70, "rgba(37, 99, 235, 0.06)");
+
+            ctx.strokeStyle = "#d7deea";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(pad, pad);
+            ctx.lineTo(pad, height - pad);
+            ctx.lineTo(width - pad, height - pad);
+            ctx.stroke();
+
+            [0, 50, 70, 90, 100].forEach((score) => {
+                const y = scoreToY(score, height, pad);
+                ctx.strokeStyle = score === 0 ? "#d7deea" : "#e5eaf2";
+                ctx.beginPath();
+                ctx.moveTo(pad, y);
+                ctx.lineTo(width - pad, y);
+                ctx.stroke();
+                ctx.fillStyle = "#64748b";
+                ctx.font = "12px Arial";
+                ctx.fillText(String(score), 8, y + 4);
+            });
+
+            if (!timeline.length) {
+                ctx.fillStyle = "#64748b";
+                ctx.font = "15px Arial";
+                ctx.fillText("Upload an audio file to generate a dynamic risk curve.", pad + 10, height / 2);
+                return;
+            }
+
+            const points = timeline.map((point, i) => {
+                const x = timeline.length === 1 ? width / 2 : pad + (i / (timeline.length - 1)) * (width - pad * 2);
+                const y = scoreToY(Number(point.smoothed_score || 0), height, pad);
+                return { x, y, point };
+            });
+
+            ctx.strokeStyle = "#2563eb";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            points.forEach((p, i) => {
+                if (i === 0) ctx.moveTo(p.x, p.y);
+                else ctx.lineTo(p.x, p.y);
+            });
+            ctx.stroke();
+
+            points.forEach((p, i) => {
+                const isActive = i === activeIndex;
+                ctx.fillStyle = isActive ? levelColor(p.point.risk_level) : "#2563eb";
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, isActive ? 6 : 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        function drawBand(ctx, width, height, pad, min, max, color) {
+            const yTop = scoreToY(max, height, pad);
+            const yBottom = scoreToY(min, height, pad);
+            ctx.fillStyle = color;
+            ctx.fillRect(pad, yTop, width - pad * 2, yBottom - yTop);
+        }
+
+        function scoreToY(score, height, pad) {
+            return height - pad - (Math.max(0, Math.min(100, score)) / 100) * (height - pad * 2);
+        }
+
+        function levelFromScore(score) {
+            if (score >= 90) return "Critical";
+            if (score >= 70) return "High Risk";
+            if (score >= 50) return "Suspicious";
+            return "Normal";
+        }
+
+        function levelColor(level) {
+            if (level === "Critical") return "#dc2626";
+            if (level === "High Risk") return "#d97706";
+            if (level === "Suspicious") return "#2563eb";
+            return "#15803d";
+        }
+
+        function formatScore(value) {
+            const number = Number(value || 0);
+            return Number.isInteger(number) ? String(number) : number.toFixed(2);
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        drawChart([]);
     </script>
 </body>
 </html>
