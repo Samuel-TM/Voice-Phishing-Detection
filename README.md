@@ -13,6 +13,8 @@ Traditional **keyword-based detection models** often misclassified conversations
 - **Speaker Diarization**: Resemblyzer embeddings + K-Means clustering  
 - **Multimodal Fusion**: 0.8 × Text + 0.2 × Voice final score  
 - **Visualization**: Self-Attention–based token/pattern visualization  
+- **Dynamic Risk Tracking**: Sliding-window timeline with fused and smoothed risk scores  
+- **Live Microphone Prototype**: Browser MediaRecorder chunks are analyzed incrementally through the same risk scoring path  
 
 
 ## Project Structure (Simplified)
@@ -38,6 +40,76 @@ ML/
 - **Attention Analysis**:  
   - Normal → distributed attention patterns  
   - Phishing → concentrated on finance, command, and urgency keywords  
+
+## Dynamic Evaluation Workflow
+
+The main thesis evaluation should report both final classification performance and time-sensitive dynamic tracking performance.
+
+Expected prediction input format:
+
+```json
+[
+  {
+    "sample_id": "case_001",
+    "label": 1,
+    "event_time_sec": 25,
+    "window_seconds": 10,
+    "step_seconds": 5,
+    "timeline": [
+      {
+        "start_sec": 0,
+        "end_sec": 10,
+        "text_score": 12,
+        "voice_score": 8,
+        "fused_score": 11.2,
+        "smoothed_score": 11.2
+      }
+    ]
+  }
+]
+```
+
+Run the thesis-oriented report:
+
+```bash
+conda activate dissertation
+python -m evaluation.dynamic_metrics \
+  --predictions evaluation/example_predictions.json \
+  --output-dir .cache/evaluation_reports
+```
+
+The script writes:
+
+- `.cache/evaluation_reports/dynamic_eval_detail.csv`
+- `.cache/evaluation_reports/dynamic_eval_ablation_summary.csv`
+- `.cache/evaluation_reports/dynamic_eval_window_summary.csv`
+- `.cache/evaluation_reports/dynamic_eval_report.json`
+
+Recommended paper tables:
+
+- Final Accuracy / Precision / Recall / F1
+- Time-to-Alert and Early Warning Lead Time
+- Text-only vs Voice-only vs Fusion vs Fusion + Smoothing
+- Window parameter comparison, such as 5s/2.5s, 10s/5s, and 20s/10s
+
+Retraining is treated as a fallback, not the default path. If the fixed evaluation set shows weak text, voice, or fusion performance, retrain only the weakest module first, then re-run the dynamic evaluation before changing another module.
+
+## Browser Microphone Prototype
+
+The web UI now supports three modes:
+
+- **Audio Stream**: upload a complete audio file and simulate streaming analysis with sliding windows.
+- **Live Mic**: capture microphone audio in browser chunks with `MediaRecorder`, upload each chunk to `/api/live_audio_chunk`, and update the risk curve incrementally.
+- **Text Check**: run a single transcript through the text model.
+
+Start the local demo:
+
+```bash
+conda activate dissertation
+PORT=5050 python server.py
+```
+
+Then open `http://localhost:5050` and use **Live Mic**. Browser microphone access requires `localhost` or HTTPS.
 
 
 ## Architecture (Screenshots & Descriptions)

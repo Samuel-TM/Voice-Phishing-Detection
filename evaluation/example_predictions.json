@@ -1,0 +1,31 @@
+[
+  {
+    "sample_id": "demo_fraud_late_instruction",
+    "label": 1,
+    "event_time_sec": 25,
+    "window_seconds": 10,
+    "step_seconds": 5,
+    "timeline": [
+      {"index": 0, "start_sec": 0, "end_sec": 10, "text_score": 8, "voice_score": 12, "fused_score": 8.8, "smoothed_score": 8.8},
+      {"index": 1, "start_sec": 5, "end_sec": 15, "text_score": 36, "voice_score": 18, "fused_score": 32.4, "smoothed_score": 17.06},
+      {"index": 2, "start_sec": 10, "end_sec": 20, "text_score": 66, "voice_score": 24, "fused_score": 57.6, "smoothed_score": 31.25},
+      {"index": 3, "start_sec": 15, "end_sec": 25, "text_score": 86, "voice_score": 30, "fused_score": 74.8, "smoothed_score": 46.49},
+      {"index": 4, "start_sec": 20, "end_sec": 30, "text_score": 94, "voice_score": 34, "fused_score": 82, "smoothed_score": 58.92},
+      {"index": 5, "start_sec": 25, "end_sec": 35, "text_score": 98, "voice_score": 40, "fused_score": 86.4, "smoothed_score": 68.54},
+      {"index": 6, "start_sec": 30, "end_sec": 40, "text_score": 99, "voice_score": 42, "fused_score": 87.6, "smoothed_score": 75.21}
+    ]
+  },
+  {
+    "sample_id": "demo_normal_service_call",
+    "label": 0,
+    "event_time_sec": null,
+    "window_seconds": 10,
+    "step_seconds": 5,
+    "timeline": [
+      {"index": 0, "start_sec": 0, "end_sec": 10, "text_score": 5, "voice_score": 10, "fused_score": 6, "smoothed_score": 6},
+      {"index": 1, "start_sec": 5, "end_sec": 15, "text_score": 8, "voice_score": 11, "fused_score": 8.6, "smoothed_score": 6.91},
+      {"index": 2, "start_sec": 10, "end_sec": 20, "text_score": 12, "voice_score": 9, "fused_score": 11.4, "smoothed_score": 8.48},
+      {"index": 3, "start_sec": 15, "end_sec": 25, "text_score": 10, "voice_score": 12, "fused_score": 10.4, "smoothed_score": 9.15}
+    ]
+  }
+]

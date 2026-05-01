@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -129,7 +130,7 @@
 
         .tabs {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-bottom: 16px;
         }
@@ -276,6 +277,7 @@
         }
 
         @media (max-width: 880px) {
+
             header,
             .layout,
             .current-window {
@@ -289,6 +291,7 @@
         }
     </style>
 </head>
+
 <body>
     <main>
         <header>
@@ -304,6 +307,7 @@
                 <h2>Input</h2>
                 <div class="tabs" role="tablist">
                     <button id="audioTab" class="active" type="button">Audio Stream</button>
+                    <button id="micTab" type="button">Live Mic</button>
                     <button id="textTab" type="button">Text Check</button>
                 </div>
 
@@ -323,13 +327,34 @@
                         </div>
                     </div>
                     <button class="primary-button" type="button" onclick="analyzeAudioStream()">Analyze Stream</button>
-                    <button class="secondary-button" type="button" onclick="playTimeline()" id="replayButton" disabled>Replay Timeline</button>
+                    <button class="secondary-button" type="button" onclick="playTimeline()" id="replayButton"
+                        disabled>Replay Timeline</button>
+                </div>
+
+                <div id="micSection" class="hidden">
+                    <div class="number-grid">
+                        <div class="field">
+                            <label for="micChunkSeconds">Chunk (sec)</label>
+                            <input type="number" id="micChunkSeconds" min="1" max="30" value="5">
+                        </div>
+                        <div class="field">
+                            <label for="micTextWeight">Text Weight</label>
+                            <input type="number" id="micTextWeight" min="0" max="1" step="0.05" value="0.8">
+                        </div>
+                    </div>
+                    <button class="primary-button" type="button" onclick="startLiveMic()" id="startMicButton">Start Live
+                        Mic</button>
+                    <button class="secondary-button" type="button" onclick="stopLiveMic()" id="stopMicButton"
+                        disabled>Stop Live Mic</button>
+                    <button class="secondary-button" type="button" onclick="playTimeline()" id="micReplayButton"
+                        disabled>Replay Timeline</button>
                 </div>
 
                 <div id="textSection" class="hidden">
                     <div class="field">
                         <label for="inputText">Chinese dialogue or transcript</label>
-                        <textarea id="inputText" placeholder="请输入中文通话文本，例如：请把验证码告诉我，我帮你处理账户异常。"></textarea>
+                        <textarea id="inputText"
+                            placeholder="Paste Chinese call text, e.g. 请把验证码告诉我，我帮你处理账户异常。"></textarea>
                     </div>
                     <button class="primary-button" type="button" onclick="analyzeText()">Analyze Text</button>
                 </div>
@@ -394,22 +419,35 @@
     <script>
         let latestTimeline = [];
         let playbackTimer = null;
+        let mediaRecorder = null;
+        let micStream = null;
+        let liveSessionId = null;
+        let liveChunkIndex = 0;
+        let liveStartedAt = 0;
+        let liveUploadQueue = Promise.resolve();
 
         const audioTab = document.getElementById("audioTab");
+        const micTab = document.getElementById("micTab");
         const textTab = document.getElementById("textTab");
         const audioSection = document.getElementById("audioSection");
+        const micSection = document.getElementById("micSection");
         const textSection = document.getElementById("textSection");
 
         // 输入模式切换，界面文本保持英文，模型输入内容保持中文
         audioTab.addEventListener("click", () => switchMode("audio"));
+        micTab.addEventListener("click", () => switchMode("mic"));
         textTab.addEventListener("click", () => switchMode("text"));
 
         function switchMode(mode) {
             const isAudio = mode === "audio";
+            const isMic = mode === "mic";
+            const isText = mode === "text";
             audioTab.classList.toggle("active", isAudio);
-            textTab.classList.toggle("active", !isAudio);
+            micTab.classList.toggle("active", isMic);
+            textTab.classList.toggle("active", isText);
             audioSection.classList.toggle("hidden", !isAudio);
-            textSection.classList.toggle("hidden", isAudio);
+            micSection.classList.toggle("hidden", !isMic);
+            textSection.classList.toggle("hidden", !isText);
         }
 
         function setStatus(text, color) {
@@ -436,6 +474,7 @@
             document.getElementById("windowTranscript").textContent = "No transcript yet.";
             document.getElementById("timelineBody").innerHTML = "";
             document.getElementById("replayButton").disabled = true;
+            document.getElementById("micReplayButton").disabled = true;
             drawChart([]);
         }
 
@@ -521,6 +560,174 @@
             }
         }
 
+        async function startLiveMic() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert("This browser does not support microphone capture.");
+                return;
+            }
+            if (!window.MediaRecorder) {
+                alert("This browser does not support MediaRecorder.");
+                return;
+            }
+
+            resetDisplay();
+            setStatus("Recording", "#dc2626");
+            liveSessionId = null;
+            liveChunkIndex = 0;
+            liveStartedAt = performance.now();
+            liveUploadQueue = Promise.resolve();
+
+            try {
+                micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const mimeType = pickRecorderMimeType();
+                mediaRecorder = new MediaRecorder(micStream, mimeType ? { mimeType } : undefined);
+
+                mediaRecorder.addEventListener("dataavailable", (event) => {
+                    if (!event.data || event.data.size === 0) {
+                        return;
+                    }
+                    const currentIndex = liveChunkIndex;
+                    liveChunkIndex += 1;
+                    liveUploadQueue = liveUploadQueue
+                        .then(() => uploadLiveChunk(event.data, currentIndex))
+                        .catch((error) => {
+                            setStatus("Error", "#dc2626");
+                            document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                        });
+                });
+
+                mediaRecorder.addEventListener("stop", async () => {
+                    await liveUploadQueue;
+                    await finishLiveMic();
+                    if (micStream) {
+                        micStream.getTracks().forEach((track) => track.stop());
+                    }
+                    micStream = null;
+                    mediaRecorder = null;
+                });
+
+                const chunkSeconds = Number(document.getElementById("micChunkSeconds").value || 5);
+                mediaRecorder.start(Math.max(1000, chunkSeconds * 1000));
+                document.getElementById("startMicButton").disabled = true;
+                document.getElementById("stopMicButton").disabled = false;
+            } catch (error) {
+                setStatus("Error", "#dc2626");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                stopMicTracks();
+                document.getElementById("startMicButton").disabled = false;
+                document.getElementById("stopMicButton").disabled = true;
+            }
+        }
+
+        function stopLiveMic() {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                setStatus("Finalizing", "#2563eb");
+                mediaRecorder.stop();
+            } else {
+                stopMicTracks();
+                document.getElementById("startMicButton").disabled = false;
+                document.getElementById("stopMicButton").disabled = true;
+            }
+        }
+
+        async function uploadLiveChunk(blob, index) {
+            const chunkSeconds = Number(document.getElementById("micChunkSeconds").value || 5);
+            const elapsedEnd = (performance.now() - liveStartedAt) / 1000;
+            const startSec = Math.max(0, elapsedEnd - chunkSeconds);
+            const formData = new FormData();
+            const mimeType = (blob && blob.type) || (mediaRecorder && mediaRecorder.mimeType) || "";
+            const extension = extensionFromMimeType(mimeType);
+            formData.append("audio_chunk", blob, `mic_chunk_${index}.${extension}`);
+            if (liveSessionId) {
+                formData.append("session_id", liveSessionId);
+            }
+            formData.append("chunk_index", String(index));
+            formData.append("chunk_seconds", String(chunkSeconds));
+            formData.append("chunk_start_sec", String(startSec));
+            formData.append("chunk_end_sec", String(elapsedEnd));
+            formData.append("text_weight", document.getElementById("micTextWeight").value || "0.8");
+
+            const response = await fetch("/api/live_audio_chunk", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || data.error) {
+                throw new Error(data.error || "Live microphone analysis failed.");
+            }
+            liveSessionId = data.session_id || liveSessionId;
+            if (data.point) {
+                addTimelinePoint(data.point);
+            }
+            if (data.warning) {
+                setStatus("Recording", "#d97706");
+            }
+        }
+
+        async function finishLiveMic() {
+            document.getElementById("startMicButton").disabled = false;
+            document.getElementById("stopMicButton").disabled = true;
+            if (!liveSessionId) {
+                setStatus("Done", "#15803d");
+                return;
+            }
+
+            const response = await fetch("/api/live_audio_finish", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ session_id: liveSessionId })
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || data.error) {
+                throw new Error(data.error || "Live microphone summary failed.");
+            }
+            renderSummary(data);
+            document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
+            document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+            setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+        }
+
+        function pickRecorderMimeType() {
+            const candidates = [
+                "audio/webm;codecs=opus",
+                "audio/webm",
+                "audio/ogg;codecs=opus",
+                "audio/mp4"
+            ];
+            return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
+        }
+
+        function extensionFromMimeType(mimeType) {
+            const lower = (mimeType || "").toLowerCase();
+            if (lower.includes("m4a")) {
+                return "m4a";
+            }
+            if (lower.includes("mp4")) {
+                return "mp4";
+            }
+            if (lower.includes("ogg")) {
+                return "ogg";
+            }
+            if (lower.includes("wav")) {
+                return "wav";
+            }
+            if (lower.includes("mpeg") || lower.includes("mp3")) {
+                return "mp3";
+            }
+            if (lower.includes("webm")) {
+                return "webm";
+            }
+            return "webm";
+        }
+
+        function stopMicTracks() {
+            if (micStream) {
+                micStream.getTracks().forEach((track) => track.stop());
+            }
+            micStream = null;
+            mediaRecorder = null;
+        }
+
         async function readAudioStream(response) {
             if (!response.body) {
                 throw new Error("This browser does not support streaming responses.");
@@ -555,6 +762,7 @@
             if (!completed) {
                 setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+                document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
             }
         }
 
@@ -573,6 +781,7 @@
             if (event.event === "done") {
                 renderSummary(event);
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
+                document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
                 setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
                 return true;
             }
@@ -714,7 +923,7 @@
             if (!timeline.length) {
                 ctx.fillStyle = "#64748b";
                 ctx.font = "15px Arial";
-                ctx.fillText("Upload an audio file to generate a dynamic risk curve.", pad + 10, height / 2);
+                ctx.fillText("Upload audio or start live mic to generate a dynamic risk curve.", pad + 10, height / 2);
                 return;
             }
 
@@ -784,4 +993,5 @@
         drawChart([]);
     </script>
 </body>
+
 </html>

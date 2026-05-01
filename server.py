@@ -6,9 +6,12 @@ import os
 import sys
 import json
 import logging
+import time
+import uuid
 import warnings
 from pathlib import Path
-from typing import Any, Dict
+from threading import Lock
+from typing import Any, Dict, List, Optional
 
 THIS_FILE = Path(__file__).resolve()
 ML_DIR = THIS_FILE.parent
@@ -22,6 +25,7 @@ import torch
 import numpy as np  # NumPy 类型检查用
 from flask import Flask, Response, jsonify, request, render_template, stream_with_context
 from flask_cors import CORS
+from pydub import AudioSegment
 from werkzeug.utils import secure_filename
 
 warnings.filterwarnings(action="ignore")
@@ -42,20 +46,35 @@ try:
     from .deepvoice_detection.predict_deepvoice import deepvoice_predict
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
     from .speaker_analysis.whisper_stt import transcribe_segment
-    from .streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
+    from .streaming_analysis.window_pipeline import (
+        analyze_audio_stream,
+        final_label_from_score,
+        iter_audio_stream_analysis,
+        risk_level,
+    )
 except Exception:
     try:
         from ML.KoBERTModel.ensemble_utils import ensemble_inference
         from ML.deepvoice_detection.predict_deepvoice import deepvoice_predict
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from ML.speaker_analysis.whisper_stt import transcribe_segment
-        from ML.streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
+        from ML.streaming_analysis.window_pipeline import (
+            analyze_audio_stream,
+            final_label_from_score,
+            iter_audio_stream_analysis,
+            risk_level,
+        )
     except Exception:
         from KoBERTModel.ensemble_utils import ensemble_inference
         from deepvoice_detection.predict_deepvoice import deepvoice_predict
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from speaker_analysis.whisper_stt import transcribe_segment
-        from streaming_analysis.window_pipeline import analyze_audio_stream, iter_audio_stream_analysis
+        from streaming_analysis.window_pipeline import (
+            analyze_audio_stream,
+            final_label_from_score,
+            iter_audio_stream_analysis,
+            risk_level,
+        )
 
 # -----------------------------------------------------------------------------
 # Flask APP
@@ -101,6 +120,10 @@ if critical_error:
 
 UPLOAD_DIR = ML_DIR / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+LIVE_STREAM_CACHE_DIR = PROJECT_CACHE_DIR / "live_audio_streams"
+LIVE_STREAM_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+LIVE_STREAM_SESSIONS: Dict[str, Dict[str, Any]] = {}
+LIVE_STREAM_LOCK = Lock()
 
 # -----------------------------------------------------------------------------
 # 工具函数
@@ -130,6 +153,83 @@ def build_text_response(analysis_result: Dict[str, Any], text_fallback: str) -> 
         "deepfake_score": "N/A",
         "total_score": round(llm_score, 2),
     }
+
+
+def clamp_number(value: Any, default: float, minimum: float, maximum: float) -> float:
+    try:
+        numeric = float(value)
+    except Exception:
+        numeric = default
+    return max(minimum, min(maximum, numeric))
+
+
+def live_extension_from_upload(filename: str, mime_type: str) -> str:
+    mime_type = str(mime_type or "").lower()
+    suffix = Path(filename or "").suffix.lower().lstrip(".")
+    allowed = {"wav", "mp3", "flac", "m4a", "ogg", "webm", "mp4"}
+
+    def ext_from_mime(mime: str) -> str:
+        if "m4a" in mime:
+            return "m4a"
+        if "mp4" in mime:
+            return "mp4"
+        if "webm" in mime:
+            return "webm"
+        if "ogg" in mime:
+            return "ogg"
+        if "mpeg" in mime or "mp3" in mime:
+            return "mp3"
+        if "wav" in mime:
+            return "wav"
+        return ""
+
+    mime_ext = ext_from_mime(mime_type)
+    if suffix in allowed:
+        if mime_ext and mime_ext != suffix:
+            return mime_ext
+        return suffix
+    if mime_ext:
+        return mime_ext
+    return "webm"
+
+
+def get_live_session(session_id: Optional[str] = None) -> Dict[str, Any]:
+    now = time.time()
+    with LIVE_STREAM_LOCK:
+        if session_id and session_id in LIVE_STREAM_SESSIONS:
+            session = LIVE_STREAM_SESSIONS[session_id]
+            session["updated_at"] = now
+            return session
+
+        new_id = session_id or uuid.uuid4().hex
+        session = {
+            "session_id": new_id,
+            "created_at": now,
+            "updated_at": now,
+            "transcript_parts": [],
+            "previous_smoothed": None,
+            "timeline": [],
+        }
+        LIVE_STREAM_SESSIONS[new_id] = session
+        return session
+
+
+def update_live_session_point(session_id: str, point: Dict[str, Any], transcript_parts: List[str], previous_smoothed: float) -> None:
+    with LIVE_STREAM_LOCK:
+        session = LIVE_STREAM_SESSIONS[session_id]
+        session["timeline"].append(point)
+        session["transcript_parts"] = transcript_parts
+        session["previous_smoothed"] = previous_smoothed
+        session["updated_at"] = time.time()
+
+
+def convert_live_chunk_to_wav(chunk_path: Path) -> Path:
+    wav_path = chunk_path.with_suffix(".wav")
+    if chunk_path.suffix.lower() == ".wav":
+        return chunk_path
+    audio = AudioSegment.from_file(chunk_path.as_posix())
+    audio.export(wav_path.as_posix(), format="wav")
+    return wav_path
 
 # -----------------------------------------------------------------------------
 # 路由
@@ -245,6 +345,175 @@ def api_stream_audio_analysis():
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@app.route("/api/live_audio_chunk", methods=["POST"])
+def api_live_audio_chunk():
+    """
+    浏览器麦克风实时分片分析接口。
+    每个 MediaRecorder chunk 单独上传，后端维护 session 级累计文本和平滑风险。
+    """
+    if "audio_chunk" not in request.files:
+        return jsonify({"error": "Audio chunk is required."}), 400
+
+    audio_chunk = request.files["audio_chunk"]
+    session_id = (request.form.get("session_id") or "").strip() or None
+    session = get_live_session(session_id)
+    session_id = session["session_id"]
+
+    chunk_index = safe_float(request.form.get("chunk_index"), len(session["timeline"]))
+    chunk_seconds = clamp_number(request.form.get("chunk_seconds"), default=5.0, minimum=1.0, maximum=30.0)
+    start_sec = safe_float(request.form.get("chunk_start_sec"), chunk_index * chunk_seconds)
+    end_sec = safe_float(request.form.get("chunk_end_sec"), start_sec + chunk_seconds)
+    text_weight = clamp_number(request.form.get("text_weight"), default=0.8, minimum=0.0, maximum=1.0)
+    voice_weight = round(1.0 - text_weight, 4)
+    smoothing_previous_weight = clamp_number(
+        request.form.get("smoothing_previous_weight"),
+        default=0.65,
+        minimum=0.0,
+        maximum=0.95,
+    )
+    smoothing_current_weight = 1.0 - smoothing_previous_weight
+
+    filename = secure_filename(audio_chunk.filename or f"chunk_{int(chunk_index):04d}.webm")
+    ext = live_extension_from_upload(filename, audio_chunk.mimetype)
+    session_dir = LIVE_STREAM_CACHE_DIR / session_id
+    session_dir.mkdir(parents=True, exist_ok=True)
+    chunk_path = (session_dir / f"chunk_{int(chunk_index):04d}.{ext}").resolve()
+    audio_chunk.save(chunk_path.as_posix())
+
+    deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
+    transcript_parts: List[str] = list(session.get("transcript_parts", []))
+    previous_smoothed = session.get("previous_smoothed")
+
+    try:
+        wav_path = convert_live_chunk_to_wav(chunk_path)
+
+        window_text = ""
+        text_error = None
+        try:
+            window_text = transcribe_segment(wav_path.as_posix()) or ""
+            if window_text.startswith("(STT"):
+                text_error = window_text
+                window_text = ""
+        except Exception:
+            app.logger.error("实时音频分片 STT 失败", exc_info=True)
+            text_error = "STT failed for this chunk."
+
+        if window_text.strip():
+            transcript_parts.append(window_text.strip())
+        cumulative_text = " ".join(transcript_parts).strip()
+
+        text_score = 0.0
+        text_result: Dict[str, Any] = {}
+        if cumulative_text:
+            try:
+                text_result = ensemble_inference(cumulative_text) or {}
+                text_score = safe_float(text_result.get("llm_score", 0.0))
+            except Exception:
+                app.logger.error("实时音频分片文本风险推理失败", exc_info=True)
+                text_result = {"error": "Text inference failed."}
+
+        deepfake_probability = 0.0
+        voice_score = 0.0
+        voice_error = None
+        if deepvoice_ok:
+            try:
+                deepfake_probability = safe_float(
+                    deepvoice_predict(
+                        wav_path.as_posix(),
+                        DEEPVOICE_MODEL_PATH.as_posix(),
+                        DEEPVOICE_CONFIG_PATH.as_posix(),
+                    )
+                )
+                voice_score = round(deepfake_probability * 100.0, 2)
+            except Exception:
+                app.logger.error("实时音频分片声学风险推理失败", exc_info=True)
+                voice_error = "Voice inference failed."
+        else:
+            voice_error = "Voice model or config is missing."
+
+        fused_score = round((text_weight * text_score) + (voice_weight * voice_score), 2)
+        if previous_smoothed is None:
+            smoothed_score = fused_score
+        else:
+            smoothed_score = round(
+                smoothing_previous_weight * safe_float(previous_smoothed)
+                + smoothing_current_weight * fused_score,
+                2,
+            )
+
+        point: Dict[str, Any] = {
+            "index": int(chunk_index),
+            "start_sec": round(start_sec, 2),
+            "end_sec": round(max(end_sec, start_sec), 2),
+            "text": window_text,
+            "cumulative_text": cumulative_text,
+            "text_score": round(text_score, 2),
+            "voice_score": voice_score,
+            "deepfake_score": round(deepfake_probability, 4),
+            "fused_score": fused_score,
+            "smoothed_score": smoothed_score,
+            "risk_level": risk_level(smoothed_score),
+            "source": "microphone",
+        }
+        if text_error:
+            point["text_error"] = text_error
+        if voice_error:
+            point["voice_error"] = voice_error
+        if text_result.get("error"):
+            point["text_model_error"] = text_result["error"]
+
+        update_live_session_point(session_id, point, transcript_parts, smoothed_score)
+        return jsonify({
+            "event": "point",
+            "session_id": session_id,
+            "point": point,
+            "full_transcript": cumulative_text,
+            "weights": {
+                "text": text_weight,
+                "voice": voice_weight,
+                "smoothing_previous": smoothing_previous_weight,
+                "smoothing_current": smoothing_current_weight,
+            },
+            "warning": None if deepvoice_ok else "Voice model or config is missing. Voice scores are set to zero.",
+        }), 200
+    except Exception:
+        app.logger.error("实时音频分片分析失败", exc_info=True)
+        return jsonify({
+            "event": "error",
+            "session_id": session_id,
+            "error": "A server error occurred during live audio analysis.",
+        }), 500
+
+
+@app.route("/api/live_audio_finish", methods=["POST"])
+def api_live_audio_finish():
+    """结束浏览器实时麦克风分析，并返回 session 汇总。"""
+    data = request.get_json(silent=True) or request.form or {}
+    session_id = (data.get("session_id") or "").strip()
+    if not session_id or session_id not in LIVE_STREAM_SESSIONS:
+        return jsonify({"error": "Live audio session not found."}), 404
+
+    with LIVE_STREAM_LOCK:
+        session = LIVE_STREAM_SESSIONS[session_id]
+        timeline = list(session.get("timeline", []))
+        full_transcript = " ".join(session.get("transcript_parts", [])).strip()
+
+    max_point = max(timeline, key=lambda item: safe_float(item.get("smoothed_score")), default=None)
+    final_score = safe_float(timeline[-1].get("smoothed_score")) if timeline else 0.0
+
+    return jsonify({
+        "event": "done",
+        "session_id": session_id,
+        "timeline": timeline,
+        "full_transcript": full_transcript,
+        "final_score": round(final_score, 2),
+        "max_score": round(safe_float(max_point.get("smoothed_score")), 2) if max_point else 0.0,
+        "final_label": final_label_from_score(final_score),
+        "highest_risk_window": max_point,
+        "mode": "browser_microphone",
+    }), 200
 
 
 @app.route("/api/audio_result", methods=["POST"])
