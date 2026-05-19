@@ -7,414 +7,882 @@
     <title>Dynamic Voice Fraud Risk Tracking</title>
     <style>
         :root {
-            --bg: #f5f7fb;
-            --panel: #ffffff;
-            --ink: #152033;
-            --muted: #64748b;
-            --line: #d7deea;
+            --bg-main: #f0f2f5;
+            --bg-panel: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --bg-muted: #f1f5f9;
+            --bg-field: #f8fafc;
+            --bg-soft-blue: #eff6ff;
+            --chart-surface: #ffffff;
             --primary: #2563eb;
-            --danger: #dc2626;
-            --warn: #d97706;
-            --ok: #15803d;
+            --primary-hover: #1d4ed8;
+            --color-critical: #ef4444;
+            --color-high: #f97316;
+            --color-suspicious: #eab308;
+            --color-normal: #22c55e;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body[data-theme="dark"] {
+            --bg-main: #0f172a;
+            --bg-panel: #172033;
+            --text-primary: #e5e7eb;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --bg-muted: #1e293b;
+            --bg-field: #111827;
+            --bg-soft-blue: #1e3a5f;
+            --chart-surface: #172033;
+            --primary: #60a5fa;
+            --primary-hover: #3b82f6;
+            --color-critical: #f87171;
+            --color-high: #fb923c;
+            --color-suspicious: #facc15;
+            --color-normal: #4ade80;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+            --shadow-md: 0 12px 24px -12px rgba(0, 0, 0, 0.55);
         }
 
         * {
             box-sizing: border-box;
+            outline: none;
         }
 
         body {
             margin: 0;
-            background: var(--bg);
-            color: var(--ink);
-            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
             letter-spacing: 0;
         }
 
-        main {
-            width: min(1180px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 28px 0 42px;
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        header {
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
+            align-items: center;
             justify-content: space-between;
             gap: 20px;
-            align-items: flex-end;
-            margin-bottom: 22px;
+            padding: 12px 24px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
         }
 
-        h1 {
-            margin: 0 0 8px;
-            font-size: 30px;
-            line-height: 1.15;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
         }
 
-        p {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .status-pill {
-            min-width: 150px;
-            padding: 10px 14px;
-            border: 1px solid var(--line);
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 32px;
+            height: 32px;
             border-radius: 8px;
-            background: var(--panel);
-            text-align: center;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .brand p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+            line-height: 1.3;
+        }
+
+        .status-engine {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: max-content;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-muted);
             font-weight: 700;
         }
 
-        .layout {
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: var(--bg-muted);
+        }
+
+        .theme-toggle button {
+            min-width: 56px;
+            min-height: 28px;
+            padding: 4px 10px;
+            border: 0;
+            border-radius: 16px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .theme-toggle button.active {
+            background: var(--bg-panel);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #94a3b8;
+        }
+
+        .app-main {
             display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 18px;
-            align-items: start;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            flex: 1;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px;
         }
 
-        .panel {
-            background: var(--panel);
-            border: 1px solid var(--line);
+        .card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s ease;
         }
 
-        .panel h2 {
-            margin: 0 0 14px;
-            font-size: 18px;
+        .card:hover {
+            box-shadow: var(--shadow-md);
         }
 
-        .field {
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .section-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: var(--bg-soft-blue);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .input-panel {
+            position: sticky;
+            top: 80px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 104px);
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            padding: 4px;
+            border-radius: 8px;
+            background: var(--bg-muted);
+        }
+
+        .tabs-nav button {
+            flex: 1;
+            min-height: 36px;
+            padding: 8px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .tabs-nav button.active {
+            background: var(--bg-panel);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group {
             margin-bottom: 16px;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 7px;
-            color: #334155;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-field);
+            color: var(--text-primary);
+            font: inherit;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            background: var(--bg-panel);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .file-picker {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            min-height: 48px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-field);
+            overflow: hidden;
+        }
+
+        .file-picker input[type="file"] {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .file-picker .file-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            align-self: stretch;
+            min-height: 46px;
+            margin: 0;
+            padding: 0 14px;
+            border-right: 1px solid var(--border-color);
+            background: var(--bg-panel);
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .file-name {
+            min-width: 0;
+            padding: 0 12px;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 16px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            margin-top: 10px;
+            border-color: var(--border-color);
+            background: var(--bg-panel);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--bg-muted);
+            border-color: var(--border-color);
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+        .monitor-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            min-width: 0;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 16px;
+        }
+
+        .kpi-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            min-width: 0;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-panel);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .kpi-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: var(--bg-soft-blue);
+            color: var(--primary);
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .kpi-data {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .kpi-label {
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .kpi-value {
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.05;
+            overflow-wrap: anywhere;
+        }
+
+        .kpi-value small {
+            margin-left: 2px;
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 700;
         }
 
-        textarea,
-        input[type="file"],
-        input[type="number"] {
-            width: 100%;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            background: #fff;
-            color: var(--ink);
-            font: inherit;
+        .stat-critical {
+            background-color: #fef2f2;
+            color: var(--color-critical) !important;
         }
 
-        textarea {
-            min-height: 132px;
-            padding: 10px;
-            resize: vertical;
+        .stat-high {
+            background-color: #fff7ed;
+            color: var(--color-high) !important;
         }
 
-        input[type="file"] {
-            padding: 10px;
+        .stat-suspicious {
+            background-color: #fefce8;
+            color: var(--color-suspicious) !important;
         }
 
-        input[type="number"] {
-            padding: 9px 10px;
+        .stat-normal {
+            background-color: #f0fdf4;
+            color: var(--color-normal) !important;
         }
 
-        .number-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .value-critical {
+            color: var(--color-critical) !important;
         }
 
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
+        .value-high {
+            color: var(--color-high) !important;
         }
 
-        .tabs button,
-        .primary-button,
-        .secondary-button {
-            min-height: 40px;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            background: #fff;
-            color: var(--ink);
-            font-weight: 700;
-            cursor: pointer;
+        .value-suspicious {
+            color: var(--color-suspicious) !important;
         }
 
-        .tabs button.active,
-        .primary-button {
-            border-color: var(--primary);
-            background: var(--primary);
-            color: #fff;
+        .value-normal {
+            color: var(--color-normal) !important;
         }
 
-        .primary-button,
-        .secondary-button {
-            width: 100%;
-            margin-top: 4px;
+        .chart-container {
+            position: relative;
+            padding: 10px 20px 20px;
         }
 
-        .secondary-button {
-            background: #fff;
-            color: var(--primary);
-        }
-
-        .metric-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .metric {
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 12px;
-            background: #fbfdff;
-        }
-
-        .metric span {
+        #riskCanvas {
             display: block;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .metric strong {
-            display: block;
-            margin-top: 8px;
-            font-size: 24px;
-            line-height: 1;
-        }
-
-        canvas {
             width: 100%;
-            height: 280px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: #fff;
+            height: 320px;
         }
 
-        .current-window {
+        .detail-grid {
             display: grid;
-            grid-template-columns: 220px 1fr;
-            gap: 16px;
-            margin-top: 16px;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
         }
 
-        .score-list {
-            display: grid;
-            gap: 8px;
+        .score-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .score-row {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #edf1f7;
-            padding-bottom: 8px;
+            gap: 12px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-field);
+        }
+
+        .score-row .label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .score-row .value {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .transcript-container {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .transcript-box {
+            min-height: 160px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-field);
+            color: var(--text-primary);
+            font-family: "PingFang SC", "Microsoft YaHei", monospace;
             font-size: 14px;
-        }
-
-        .transcript {
-            min-height: 120px;
-            max-height: 220px;
-            overflow: auto;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 12px;
-            background: #fff;
+            line-height: 1.7;
             white-space: pre-wrap;
-            line-height: 1.5;
         }
 
-        .timeline {
-            margin-top: 16px;
-            max-height: 260px;
-            overflow: auto;
-            border: 1px solid var(--line);
-            border-radius: 8px;
+        .transcript-placeholder {
+            padding-top: 40px;
+            color: #94a3b8;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .timeline-card {
+            margin-bottom: 24px;
+        }
+
+        .table-overflow {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 0 0 8px 8px;
         }
 
         table {
             width: 100%;
+            min-width: 640px;
             border-collapse: collapse;
             font-size: 13px;
-        }
-
-        th,
-        td {
-            padding: 9px 10px;
-            border-bottom: 1px solid #edf1f7;
-            text-align: left;
-            vertical-align: top;
         }
 
         th {
             position: sticky;
             top: 0;
-            background: #f8fafc;
-            color: #334155;
+            z-index: 10;
+            padding: 12px 16px;
+            background: var(--bg-muted);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-align: left;
+            text-transform: uppercase;
         }
 
-        tr.active-row {
-            background: #eff6ff;
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            vertical-align: middle;
         }
 
-        .hidden {
-            display: none;
+        tr:last-child td {
+            border-bottom: 0;
         }
 
-        .error {
-            color: var(--danger);
+        tr.active-row td {
+            background-color: var(--bg-soft-blue);
+            border-color: var(--primary);
             font-weight: 700;
         }
 
-        @media (max-width: 880px) {
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 22px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
 
-            header,
-            .layout,
-            .current-window {
+        .hidden {
+            display: none !important;
+        }
+
+        .error-text {
+            color: var(--color-critical);
+            font-weight: 700;
+        }
+
+        @media (max-width: 1100px) {
+            .app-main {
                 grid-template-columns: 1fr;
-                display: grid;
             }
 
-            .metric-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .input-panel {
+                position: static;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .app-main {
+                padding: 16px;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .kpi-grid,
+            .row-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand h1 {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 
 <body>
-    <main>
-        <header>
-            <div>
-                <h1>Dynamic Voice Fraud Risk Tracking</h1>
-                <p>Sliding-window multimodal analysis for simulated in-event telecom fraud detection.</p>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-logo">VS</div>
+                <div>
+                    <h1>Dynamic Voice Fraud Risk Tracking</h1>
+                    <p>Voice Fraud Risk Sentinel · Multimodal Analysis</p>
+                </div>
             </div>
-            <div id="statusPill" class="status-pill">Idle</div>
+            <div class="header-actions">
+                <div class="theme-toggle" aria-label="Theme">
+                    <button id="lightThemeButton" class="active" type="button" aria-pressed="true">Light</button>
+                    <button id="darkThemeButton" type="button" aria-pressed="false">Dark</button>
+                </div>
+                <div class="status-engine">
+                    <div id="statusDot" class="status-dot"></div>
+                    <span id="statusText">Engine Ready</span>
+                </div>
+            </div>
         </header>
 
-        <section class="layout">
-            <aside class="panel">
-                <h2>Input</h2>
-                <div class="tabs" role="tablist">
-                    <button id="audioTab" class="active" type="button">Audio Stream</button>
-                    <button id="micTab" type="button">Live Mic</button>
-                    <button id="textTab" type="button">Text Check</button>
+        <main class="app-main">
+            <aside class="card input-panel">
+                <div class="card-header">
+                    <h2><span class="section-mark">IN</span> Input Source</h2>
                 </div>
+                <div class="card-body">
+                    <div class="tabs-nav" role="tablist">
+                        <button id="audioTab" class="active" type="button">Audio File</button>
+                        <button id="micTab" type="button">Live Mic</button>
+                        <button id="textTab" type="button">Text Check</button>
+                    </div>
 
-                <div id="audioSection">
-                    <div class="field">
-                        <label for="audioFile">Audio file</label>
-                        <input type="file" id="audioFile" accept="audio/*">
-                    </div>
-                    <div class="number-grid">
-                        <div class="field">
-                            <label for="windowSeconds">Window (sec)</label>
-                            <input type="number" id="windowSeconds" min="2" max="60" value="10">
+                    <div id="audioSection">
+                        <div class="form-group">
+                            <label for="audioFile">Call Recording</label>
+                            <div class="file-picker">
+                                <label class="file-button" for="audioFile">Choose File</label>
+                                <span class="file-name" id="audioFileName">No file selected</span>
+                                <input type="file" id="audioFile" accept="audio/*">
+                            </div>
                         </div>
-                        <div class="field">
-                            <label for="stepSeconds">Step (sec)</label>
-                            <input type="number" id="stepSeconds" min="1" max="60" value="5">
+                        <div class="row-grid">
+                            <div class="form-group">
+                                <label for="windowSeconds">Window (sec)</label>
+                                <input type="number" id="windowSeconds" min="2" max="60" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label for="stepSeconds">Step (sec)</label>
+                                <input type="number" id="stepSeconds" min="1" max="60" value="5">
+                            </div>
                         </div>
+                        <button class="btn btn-primary" type="button" onclick="analyzeAudioStream()">Analyze Stream</button>
+                        <button class="btn btn-secondary" type="button" onclick="playTimeline()" id="replayButton" disabled>Replay Timeline</button>
                     </div>
-                    <button class="primary-button" type="button" onclick="analyzeAudioStream()">Analyze Stream</button>
-                    <button class="secondary-button" type="button" onclick="playTimeline()" id="replayButton"
-                        disabled>Replay Timeline</button>
-                </div>
 
-                <div id="micSection" class="hidden">
-                    <div class="number-grid">
-                        <div class="field">
-                            <label for="micChunkSeconds">Chunk (sec)</label>
-                            <input type="number" id="micChunkSeconds" min="1" max="30" value="5">
+                    <div id="micSection" class="hidden">
+                        <div class="row-grid">
+                            <div class="form-group">
+                                <label for="micChunkSeconds">Chunk (sec)</label>
+                                <input type="number" id="micChunkSeconds" min="1" max="30" value="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="micTextWeight">Text Weight</label>
+                                <input type="number" id="micTextWeight" min="0" max="1" step="0.05" value="0.8">
+                            </div>
                         </div>
-                        <div class="field">
-                            <label for="micTextWeight">Text Weight</label>
-                            <input type="number" id="micTextWeight" min="0" max="1" step="0.05" value="0.8">
-                        </div>
+                        <button class="btn btn-primary" type="button" onclick="startLiveMic()" id="startMicButton">Start Live Mic</button>
+                        <button class="btn btn-secondary value-critical" type="button" onclick="stopLiveMic()" id="stopMicButton" disabled>Stop Live Mic</button>
+                        <button class="btn btn-secondary" type="button" onclick="playTimeline()" id="micReplayButton" disabled>Replay Timeline</button>
                     </div>
-                    <button class="primary-button" type="button" onclick="startLiveMic()" id="startMicButton">Start Live
-                        Mic</button>
-                    <button class="secondary-button" type="button" onclick="stopLiveMic()" id="stopMicButton"
-                        disabled>Stop Live Mic</button>
-                    <button class="secondary-button" type="button" onclick="playTimeline()" id="micReplayButton"
-                        disabled>Replay Timeline</button>
-                </div>
 
-                <div id="textSection" class="hidden">
-                    <div class="field">
-                        <label for="inputText">Chinese dialogue or transcript</label>
-                        <textarea id="inputText"
-                            placeholder="Paste Chinese call text, e.g. 请把验证码告诉我，我帮你处理账户异常。"></textarea>
+                    <div id="textSection" class="hidden">
+                        <div class="form-group">
+                            <label for="inputText">Chinese Dialogue or Transcript</label>
+                            <textarea id="inputText" placeholder="Paste Chinese call text for risk analysis."></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="button" onclick="analyzeText()">Analyze Text</button>
                     </div>
-                    <button class="primary-button" type="button" onclick="analyzeText()">Analyze Text</button>
                 </div>
             </aside>
 
-            <section class="panel">
-                <h2>Risk Evolution</h2>
-                <div class="metric-grid">
-                    <div class="metric">
-                        <span>Final Decision</span>
-                        <strong id="finalDecision">-</strong>
+            <section class="monitor-panel">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon" id="decisionIcon">FD</div>
+                        <div class="kpi-data">
+                            <div class="kpi-label">Final Decision</div>
+                            <div class="kpi-value" id="finalDecision" style="font-size: 22px;">-</div>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span>Final Risk</span>
-                        <strong id="finalRisk">0</strong>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">RS</div>
+                        <div class="kpi-data">
+                            <div class="kpi-label">Current / Final Risk</div>
+                            <div class="kpi-value"><span id="finalRisk">0</span><small>/ 100</small></div>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span>Peak Risk</span>
-                        <strong id="peakRisk">0</strong>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">PK</div>
+                        <div class="kpi-data">
+                            <div class="kpi-label">Peak Risk</div>
+                            <div class="kpi-value"><span id="peakRisk">0</span><small>/ 100</small></div>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span>Current Level</span>
-                        <strong id="currentLevel">-</strong>
-                    </div>
-                </div>
-
-                <canvas id="riskCanvas" width="900" height="280"></canvas>
-
-                <div class="current-window">
-                    <div class="score-list">
-                        <div class="score-row"><span>Window</span><strong id="currentWindow">-</strong></div>
-                        <div class="score-row"><span>Text Risk</span><strong id="textScore">0</strong></div>
-                        <div class="score-row"><span>Voice Risk</span><strong id="voiceScore">0</strong></div>
-                        <div class="score-row"><span>Fused Risk</span><strong id="fusedScore">0</strong></div>
-                        <div class="score-row"><span>Smoothed Risk</span><strong id="smoothScore">0</strong></div>
-                    </div>
-                    <div>
-                        <label>Current Window Transcript</label>
-                        <div id="windowTranscript" class="transcript">No transcript yet.</div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon" id="levelIcon">LV</div>
+                        <div class="kpi-data">
+                            <div class="kpi-label">Current Risk Level</div>
+                            <div class="kpi-value" id="currentLevel">-</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="timeline">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Level</th>
-                                <th>Text</th>
-                                <th>Voice</th>
-                                <th>Fused</th>
-                                <th>Smoothed</th>
-                            </tr>
-                        </thead>
-                        <tbody id="timelineBody"></tbody>
-                    </table>
+                <div class="card">
+                    <div class="card-header">
+                        <h2><span class="section-mark">EV</span> Risk Evolution Trend</h2>
+                    </div>
+                    <div class="card-body chart-container">
+                        <canvas id="riskCanvas"></canvas>
+                    </div>
+                </div>
+
+                <div class="detail-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><span class="section-mark">SC</span> Current Window</h2>
+                        </div>
+                        <div class="card-body score-details">
+                            <div class="score-row">
+                                <span class="label">Time Span</span>
+                                <span class="value" id="currentWindow">-</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="label">Text Risk</span>
+                                <span class="value" id="textScore">0</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="label">Voice Risk</span>
+                                <span class="value" id="voiceScore">0</span>
+                            </div>
+                            <div class="score-row">
+                                <span class="label">Fused Risk</span>
+                                <span class="value" id="fusedScore">0</span>
+                            </div>
+                            <div class="score-row" style="background: var(--bg-soft-blue); border-color: var(--primary);">
+                                <span class="label" style="color: var(--primary);">Smoothed Risk</span>
+                                <span class="value" id="smoothScore" style="color: var(--primary); font-size: 20px;">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card transcript-container">
+                        <div class="card-header">
+                            <h2><span class="section-mark">ASR</span> Current Window Transcript</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="windowTranscript" class="transcript-box">
+                                <div class="transcript-placeholder">No transcript yet.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card timeline-card">
+                    <div class="card-header">
+                        <h2><span class="section-mark">TL</span> Analysis Timeline</h2>
+                    </div>
+                    <div class="table-overflow">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Level</th>
+                                    <th>Text</th>
+                                    <th>Voice</th>
+                                    <th>Fused</th>
+                                    <th>Smoothed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="timelineBody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; color: var(--text-secondary); padding: 40px;">No analysis records yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <script>
         let latestTimeline = [];
@@ -432,11 +900,29 @@
         const audioSection = document.getElementById("audioSection");
         const micSection = document.getElementById("micSection");
         const textSection = document.getElementById("textSection");
+        const lightThemeButton = document.getElementById("lightThemeButton");
+        const darkThemeButton = document.getElementById("darkThemeButton");
 
-        // 输入模式切换，界面文本保持英文，模型输入内容保持中文
         audioTab.addEventListener("click", () => switchMode("audio"));
         micTab.addEventListener("click", () => switchMode("mic"));
         textTab.addEventListener("click", () => switchMode("text"));
+        lightThemeButton.addEventListener("click", () => setTheme("light"));
+        darkThemeButton.addEventListener("click", () => setTheme("dark"));
+        document.getElementById("audioFile").addEventListener("change", (event) => {
+            const file = event.target.files && event.target.files[0];
+            document.getElementById("audioFileName").textContent = file ? file.name : "No file selected";
+        });
+
+        function setTheme(theme) {
+            const nextTheme = theme === "dark" ? "dark" : "light";
+            document.body.dataset.theme = nextTheme;
+            lightThemeButton.classList.toggle("active", nextTheme === "light");
+            darkThemeButton.classList.toggle("active", nextTheme === "dark");
+            lightThemeButton.setAttribute("aria-pressed", String(nextTheme === "light"));
+            darkThemeButton.setAttribute("aria-pressed", String(nextTheme === "dark"));
+            localStorage.setItem("voiceRiskTheme", nextTheme);
+            drawChart(latestTimeline, -1);
+        }
 
         function switchMode(mode) {
             const isAudio = mode === "audio";
@@ -450,10 +936,29 @@
             textSection.classList.toggle("hidden", !isText);
         }
 
-        function setStatus(text, color) {
-            const pill = document.getElementById("statusPill");
-            pill.textContent = text;
-            pill.style.color = color || "";
+        function setStatus(text, state) {
+            const dot = document.getElementById("statusDot");
+            const textEl = document.getElementById("statusText");
+            textEl.textContent = text;
+            dot.style.backgroundColor = "";
+
+            switch (state) {
+                case "running":
+                    dot.style.backgroundColor = "var(--primary)";
+                    break;
+                case "recording":
+                case "error":
+                    dot.style.backgroundColor = "var(--color-critical)";
+                    break;
+                case "warn":
+                    dot.style.backgroundColor = "var(--color-suspicious)";
+                    break;
+                case "success":
+                    dot.style.backgroundColor = "var(--color-normal)";
+                    break;
+                default:
+                    dot.style.backgroundColor = "#94a3b8";
+            }
         }
 
         function resetDisplay() {
@@ -463,19 +968,28 @@
             }
             latestTimeline = [];
             document.getElementById("finalDecision").textContent = "-";
+            document.getElementById("finalDecision").className = "kpi-value";
+            document.getElementById("decisionIcon").className = "kpi-icon";
             document.getElementById("finalRisk").textContent = "0";
             document.getElementById("peakRisk").textContent = "0";
             document.getElementById("currentLevel").textContent = "-";
+            document.getElementById("currentLevel").className = "kpi-value";
+            document.getElementById("levelIcon").className = "kpi-icon";
             document.getElementById("currentWindow").textContent = "-";
-            document.getElementById("textScore").textContent = "0";
-            document.getElementById("voiceScore").textContent = "0";
+            setScoreValue("textScore", 0);
+            setScoreValue("voiceScore", 0);
             document.getElementById("fusedScore").textContent = "0";
             document.getElementById("smoothScore").textContent = "0";
-            document.getElementById("windowTranscript").textContent = "No transcript yet.";
-            document.getElementById("timelineBody").innerHTML = "";
+            showTranscriptPlaceholder("No transcript yet.");
+            document.getElementById("timelineBody").innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-secondary); padding: 40px;">No analysis records yet.</td></tr>`;
             document.getElementById("replayButton").disabled = true;
             document.getElementById("micReplayButton").disabled = true;
+            setStatus("Engine Ready", "idle");
             drawChart([]);
+        }
+
+        function showTranscriptPlaceholder(text) {
+            document.getElementById("windowTranscript").innerHTML = `<div class="transcript-placeholder">${escapeHtml(text)}</div>`;
         }
 
         async function analyzeText() {
@@ -486,7 +1000,7 @@
             }
 
             resetDisplay();
-            setStatus("Analyzing", "#2563eb");
+            setStatus("Analyzing Text", "running");
 
             try {
                 const response = await fetch("/predict", {
@@ -520,10 +1034,10 @@
                 renderTimeline(latestTimeline);
                 showPoint(point);
                 drawChart(latestTimeline, 0);
-                setStatus("Done", levelColor(point.risk_level));
+                setStatus("Text Analysis Complete", statusFromLevel(point.risk_level));
             } catch (error) {
-                setStatus("Error", "#dc2626");
-                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                setStatus("Analysis Error", "error");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error-text">${escapeHtml(error.message)}</span>`;
             }
         }
 
@@ -535,7 +1049,7 @@
             }
 
             resetDisplay();
-            setStatus("Uploading", "#2563eb");
+            setStatus("Uploading Audio", "running");
 
             const formData = new FormData();
             formData.append("audio_file", fileInput.files[0]);
@@ -552,11 +1066,11 @@
                     throw new Error(errorData.error || "Audio stream analysis failed.");
                 }
 
-                setStatus("Analyzing", "#2563eb");
+                setStatus("Analyzing Stream", "running");
                 await readAudioStream(response);
             } catch (error) {
-                setStatus("Error", "#dc2626");
-                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                setStatus("Analysis Error", "error");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error-text">${escapeHtml(error.message)}</span>`;
             }
         }
 
@@ -571,7 +1085,7 @@
             }
 
             resetDisplay();
-            setStatus("Recording", "#dc2626");
+            setStatus("Recording", "recording");
             liveSessionId = null;
             liveChunkIndex = 0;
             liveStartedAt = performance.now();
@@ -587,23 +1101,20 @@
                         return;
                     }
                     const currentIndex = liveChunkIndex;
+                    const elapsedEnd = (performance.now() - liveStartedAt) / 1000;
                     liveChunkIndex += 1;
                     liveUploadQueue = liveUploadQueue
-                        .then(() => uploadLiveChunk(event.data, currentIndex))
+                        .then(() => uploadLiveChunk(event.data, currentIndex, elapsedEnd))
                         .catch((error) => {
-                            setStatus("Error", "#dc2626");
-                            document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                            setStatus("Analysis Error", "error");
+                            document.getElementById("windowTranscript").innerHTML = `<span class="error-text">${escapeHtml(error.message)}</span>`;
                         });
                 });
 
                 mediaRecorder.addEventListener("stop", async () => {
                     await liveUploadQueue;
                     await finishLiveMic();
-                    if (micStream) {
-                        micStream.getTracks().forEach((track) => track.stop());
-                    }
-                    micStream = null;
-                    mediaRecorder = null;
+                    stopMicTracks();
                 });
 
                 const chunkSeconds = Number(document.getElementById("micChunkSeconds").value || 5);
@@ -611,8 +1122,8 @@
                 document.getElementById("startMicButton").disabled = true;
                 document.getElementById("stopMicButton").disabled = false;
             } catch (error) {
-                setStatus("Error", "#dc2626");
-                document.getElementById("windowTranscript").innerHTML = `<span class="error">${escapeHtml(error.message)}</span>`;
+                setStatus("Analysis Error", "error");
+                document.getElementById("windowTranscript").innerHTML = `<span class="error-text">${escapeHtml(error.message)}</span>`;
                 stopMicTracks();
                 document.getElementById("startMicButton").disabled = false;
                 document.getElementById("stopMicButton").disabled = true;
@@ -621,7 +1132,7 @@
 
         function stopLiveMic() {
             if (mediaRecorder && mediaRecorder.state !== "inactive") {
-                setStatus("Finalizing", "#2563eb");
+                setStatus("Finalizing", "running");
                 mediaRecorder.stop();
             } else {
                 stopMicTracks();
@@ -630,9 +1141,8 @@
             }
         }
 
-        async function uploadLiveChunk(blob, index) {
+        async function uploadLiveChunk(blob, index, elapsedEnd) {
             const chunkSeconds = Number(document.getElementById("micChunkSeconds").value || 5);
-            const elapsedEnd = (performance.now() - liveStartedAt) / 1000;
             const startSec = Math.max(0, elapsedEnd - chunkSeconds);
             const formData = new FormData();
             const mimeType = (blob && blob.type) || (mediaRecorder && mediaRecorder.mimeType) || "";
@@ -660,7 +1170,7 @@
                 addTimelinePoint(data.point);
             }
             if (data.warning) {
-                setStatus("Recording", "#d97706");
+                setStatus("Recording · Voice Model Warning", "warn");
             }
         }
 
@@ -668,7 +1178,7 @@
             document.getElementById("startMicButton").disabled = false;
             document.getElementById("stopMicButton").disabled = true;
             if (!liveSessionId) {
-                setStatus("Done", "#15803d");
+                setStatus("Done", "success");
                 return;
             }
 
@@ -684,7 +1194,7 @@
             renderSummary(data);
             document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
             document.getElementById("replayButton").disabled = latestTimeline.length === 0;
-            setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+            setStatus("Live Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
         }
 
         function pickRecorderMimeType() {
@@ -699,24 +1209,12 @@
 
         function extensionFromMimeType(mimeType) {
             const lower = (mimeType || "").toLowerCase();
-            if (lower.includes("m4a")) {
-                return "m4a";
-            }
-            if (lower.includes("mp4")) {
-                return "mp4";
-            }
-            if (lower.includes("ogg")) {
-                return "ogg";
-            }
-            if (lower.includes("wav")) {
-                return "wav";
-            }
-            if (lower.includes("mpeg") || lower.includes("mp3")) {
-                return "mp3";
-            }
-            if (lower.includes("webm")) {
-                return "webm";
-            }
+            if (lower.includes("m4a")) return "m4a";
+            if (lower.includes("mp4")) return "mp4";
+            if (lower.includes("ogg")) return "ogg";
+            if (lower.includes("wav")) return "wav";
+            if (lower.includes("mpeg") || lower.includes("mp3")) return "mp3";
+            if (lower.includes("webm")) return "webm";
             return "webm";
         }
 
@@ -760,7 +1258,7 @@
             }
 
             if (!completed) {
-                setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
                 document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
             }
@@ -768,7 +1266,7 @@
 
         function handleStreamEvent(event) {
             if (event.event === "warning") {
-                setStatus("Analyzing", "#d97706");
+                setStatus("Analyzing · Voice Model Warning", "warn");
                 return false;
             }
             if (event.event === "error") {
@@ -782,13 +1280,16 @@
                 renderSummary(event);
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
                 document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
-                setStatus("Done", latestTimeline.length ? levelColor(latestTimeline[latestTimeline.length - 1].risk_level) : "#15803d");
+                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
                 return true;
             }
             return false;
         }
 
         function addTimelinePoint(point) {
+            if (latestTimeline.length === 0) {
+                document.getElementById("timelineBody").innerHTML = "";
+            }
             latestTimeline.push(point);
             appendTimelineRow(point);
             showPoint(point);
@@ -799,42 +1300,62 @@
                 Number(item.smoothed_score || 0) > Number(max.smoothed_score || 0) ? item : max
             ), latestTimeline[0]);
             document.getElementById("finalDecision").textContent = "Analyzing";
+            document.getElementById("finalDecision").className = "kpi-value";
+            document.getElementById("decisionIcon").className = "kpi-icon";
             document.getElementById("finalRisk").textContent = formatScore(point.smoothed_score);
             document.getElementById("peakRisk").textContent = formatScore(peak.smoothed_score);
         }
 
         function renderSummary(data) {
-            document.getElementById("finalDecision").textContent = data.final_label || "-";
+            const score = Number(data.final_score || 0);
+            const level = levelFromScore(score);
+            const assets = getLevelAssets(level);
+            const decisionEl = document.getElementById("finalDecision");
+            decisionEl.textContent = data.final_label || "-";
+            decisionEl.className = `kpi-value value-${assets.className}`;
+            document.getElementById("decisionIcon").className = `kpi-icon stat-${assets.className}`;
             document.getElementById("finalRisk").textContent = formatScore(data.final_score);
             document.getElementById("peakRisk").textContent = formatScore(data.max_score);
         }
 
         function renderTimeline(timeline) {
             const body = document.getElementById("timelineBody");
-            body.innerHTML = timeline.map((point) => `
-                <tr id="row-${point.index}">
-                    <td>${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
-                    <td>${escapeHtml(point.risk_level)}</td>
-                    <td>${formatScore(point.text_score)}</td>
-                    <td>${formatScore(point.voice_score)}</td>
-                    <td>${formatScore(point.fused_score)}</td>
-                    <td>${formatScore(point.smoothed_score)}</td>
-                </tr>
-            `).join("");
+            if (!timeline.length) {
+                body.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-secondary); padding: 40px;">No analysis records yet.</td></tr>`;
+                return;
+            }
+            body.innerHTML = timeline.map((point) => generateRowHtml(point)).join("");
         }
 
         function appendTimelineRow(point) {
-            const body = document.getElementById("timelineBody");
-            body.insertAdjacentHTML("beforeend", `
-                <tr id="row-${point.index}">
-                    <td>${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
-                    <td>${escapeHtml(point.risk_level)}</td>
-                    <td>${formatScore(point.text_score)}</td>
-                    <td>${formatScore(point.voice_score)}</td>
+            document.getElementById("timelineBody").insertAdjacentHTML("beforeend", generateRowHtml(point));
+        }
+
+        function generateRowHtml(point) {
+            const assets = getLevelAssets(point.risk_level);
+            return `
+                <tr id="row-${point.index}" onclick="jumpToPoint(${point.index})" style="cursor:pointer;">
+                    <td style="font-variant-numeric: tabular-nums; font-weight:700;">${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
+                    <td><span class="badge stat-${assets.className}">${escapeHtml(point.risk_level)}</span></td>
+                    <td class="${scoreClass(point.text_score)}">${formatScore(point.text_score)}</td>
+                    <td class="${scoreClass(point.voice_score)}">${formatScore(point.voice_score)}</td>
                     <td>${formatScore(point.fused_score)}</td>
-                    <td>${formatScore(point.smoothed_score)}</td>
+                    <td style="font-weight:800; color:var(--primary);">${formatScore(point.smoothed_score)}</td>
                 </tr>
-            `);
+            `;
+        }
+
+        function jumpToPoint(index) {
+            if (playbackTimer) {
+                clearInterval(playbackTimer);
+                playbackTimer = null;
+            }
+            const point = latestTimeline.find((item) => item.index === index);
+            if (point) {
+                showPoint(point);
+                drawChart(latestTimeline, latestTimeline.indexOf(point));
+                markRow(index);
+            }
         }
 
         function playTimeline() {
@@ -845,121 +1366,251 @@
                 clearInterval(playbackTimer);
             }
 
+            setStatus("Replaying Timeline", "running");
             let index = 0;
-            showPoint(latestTimeline[index]);
-            drawChart(latestTimeline, index);
-            markRow(latestTimeline[index].index);
-
-            playbackTimer = setInterval(() => {
-                index += 1;
+            const playNext = () => {
                 if (index >= latestTimeline.length) {
                     clearInterval(playbackTimer);
                     playbackTimer = null;
-                    setStatus("Done", levelColor(latestTimeline[latestTimeline.length - 1].risk_level));
+                    setStatus("Replay Complete", statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level));
                     return;
                 }
                 showPoint(latestTimeline[index]);
                 drawChart(latestTimeline, index);
                 markRow(latestTimeline[index].index);
-            }, 900);
+                index += 1;
+            };
+            playNext();
+            playbackTimer = setInterval(playNext, 900);
         }
 
         function showPoint(point) {
             document.getElementById("currentWindow").textContent = `${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s`;
-            document.getElementById("textScore").textContent = formatScore(point.text_score);
-            document.getElementById("voiceScore").textContent = formatScore(point.voice_score);
+            setScoreValue("textScore", point.text_score);
+            setScoreValue("voiceScore", point.voice_score);
             document.getElementById("fusedScore").textContent = formatScore(point.fused_score);
             document.getElementById("smoothScore").textContent = formatScore(point.smoothed_score);
-            document.getElementById("currentLevel").textContent = point.risk_level;
-            document.getElementById("currentLevel").style.color = levelColor(point.risk_level);
-            document.getElementById("windowTranscript").textContent = point.text || "No transcript in this window.";
+
+            const assets = getLevelAssets(point.risk_level);
+            const levelEl = document.getElementById("currentLevel");
+            levelEl.textContent = point.risk_level;
+            levelEl.className = `kpi-value value-${assets.className}`;
+            document.getElementById("levelIcon").className = `kpi-icon stat-${assets.className}`;
+
+            if (point.text) {
+                document.getElementById("windowTranscript").textContent = point.text;
+            } else {
+                showTranscriptPlaceholder("No transcript in this window.");
+            }
+        }
+
+        function setScoreValue(id, value) {
+            const element = document.getElementById(id);
+            element.textContent = formatScore(value);
+            element.className = `value ${scoreClass(value)}`;
         }
 
         function markRow(index) {
-            document.querySelectorAll("tr.active-row").forEach((row) => row.classList.remove("active-row"));
+            document.querySelectorAll("#timelineBody tr").forEach((row) => row.classList.remove("active-row"));
             const row = document.getElementById(`row-${index}`);
             if (row) {
                 row.classList.add("active-row");
-                row.scrollIntoView({ block: "nearest" });
+                row.scrollIntoView({ block: "nearest", behavior: "smooth" });
             }
         }
 
         function drawChart(timeline, activeIndex) {
             const canvas = document.getElementById("riskCanvas");
             const ctx = canvas.getContext("2d");
-            const width = canvas.width;
-            const height = canvas.height;
-            const pad = 38;
+            const themeStyle = getComputedStyle(document.body);
+            const primaryColor = themeStyle.getPropertyValue("--primary").trim();
+            const textPrimary = themeStyle.getPropertyValue("--text-primary").trim();
+            const textSecondary = themeStyle.getPropertyValue("--text-secondary").trim();
+            const borderColor = themeStyle.getPropertyValue("--border-color").trim();
+            const criticalColor = themeStyle.getPropertyValue("--color-critical").trim();
+            const highColor = themeStyle.getPropertyValue("--color-high").trim();
+            const suspiciousColor = themeStyle.getPropertyValue("--color-suspicious").trim();
+            const chartSurface = themeStyle.getPropertyValue("--chart-surface").trim();
+            const isDarkTheme = document.body.dataset.theme === "dark";
+            const riskLineColor = isDarkTheme ? "#fb7185" : "#dc2626";
+            const riskGlowColor = isDarkTheme ? "rgba(251, 113, 133, 0.42)" : "rgba(220, 38, 38, 0.28)";
+            const dpr = window.devicePixelRatio || 1;
+            const container = canvas.parentElement;
+            const displayWidth = Math.max(320, container.clientWidth - 40);
+            const displayHeight = 320;
+
+            canvas.width = displayWidth * dpr;
+            canvas.height = displayHeight * dpr;
+            canvas.style.width = `${displayWidth}px`;
+            canvas.style.height = `${displayHeight}px`;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            const width = displayWidth;
+            const height = displayHeight;
+            const padTop = 10;
+            const padBottom = 30;
+            const padLeft = 40;
+            const padRight = 20;
+            const chartW = width - padLeft - padRight;
+            const chartH = height - padTop - padBottom;
 
             ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "#ffffff";
+            ctx.fillStyle = chartSurface;
             ctx.fillRect(0, 0, width, height);
 
-            // 风险阈值带
-            drawBand(ctx, width, height, pad, 90, 100, "rgba(220, 38, 38, 0.08)");
-            drawBand(ctx, width, height, pad, 70, 90, "rgba(217, 119, 6, 0.08)");
-            drawBand(ctx, width, height, pad, 50, 70, "rgba(37, 99, 235, 0.06)");
+            const drawBand = (min, max, color) => {
+                const yTop = scoreToY(max, chartH, padTop);
+                const yBottom = scoreToY(min, chartH, padTop);
+                ctx.fillStyle = color;
+                ctx.fillRect(padLeft, yTop, chartW, yBottom - yTop);
+            };
 
-            ctx.strokeStyle = "#d7deea";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(pad, pad);
-            ctx.lineTo(pad, height - pad);
-            ctx.lineTo(width - pad, height - pad);
-            ctx.stroke();
+            drawBand(90, 100, "rgba(239, 68, 68, 0.10)");
+            drawBand(70, 90, "rgba(249, 115, 22, 0.08)");
+            drawBand(50, 70, "rgba(234, 179, 8, 0.06)");
+            drawBand(0, 50, "rgba(34, 197, 94, 0.03)");
 
             [0, 50, 70, 90, 100].forEach((score) => {
-                const y = scoreToY(score, height, pad);
-                ctx.strokeStyle = score === 0 ? "#d7deea" : "#e5eaf2";
+                const y = scoreToY(score, chartH, padTop);
                 ctx.beginPath();
-                ctx.moveTo(pad, y);
-                ctx.lineTo(width - pad, y);
+                ctx.moveTo(padLeft, y);
+                ctx.lineTo(width - padRight, y);
+                ctx.strokeStyle = borderColor;
+                ctx.lineWidth = 1;
                 ctx.stroke();
-                ctx.fillStyle = "#64748b";
-                ctx.font = "12px Arial";
-                ctx.fillText(String(score), 8, y + 4);
+                ctx.fillStyle = textSecondary;
+                ctx.font = "bold 11px sans-serif";
+                ctx.textAlign = "right";
+                ctx.fillText(String(score), padLeft - 10, y + 4);
             });
 
+            ctx.beginPath();
+            ctx.moveTo(padLeft, height - padBottom);
+            ctx.lineTo(width - padRight, height - padBottom);
+            ctx.strokeStyle = borderColor;
+            ctx.stroke();
+
             if (!timeline.length) {
-                ctx.fillStyle = "#64748b";
-                ctx.font = "15px Arial";
-                ctx.fillText("Upload audio or start live mic to generate a dynamic risk curve.", pad + 10, height / 2);
+                ctx.fillStyle = textSecondary;
+                ctx.font = "14px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("Upload audio or start live mic to generate a dynamic risk curve.", width / 2, height / 2);
                 return;
             }
 
             const points = timeline.map((point, i) => {
-                const x = timeline.length === 1 ? width / 2 : pad + (i / (timeline.length - 1)) * (width - pad * 2);
-                const y = scoreToY(Number(point.smoothed_score || 0), height, pad);
+                const x = timeline.length === 1 ? padLeft + chartW / 2 : padLeft + (i / (timeline.length - 1)) * chartW;
+                const y = scoreToY(Number(point.smoothed_score || 0), chartH, padTop);
                 return { x, y, point };
             });
 
-            ctx.strokeStyle = "#2563eb";
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            points.forEach((p, i) => {
-                if (i === 0) ctx.moveTo(p.x, p.y);
-                else ctx.lineTo(p.x, p.y);
-            });
-            ctx.stroke();
-
-            points.forEach((p, i) => {
-                const isActive = i === activeIndex;
-                ctx.fillStyle = isActive ? levelColor(p.point.risk_level) : "#2563eb";
+            if (points.length === 1) {
+                const singlePoint = points[0];
+                const baseline = height - padBottom;
+                const singleGradient = ctx.createLinearGradient(0, singlePoint.y, 0, baseline);
+                singleGradient.addColorStop(0, isDarkTheme ? "rgba(251, 113, 133, 0.24)" : "rgba(220, 38, 38, 0.18)");
+                singleGradient.addColorStop(1, "rgba(220, 38, 38, 0)");
+                ctx.fillStyle = singleGradient;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, isActive ? 6 : 4, 0, Math.PI * 2);
+                ctx.ellipse(singlePoint.x, singlePoint.y, 44, 18, 0, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.shadowColor = riskGlowColor;
+                ctx.shadowBlur = 14;
+                ctx.fillStyle = riskLineColor;
+                ctx.beginPath();
+                ctx.arc(singlePoint.x, singlePoint.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = textPrimary;
+                ctx.font = "bold 11px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(`${formatScore(singlePoint.point.end_sec)}s`, singlePoint.x, baseline + 18);
+                return;
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, height - padBottom);
+            ctx.lineTo(points[0].x, points[0].y);
+            drawSmoothCurve(ctx, points, false);
+            ctx.lineTo(points[points.length - 1].x, height - padBottom);
+            ctx.closePath();
+            const gradient = ctx.createLinearGradient(0, padTop, 0, height - padBottom);
+            gradient.addColorStop(0, isDarkTheme ? "rgba(251, 113, 133, 0.26)" : "rgba(220, 38, 38, 0.20)");
+            gradient.addColorStop(0.65, isDarkTheme ? "rgba(251, 113, 133, 0.10)" : "rgba(220, 38, 38, 0.08)");
+            gradient.addColorStop(1, "rgba(220, 38, 38, 0)");
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.save();
+            ctx.strokeStyle = riskGlowColor;
+            ctx.lineWidth = 11;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.beginPath();
+            drawSmoothCurve(ctx, points);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            ctx.shadowColor = riskGlowColor;
+            ctx.shadowBlur = 10;
+            ctx.strokeStyle = riskLineColor;
+            ctx.lineWidth = 3;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.beginPath();
+            drawSmoothCurve(ctx, points);
+            ctx.stroke();
+            ctx.restore();
+
+            points.forEach((point, i) => {
+                const isActive = i === activeIndex;
+                const level = levelFromScore(Number(point.point.smoothed_score || 0));
+                let pointColor = riskLineColor;
+                if (level === "Critical") pointColor = criticalColor;
+                else if (level === "High Risk") pointColor = highColor;
+                else if (level === "Suspicious") pointColor = suspiciousColor;
+
+                ctx.fillStyle = isActive ? chartSurface : pointColor;
+                ctx.strokeStyle = pointColor;
+                ctx.lineWidth = isActive ? 4 : 2;
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, isActive ? 7 : 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                if (i === 0 || i === points.length - 1 || isActive) {
+                    ctx.fillStyle = isActive ? textPrimary : textSecondary;
+                    ctx.font = isActive ? "bold 11px sans-serif" : "11px sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(`${formatScore(point.point.end_sec)}s`, point.x, height - padBottom + 18);
+                }
             });
         }
 
-        function drawBand(ctx, width, height, pad, min, max, color) {
-            const yTop = scoreToY(max, height, pad);
-            const yBottom = scoreToY(min, height, pad);
-            ctx.fillStyle = color;
-            ctx.fillRect(pad, yTop, width - pad * 2, yBottom - yTop);
+        function drawSmoothCurve(ctx, points, moveToFirst = true) {
+            if (moveToFirst) {
+                ctx.moveTo(points[0].x, points[0].y);
+            }
+            if (points.length === 2) {
+                const controlX = (points[0].x + points[1].x) / 2;
+                ctx.bezierCurveTo(controlX, points[0].y, controlX, points[1].y, points[1].x, points[1].y);
+                return;
+            }
+
+            for (let i = 1; i < points.length - 1; i += 1) {
+                const midX = (points[i].x + points[i + 1].x) / 2;
+                const midY = (points[i].y + points[i + 1].y) / 2;
+                ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+            }
+            const last = points[points.length - 1];
+            const previous = points[points.length - 2];
+            ctx.quadraticCurveTo(previous.x, previous.y, last.x, last.y);
         }
 
-        function scoreToY(score, height, pad) {
-            return height - pad - (Math.max(0, Math.min(100, score)) / 100) * (height - pad * 2);
+        function scoreToY(score, chartH, padTop) {
+            const safeScore = Math.max(0, Math.min(100, score));
+            return padTop + chartH - (safeScore / 100) * chartH;
         }
 
         function levelFromScore(score) {
@@ -969,16 +1620,32 @@
             return "Normal";
         }
 
-        function levelColor(level) {
-            if (level === "Critical") return "#dc2626";
-            if (level === "High Risk") return "#d97706";
-            if (level === "Suspicious") return "#2563eb";
-            return "#15803d";
+        function getLevelAssets(level) {
+            if (level === "Critical") return { className: "critical" };
+            if (level === "High Risk") return { className: "high" };
+            if (level === "Suspicious") return { className: "suspicious" };
+            if (level === "Normal") return { className: "normal" };
+            return { className: "normal" };
+        }
+
+        function statusFromLevel(level) {
+            if (level === "Critical" || level === "High Risk" || level === "Suspicious") {
+                return "warn";
+            }
+            return "success";
+        }
+
+        function scoreClass(value) {
+            const score = Number(value || 0);
+            if (score >= 90) return "value-critical";
+            if (score >= 70) return "value-high";
+            if (score >= 50) return "value-suspicious";
+            return "value-normal";
         }
 
         function formatScore(value) {
             const number = Number(value || 0);
-            return Number.isInteger(number) ? String(number) : number.toFixed(2);
+            return Number.isInteger(number) ? String(number) : number.toFixed(1);
         }
 
         function escapeHtml(value) {
@@ -990,6 +1657,8 @@
                 .replaceAll("'", "&#039;");
         }
 
+        window.addEventListener("resize", () => drawChart(latestTimeline, -1));
+        setTheme(localStorage.getItem("voiceRiskTheme") || "light");
         drawChart([]);
     </script>
 </body>

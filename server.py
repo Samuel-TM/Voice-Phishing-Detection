@@ -231,6 +231,46 @@ def convert_live_chunk_to_wav(chunk_path: Path) -> Path:
     audio.export(wav_path.as_posix(), format="wav")
     return wav_path
 
+
+def prepare_live_chunk_wav(
+    session_id: str,
+    chunk_path: Path,
+    chunk_index: int,
+    start_sec: float,
+    end_sec: float,
+    chunk_seconds: float,
+) -> Path:
+    suffix = chunk_path.suffix.lower().lstrip(".")
+    if suffix not in {"webm", "ogg", "mp4", "m4a"}:
+        return convert_live_chunk_to_wav(chunk_path)
+
+    session_dir = LIVE_STREAM_CACHE_DIR / session_id
+    stream_path = session_dir / f"live_recording.{suffix}"
+    mode = "wb" if chunk_index == 0 or not stream_path.exists() else "ab"
+    with LIVE_STREAM_LOCK:
+        with chunk_path.open("rb") as source, stream_path.open(mode) as target:
+            target.write(source.read())
+
+    audio = AudioSegment.from_file(stream_path.as_posix())
+    audio_len_ms = len(audio)
+    if audio_len_ms <= 0:
+        raise ValueError("Decoded live audio stream is empty.")
+
+    start_ms = int(max(0.0, start_sec) * 1000)
+    end_ms = int(max(start_sec, end_sec) * 1000)
+    if end_ms <= start_ms:
+        end_ms = start_ms + int(max(1.0, chunk_seconds) * 1000)
+
+    start_ms = min(start_ms, audio_len_ms)
+    end_ms = min(max(end_ms, start_ms + 100), audio_len_ms)
+    if end_ms <= start_ms:
+        start_ms = max(0, audio_len_ms - int(max(1.0, chunk_seconds) * 1000))
+        end_ms = audio_len_ms
+
+    wav_path = chunk_path.with_suffix(".wav")
+    audio[start_ms:end_ms].export(wav_path.as_posix(), format="wav")
+    return wav_path
+
 # -----------------------------------------------------------------------------
 # 路由
 # -----------------------------------------------------------------------------
@@ -387,7 +427,14 @@ def api_live_audio_chunk():
     previous_smoothed = session.get("previous_smoothed")
 
     try:
-        wav_path = convert_live_chunk_to_wav(chunk_path)
+        wav_path = prepare_live_chunk_wav(
+            session_id=session_id,
+            chunk_path=chunk_path,
+            chunk_index=int(chunk_index),
+            start_sec=start_sec,
+            end_sec=end_sec,
+            chunk_seconds=chunk_seconds,
+        )
 
         window_text = ""
         text_error = None
