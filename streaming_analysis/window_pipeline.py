@@ -48,10 +48,10 @@ def _clamp_seconds(value: Any, default: float, minimum: float, maximum: float) -
 
 def analyze_audio_stream(
     audio_path: str,
-    deepvoice_model_path: Optional[str],
-    deepvoice_config_path: Optional[str],
+    audio_risk_model_path: Optional[str],
+    audio_risk_config_path: Optional[str],
     text_inference: Callable[[str], Dict[str, Any]],
-    deepvoice_inference: Callable[[str, str, str], float],
+    audio_risk_inference: Callable[[str, str, str], float],
     transcribe_segment: Callable[[str], str],
     window_seconds: Any = 10,
     step_seconds: Any = 5,
@@ -71,10 +71,10 @@ def analyze_audio_stream(
 
     for event in iter_audio_stream_analysis(
         audio_path=audio_path,
-        deepvoice_model_path=deepvoice_model_path,
-        deepvoice_config_path=deepvoice_config_path,
+        audio_risk_model_path=audio_risk_model_path,
+        audio_risk_config_path=audio_risk_config_path,
         text_inference=text_inference,
-        deepvoice_inference=deepvoice_inference,
+        audio_risk_inference=audio_risk_inference,
         transcribe_segment=transcribe_segment,
         window_seconds=window_seconds,
         step_seconds=step_seconds,
@@ -108,10 +108,10 @@ def analyze_audio_stream(
 
 def iter_audio_stream_analysis(
     audio_path: str,
-    deepvoice_model_path: Optional[str],
-    deepvoice_config_path: Optional[str],
+    audio_risk_model_path: Optional[str],
+    audio_risk_config_path: Optional[str],
     text_inference: Callable[[str], Dict[str, Any]],
-    deepvoice_inference: Callable[[str, str, str], float],
+    audio_risk_inference: Callable[[str, str, str], float],
     transcribe_segment: Callable[[str], str],
     window_seconds: Any = 10,
     step_seconds: Any = 5,
@@ -197,13 +197,13 @@ def iter_audio_stream_analysis(
             deepfake_probability = 0.0
             voice_score = 0.0
             voice_error = None
-            if deepvoice_model_path and deepvoice_config_path:
+            if audio_risk_model_path and audio_risk_config_path:
                 try:
                     deepfake_probability = _safe_float(
-                        deepvoice_inference(
+                        audio_risk_inference(
                             segment_path.as_posix(),
-                            deepvoice_model_path,
-                            deepvoice_config_path,
+                            audio_risk_model_path,
+                            audio_risk_config_path,
                         )
                     )
                     voice_score = round(deepfake_probability * 100.0, 2)

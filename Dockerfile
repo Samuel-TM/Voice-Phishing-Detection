@@ -31,7 +31,7 @@ RUN pip install torch==1.10.1+cpu torchvision==0.11.2+cpu torchaudio==0.10.1+cpu
 # 2. PyTorch 1.10.1과 호환되는 transformers 버전을 직접 설치 (핵심 수정 사항)
 RUN pip install transformers==4.28.1
 
-# 3. KoBERT 토크나이저에 필요한 sentencepiece 설치
+# 3. Chinese BERT 토크나이저에 필요한 sentencepiece 설치
 RUN pip install sentencepiece
 
 # 4. requirements.txt 복사 및 설치 (transformers 관련 라인은 삭제된 상태여야 함)
@@ -73,8 +73,8 @@ COPY . .
 # 필요한 폴더 미리 생성
 RUN mkdir -p uploads \
     static/csv \
-    deepvoice_detection/model \
-    KoBERTModel/model
+    audio_risk_detection/model \
+    ChineseBERTModel/model
 
 # Flask 포트 오픈
 EXPOSE 5000

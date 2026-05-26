@@ -42,8 +42,8 @@ if ML_DIR.as_posix() not in sys.path:
 
 # 包导入和直接脚本导入都做兼容
 try:
-    from .KoBERTModel.ensemble_utils import ensemble_inference
-    from .deepvoice_detection.predict_deepvoice import deepvoice_predict
+    from .ChineseBERTModel.ensemble_utils import ensemble_inference
+    from .audio_risk_detection.predict_audio_risk import audio_risk_predict
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
     from .speaker_analysis.whisper_stt import transcribe_segment
     from .streaming_analysis.window_pipeline import (
@@ -54,8 +54,8 @@ try:
     )
 except Exception:
     try:
-        from ML.KoBERTModel.ensemble_utils import ensemble_inference
-        from ML.deepvoice_detection.predict_deepvoice import deepvoice_predict
+        from ML.ChineseBERTModel.ensemble_utils import ensemble_inference
+        from ML.audio_risk_detection.predict_audio_risk import audio_risk_predict
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from ML.speaker_analysis.whisper_stt import transcribe_segment
         from ML.streaming_analysis.window_pipeline import (
@@ -65,8 +65,8 @@ except Exception:
             risk_level,
         )
     except Exception:
-        from KoBERTModel.ensemble_utils import ensemble_inference
-        from deepvoice_detection.predict_deepvoice import deepvoice_predict
+        from ChineseBERTModel.ensemble_utils import ensemble_inference
+        from audio_risk_detection.predict_audio_risk import audio_risk_predict
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from speaker_analysis.whisper_stt import transcribe_segment
         from streaming_analysis.window_pipeline import (
@@ -100,22 +100,31 @@ app.logger.info(f"Using device: {device} in server.py")
 # -----------------------------------------------------------------------------
 # 路径/模型文件
 # -----------------------------------------------------------------------------
-DEEPVOICE_MODEL_FILENAME = "best_f1_model.pt"
-DEEPVOICE_MODEL_PATH = ML_DIR / "deepvoice_detection" / "model" / DEEPVOICE_MODEL_FILENAME
-DEEPVOICE_CONFIG_PATH = ML_DIR / "deepvoice_detection" / "model" / "deepvoice_config.json"
-LEGACY_DEEPVOICE_CONFIG_PATH = ML_DIR / "deepvoice_detection" / "deepvoice_config.json"
-if not DEEPVOICE_CONFIG_PATH.exists() and LEGACY_DEEPVOICE_CONFIG_PATH.exists():
-    DEEPVOICE_CONFIG_PATH = LEGACY_DEEPVOICE_CONFIG_PATH
+AUDIO_RISK_MODEL_FILENAME = "best_f1_model.pt"
+AUDIO_RISK_MODEL_PATH = ML_DIR / "audio_risk_detection" / "model" / AUDIO_RISK_MODEL_FILENAME
+AUDIO_RISK_CONFIG_PATH = ML_DIR / "audio_risk_detection" / "model" / "audio_risk_config.json"
+LEGACY_AUDIO_RISK_CONFIG_PATH = ML_DIR / "audio_risk_detection" / "audio_risk_config.json"
+OLD_AUDIO_RISK_MODEL_PATH = ML_DIR / "deepvoice_detection" / "model" / AUDIO_RISK_MODEL_FILENAME
+OLD_AUDIO_RISK_CONFIG_PATH = ML_DIR / "deepvoice_detection" / "model" / "deepvoice_config.json"
+OLD_LEGACY_AUDIO_RISK_CONFIG_PATH = ML_DIR / "deepvoice_detection" / "deepvoice_config.json"
+if not AUDIO_RISK_MODEL_PATH.exists() and OLD_AUDIO_RISK_MODEL_PATH.exists():
+    AUDIO_RISK_MODEL_PATH = OLD_AUDIO_RISK_MODEL_PATH
+if not AUDIO_RISK_CONFIG_PATH.exists() and LEGACY_AUDIO_RISK_CONFIG_PATH.exists():
+    AUDIO_RISK_CONFIG_PATH = LEGACY_AUDIO_RISK_CONFIG_PATH
+if not AUDIO_RISK_CONFIG_PATH.exists() and OLD_AUDIO_RISK_CONFIG_PATH.exists():
+    AUDIO_RISK_CONFIG_PATH = OLD_AUDIO_RISK_CONFIG_PATH
+if not AUDIO_RISK_CONFIG_PATH.exists() and OLD_LEGACY_AUDIO_RISK_CONFIG_PATH.exists():
+    AUDIO_RISK_CONFIG_PATH = OLD_LEGACY_AUDIO_RISK_CONFIG_PATH
 
 critical_error = False
-if not DEEPVOICE_MODEL_PATH.exists():
-    app.logger.critical(f"Deepvoice model NOT FOUND at {DEEPVOICE_MODEL_PATH}")
+if not AUDIO_RISK_MODEL_PATH.exists():
+    app.logger.critical(f"Audio risk model NOT FOUND at {AUDIO_RISK_MODEL_PATH}")
     critical_error = True
-if not DEEPVOICE_CONFIG_PATH.exists():
-    app.logger.critical(f"Deepvoice config NOT FOUND at {DEEPVOICE_CONFIG_PATH}")
+if not AUDIO_RISK_CONFIG_PATH.exists():
+    app.logger.critical(f"Audio risk config NOT FOUND at {AUDIO_RISK_CONFIG_PATH}")
     critical_error = True
 if critical_error:
-    app.logger.error("Essential model or config files are missing (deepvoice). "
+    app.logger.error("Essential model or config files are missing (audio risk). "
                      "Audio-related features may be disabled.")
 
 UPLOAD_DIR = ML_DIR / "uploads"
@@ -337,7 +346,7 @@ def api_stream_audio_analysis():
     audio_path = (UPLOAD_DIR / f"stream_{filename}").resolve()
     audio_file.save(audio_path.as_posix())
 
-    deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
+    audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
     window_seconds = request.form.get("window_seconds", 10)
     step_seconds = request.form.get("step_seconds", 5)
 
@@ -347,7 +356,7 @@ def api_stream_audio_analysis():
     @stream_with_context
     def generate_events():
         try:
-            if not deepvoice_ok:
+            if not audio_risk_ok:
                 yield encode_event({
                     "event": "warning",
                     "warning": "Voice model or config is missing. Voice scores are set to zero.",
@@ -355,10 +364,10 @@ def api_stream_audio_analysis():
 
             for event in iter_audio_stream_analysis(
                 audio_path=audio_path.as_posix(),
-                deepvoice_model_path=DEEPVOICE_MODEL_PATH.as_posix() if deepvoice_ok else None,
-                deepvoice_config_path=DEEPVOICE_CONFIG_PATH.as_posix() if deepvoice_ok else None,
+                audio_risk_model_path=AUDIO_RISK_MODEL_PATH.as_posix() if audio_risk_ok else None,
+                audio_risk_config_path=AUDIO_RISK_CONFIG_PATH.as_posix() if audio_risk_ok else None,
                 text_inference=ensemble_inference,
-                deepvoice_inference=deepvoice_predict,
+                audio_risk_inference=audio_risk_predict,
                 transcribe_segment=transcribe_segment,
                 window_seconds=window_seconds,
                 step_seconds=step_seconds,
@@ -422,7 +431,7 @@ def api_live_audio_chunk():
     chunk_path = (session_dir / f"chunk_{int(chunk_index):04d}.{ext}").resolve()
     audio_chunk.save(chunk_path.as_posix())
 
-    deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
+    audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
     transcript_parts: List[str] = list(session.get("transcript_parts", []))
     previous_smoothed = session.get("previous_smoothed")
 
@@ -464,13 +473,13 @@ def api_live_audio_chunk():
         deepfake_probability = 0.0
         voice_score = 0.0
         voice_error = None
-        if deepvoice_ok:
+        if audio_risk_ok:
             try:
                 deepfake_probability = safe_float(
-                    deepvoice_predict(
+                    audio_risk_predict(
                         wav_path.as_posix(),
-                        DEEPVOICE_MODEL_PATH.as_posix(),
-                        DEEPVOICE_CONFIG_PATH.as_posix(),
+                        AUDIO_RISK_MODEL_PATH.as_posix(),
+                        AUDIO_RISK_CONFIG_PATH.as_posix(),
                     )
                 )
                 voice_score = round(deepfake_probability * 100.0, 2)
@@ -523,7 +532,7 @@ def api_live_audio_chunk():
                 "smoothing_previous": smoothing_previous_weight,
                 "smoothing_current": smoothing_current_weight,
             },
-            "warning": None if deepvoice_ok else "Voice model or config is missing. Voice scores are set to zero.",
+            "warning": None if audio_risk_ok else "Voice model or config is missing. Voice scores are set to zero.",
         }), 200
     except Exception:
         app.logger.error("实时音频分片分析失败", exc_info=True)
@@ -614,10 +623,10 @@ def api_audio_result():
     }
 
     try:
-        # Deepvoice 文件缺失时禁用音频风险评分
-        deepvoice_ok = DEEPVOICE_MODEL_PATH.exists() and DEEPVOICE_CONFIG_PATH.exists()
-        if not deepvoice_ok:
-            app.logger.warning("Deepvoice model/config is missing. Voice-related scores will be zeros.")
+        # Audio risk 文件缺失时禁用音频风险评分
+        audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
+        if not audio_risk_ok:
+            app.logger.warning("Audio risk model/config is missing. Voice-related scores will be zeros.")
 
         if multi_speaker:
             app.logger.debug(f"Analyzing multi-speaker audio: {audio_path}")
@@ -629,9 +638,9 @@ def api_audio_result():
             # }
             raw_results = analyze_multi_speaker_audio(
                 audio_path.as_posix(),
-                DEEPVOICE_MODEL_PATH.as_posix(),
-                DEEPVOICE_CONFIG_PATH.as_posix()
-            ) if deepvoice_ok else analyze_multi_speaker_audio(
+                AUDIO_RISK_MODEL_PATH.as_posix(),
+                AUDIO_RISK_CONFIG_PATH.as_posix()
+            ) if audio_risk_ok else analyze_multi_speaker_audio(
                 audio_path.as_posix(), None, None
             )
             app.logger.debug(f"Multi-speaker analysis raw result: {raw_results}")
@@ -690,16 +699,16 @@ def api_audio_result():
                 text = ""
 
             # --- 文本风险 ---
-            kobert_text_result = ensemble_inference(text) or {}
-            llm_s = safe_float(kobert_text_result.get("llm_score", 0.0))
-            is_text_phishing = bool(kobert_text_result.get("phishing_detected", llm_s > 50))
+            text_risk_result = ensemble_inference(text) or {}
+            llm_s = safe_float(text_risk_result.get("llm_score", 0.0))
+            is_text_phishing = bool(text_risk_result.get("phishing_detected", llm_s > 50))
 
             # --- 音频深伪风险 ---
-            if deepvoice_ok:
-                deep_prob = deepvoice_predict(
+            if audio_risk_ok:
+                deep_prob = audio_risk_predict(
                     audio_path.as_posix(),
-                    DEEPVOICE_MODEL_PATH.as_posix(),
-                    DEEPVOICE_CONFIG_PATH.as_posix()
+                    AUDIO_RISK_MODEL_PATH.as_posix(),
+                    AUDIO_RISK_CONFIG_PATH.as_posix()
                 )
                 deep_prob = 0.0 if deep_prob is None else safe_float(deep_prob, 0.0)
             else:

@@ -66,14 +66,12 @@ PORT=5050 python server.py
 
 ## 命名迁移策略
 
-项目里存在历史命名，例如：
+项目已从原始开源项目命名迁移到当前系统命名：
 
-- `KoBERTModel`
-- `deepvoice_detection`
+- 文本风险模块：`ChineseBERTModel`
+- 音频风险模块：`audio_risk_detection`
 
-这些名字来自原始开源项目或旧实现。后续可以逐步重构为更准确的命名，例如中文 BERT 文本风险模块、audio risk 模块等。
-
-但重命名时必须同步修改所有关联代码、导入路径、模板调用、测试脚本和文档引用。不要只改目录名或文件名。若时间紧，优先保证系统可运行，再做命名清理。
+后续如果继续重命名，必须同步修改所有关联代码、导入路径、模板调用、测试脚本和文档引用。不要只改目录名或文件名。若时间紧，优先保证系统可运行，再做命名清理。
 
 推荐策略：
 
@@ -100,9 +98,9 @@ PORT=5050 python server.py
 
 当前关键模型文件：
 
-- 文本模型权重：`KoBERTModel/model/train.pt`
-- 音频模型权重：`deepvoice_detection/model/best_f1_model.pt`
-- 音频模型配置：`deepvoice_detection/model/deepvoice_config.json`
+- 文本模型权重：`ChineseBERTModel/model/train.pt`
+- 音频模型权重：`audio_risk_detection/model/best_f1_model.pt`
+- 音频模型配置：`audio_risk_detection/model/audio_risk_config.json`
 
 如果模型文件缺失，应该返回清晰、结构化的错误信息，并提示缺少哪个文件。不要自动启动训练流程，不要静默下载其他模型来替代项目指定权重。
 

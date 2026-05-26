@@ -3,13 +3,13 @@
 try:
     from .diarization_utils import split_speakers
     from .whisper_stt import transcribe_segment
-    from ..deepvoice_detection.predict_deepvoice import deepvoice_predict
-    from ..KoBERTModel.ensemble_utils import ensemble_inference
+    from ..audio_risk_detection.predict_audio_risk import audio_risk_predict
+    from ..ChineseBERTModel.ensemble_utils import ensemble_inference
 except Exception:
     from speaker_analysis.diarization_utils import split_speakers
     from speaker_analysis.whisper_stt import transcribe_segment
-    from deepvoice_detection.predict_deepvoice import deepvoice_predict
-    from KoBERTModel.ensemble_utils import ensemble_inference
+    from audio_risk_detection.predict_audio_risk import audio_risk_predict
+    from ChineseBERTModel.ensemble_utils import ensemble_inference
 
 import os
 import logging
@@ -73,32 +73,32 @@ def analyze_multi_speaker_audio(audio_path: str, dv_model_path: str, dv_config_p
             logger.error(f"STT failed for segment {segment_audio_path} of speaker {speaker_id}: {e_stt}", exc_info=True)
 
         # 中文 BERT 文本风险分析
-        kobert_analysis_result = {"phishing_detected": False, "llm_score": 0.0, "final_label": "Normal"}
+        text_analysis_result = {"phishing_detected": False, "llm_score": 0.0, "final_label": "Normal"}
         try:
             if transcribed_text and not transcribed_text.startswith("(STT") and transcribed_text.strip():
-                kobert_analysis_result = ensemble_inference(transcribed_text)
-                logger.info(f"KoBERT analysis result for {speaker_id}: {kobert_analysis_result}")
+                text_analysis_result = ensemble_inference(transcribed_text)
+                logger.info(f"Chinese BERT analysis result for {speaker_id}: {text_analysis_result}")
             else:
-                logger.warning(f"Skipping KoBERT analysis for {speaker_id} due to STT failure or empty text.")
-        except Exception as e_kobert:
-            logger.error(f"KoBERT analysis failed for text from speaker {speaker_id}: {e_kobert}", exc_info=True)
+                logger.warning(f"Skipping Chinese BERT analysis for {speaker_id} due to STT failure or empty text.")
+        except Exception as e_text:
+            logger.error(f"Chinese BERT analysis failed for text from speaker {speaker_id}: {e_text}", exc_info=True)
 
         # 深伪语音检测
         deepfake_probability = 0.0
         if dv_model_path and dv_config_path:
             try:
-                logger.debug(f"Predicting deepvoice for {segment_audio_path} with model {dv_model_path}")
-                deepfake_probability = deepvoice_predict(segment_audio_path, dv_model_path, dv_config_path)
+                logger.debug(f"Predicting audio risk for {segment_audio_path} with model {dv_model_path}")
+                deepfake_probability = audio_risk_predict(segment_audio_path, dv_model_path, dv_config_path)
                 if deepfake_probability is None:
                     deepfake_probability = 0.0
-                logger.info(f"Deepvoice score (probability) for {speaker_id}: {deepfake_probability:.4f}")
+                logger.info(f"Audio risk score (probability) for {speaker_id}: {deepfake_probability:.4f}")
             except Exception as e_dv:
-                logger.error(f"Deepvoice prediction failed for segment {segment_audio_path} of speaker {speaker_id}: {e_dv}", exc_info=True)
+                logger.error(f"Audio risk prediction failed for segment {segment_audio_path} of speaker {speaker_id}: {e_dv}", exc_info=True)
         else:
-            logger.warning("Deepvoice model or config path is missing; voice risk score is set to 0.")
+            logger.warning("Audio risk model or config path is missing; voice risk score is set to 0.")
 
         # 汇总单说话人的多模态结果
-        is_text_phishing = bool(kobert_analysis_result.get("phishing_detected", False))
+        is_text_phishing = bool(text_analysis_result.get("phishing_detected", False))
         deepfake_detection_threshold = 0.5 
         is_voice_deepfake = deepfake_probability > deepfake_detection_threshold
 
@@ -108,7 +108,7 @@ def analyze_multi_speaker_audio(audio_path: str, dv_model_path: str, dv_config_p
         analysis_results[speaker_id] = {
             "text": transcribed_text,
             "phishing_detected_text": is_text_phishing,
-            "text_score": kobert_analysis_result.get("llm_score", 0.0),
+            "text_score": text_analysis_result.get("llm_score", 0.0),
             "deepfake_score": round(deepfake_probability, 4),
             "deepfake_detected_voice": is_voice_deepfake,
             "phishing": is_overall_phishing,
