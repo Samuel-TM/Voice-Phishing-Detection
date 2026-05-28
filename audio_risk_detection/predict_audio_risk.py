@@ -6,7 +6,7 @@ import json
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 os.environ.setdefault("NUMBA_CACHE_DIR", (PROJECT_DIR / ".cache" / "numba").as_posix())
@@ -16,6 +16,7 @@ import librosa
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 logger = logging.getLogger(__name__)
 _MODEL_CACHE: Dict[Tuple[str, str], Tuple["AudioCNNLSTM", dict]] = {}
+DEFAULT_DECISION_THRESHOLD = 0.5
 
 class AudioCNNLSTM(nn.Module):
     def __init__(self, model_config):
@@ -73,11 +74,11 @@ def extract_mfcc_features(audio_path, feature_config):
         return None
 
 def load_predict_config(config_path):
-    # 加载训练时保存的特征参数和模型结构参数
+    # 加载训练时保存的特征参数、模型结构参数和部署阈值
     logger.debug(f"Loading config from: {config_path}")
     if not os.path.exists(config_path):
         logger.critical(f"Config file NOT FOUND at {config_path}")
-        return None, None, None
+        return None, None, None, None
 
     with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
@@ -85,7 +86,37 @@ def load_predict_config(config_path):
     if config['model_params']['conv_in_channels'] != config['feature_params']['n_mfcc']:
         logger.warning(f"model_params.conv_in_channels adjusted to feature_params.n_mfcc for {config_path}.")
         config['model_params']['conv_in_channels'] = config['feature_params']['n_mfcc']
-    return config.get('feature_params'), config.get('model_params'), config.get('output_paths')
+    return (
+        config.get('feature_params'),
+        config.get('model_params'),
+        config.get('output_paths'),
+        config.get('decision_params') or {},
+    )
+
+
+def clamp_probability(value: Any, default: float = 0.0) -> float:
+    try:
+        numeric = float(value)
+    except Exception:
+        numeric = default
+    return max(0.0, min(1.0, numeric))
+
+
+def get_decision_threshold(config_path: str, default: float = DEFAULT_DECISION_THRESHOLD) -> float:
+    _, _, _, decision_params = load_predict_config(config_path)
+    if not decision_params:
+        return default
+    return clamp_probability(decision_params.get("decision_threshold", default), default=default)
+
+
+def probability_to_voice_score(probability: Any, decision_threshold: Any = DEFAULT_DECISION_THRESHOLD) -> float:
+    """Map raw class-1 probability to a calibrated 0-100 risk score."""
+    probability = clamp_probability(probability)
+    threshold = clamp_probability(decision_threshold, default=DEFAULT_DECISION_THRESHOLD)
+    threshold = min(max(threshold, 1e-6), 1.0 - 1e-6)
+    if probability <= threshold:
+        return round((probability / threshold) * 50.0, 2)
+    return round(50.0 + ((probability - threshold) / (1.0 - threshold)) * 50.0, 2)
 
 
 def load_audio_risk_model_once(model_path: str, config_path: str) -> Tuple[Optional[AudioCNNLSTM], Optional[dict]]:
@@ -98,7 +129,7 @@ def load_audio_risk_model_once(model_path: str, config_path: str) -> Tuple[Optio
     if cache_key in _MODEL_CACHE:
         return _MODEL_CACHE[cache_key]
 
-    feature_params, model_params_from_config, _ = load_predict_config(config_path)
+    feature_params, model_params_from_config, _, _ = load_predict_config(config_path)
     if feature_params is None or model_params_from_config is None:
         logger.error(f"Failed to load feature_params or model_params from config {config_path}")
         return None, None
@@ -148,6 +179,26 @@ def audio_risk_predict(audio_path: str, model_path: str, config_path: str) -> fl
 
     return deepfake_probability
 
+
+def audio_risk_predict_with_decision(audio_path: str, model_path: str, config_path: str) -> Dict[str, Any]:
+    """Return raw probability plus the calibrated decision fields used by services."""
+    probability = audio_risk_predict(audio_path, model_path, config_path)
+    _, _, _, decision_params = load_predict_config(config_path)
+    decision_params = decision_params or {}
+    threshold = clamp_probability(
+        decision_params.get("decision_threshold", DEFAULT_DECISION_THRESHOLD),
+        default=DEFAULT_DECISION_THRESHOLD,
+    )
+    voice_score = probability_to_voice_score(probability, threshold)
+    return {
+        "deepfake_probability": round(clamp_probability(probability), 6),
+        "deepfake_score": round(clamp_probability(probability), 6),
+        "voice_score": voice_score,
+        "decision_threshold": threshold,
+        "threshold_source": decision_params.get("threshold_source", "default_0_5"),
+        "deepfake_detected_voice": clamp_probability(probability) > threshold,
+    }
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Predict synthetic speech risk for an audio file.")
     parser.add_argument("--audio_path", type=str, required=True, help="Path to the input audio file.")
@@ -158,7 +209,7 @@ if __name__ == '__main__':
 
     used_model_path = args.model_path
     if used_model_path is None:
-        _, _, output_paths_config = load_predict_config(args.config_path)
+        _, _, output_paths_config, _ = load_predict_config(args.config_path)
         if output_paths_config and 'best_model_save_path' in output_paths_config:
             used_model_path = output_paths_config['best_model_save_path']
             logger.info(f"Model path not provided, using default from config: {used_model_path}")
@@ -172,15 +223,18 @@ if __name__ == '__main__':
         logger.critical(f"Effective model path is invalid or model file does not exist: {used_model_path}")
         exit()
 
-    score = audio_risk_predict(args.audio_path, used_model_path, args.config_path)
+    result = audio_risk_predict_with_decision(args.audio_path, used_model_path, args.config_path)
+    score = result["deepfake_probability"]
 
     print(f"--- Prediction Result ---")
     print(f"Audio: {args.audio_path}")
     print(f"Using model: {used_model_path}")
     print(f"Using config: {args.config_path}")
     print(f"Deepfake Probability (Class 1): {score:.4f}")
+    print(f"Decision Threshold: {result['decision_threshold']:.4f} ({result['threshold_source']})")
+    print(f"Calibrated Voice Risk Score: {result['voice_score']:.2f}")
 
-    if score > 0.5:
+    if result["deepfake_detected_voice"]:
         print("Prediction: Synthetic speech risk")
     else:
         print("Prediction: Real voice / low synthetic speech risk")

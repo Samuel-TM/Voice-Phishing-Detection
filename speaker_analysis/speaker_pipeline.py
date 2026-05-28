@@ -3,12 +3,12 @@
 try:
     from .diarization_utils import split_speakers
     from .whisper_stt import transcribe_segment
-    from ..audio_risk_detection.predict_audio_risk import audio_risk_predict
+    from ..audio_risk_detection.predict_audio_risk import audio_risk_predict_with_decision
     from ..ChineseBERTModel.ensemble_utils import ensemble_inference
 except Exception:
     from speaker_analysis.diarization_utils import split_speakers
     from speaker_analysis.whisper_stt import transcribe_segment
-    from audio_risk_detection.predict_audio_risk import audio_risk_predict
+    from audio_risk_detection.predict_audio_risk import audio_risk_predict_with_decision
     from ChineseBERTModel.ensemble_utils import ensemble_inference
 
 import os
@@ -85,12 +85,19 @@ def analyze_multi_speaker_audio(audio_path: str, dv_model_path: str, dv_config_p
 
         # 深伪语音检测
         deepfake_probability = 0.0
+        voice_score = 0.0
+        deepfake_detection_threshold = 0.5
+        threshold_source = "default_0_5"
+        is_voice_deepfake = False
         if dv_model_path and dv_config_path:
             try:
                 logger.debug(f"Predicting audio risk for {segment_audio_path} with model {dv_model_path}")
-                deepfake_probability = audio_risk_predict(segment_audio_path, dv_model_path, dv_config_path)
-                if deepfake_probability is None:
-                    deepfake_probability = 0.0
+                voice_result = audio_risk_predict_with_decision(segment_audio_path, dv_model_path, dv_config_path)
+                deepfake_probability = float(voice_result.get("deepfake_probability", 0.0))
+                voice_score = float(voice_result.get("voice_score", 0.0))
+                deepfake_detection_threshold = float(voice_result.get("decision_threshold", 0.5))
+                threshold_source = voice_result.get("threshold_source", threshold_source)
+                is_voice_deepfake = bool(voice_result.get("deepfake_detected_voice", False))
                 logger.info(f"Audio risk score (probability) for {speaker_id}: {deepfake_probability:.4f}")
             except Exception as e_dv:
                 logger.error(f"Audio risk prediction failed for segment {segment_audio_path} of speaker {speaker_id}: {e_dv}", exc_info=True)
@@ -99,8 +106,6 @@ def analyze_multi_speaker_audio(audio_path: str, dv_model_path: str, dv_config_p
 
         # 汇总单说话人的多模态结果
         is_text_phishing = bool(text_analysis_result.get("phishing_detected", False))
-        deepfake_detection_threshold = 0.5 
-        is_voice_deepfake = deepfake_probability > deepfake_detection_threshold
 
         is_overall_phishing = is_text_phishing or is_voice_deepfake
         final_decision_message = "Fraud Risk Detected" if is_overall_phishing else "No High Risk Detected"
@@ -110,7 +115,10 @@ def analyze_multi_speaker_audio(audio_path: str, dv_model_path: str, dv_config_p
             "phishing_detected_text": is_text_phishing,
             "text_score": text_analysis_result.get("llm_score", 0.0),
             "deepfake_score": round(deepfake_probability, 4),
+            "voice_score": round(voice_score, 2),
             "deepfake_detected_voice": is_voice_deepfake,
+            "voice_decision_threshold": round(deepfake_detection_threshold, 4),
+            "voice_threshold_source": threshold_source,
             "phishing": is_overall_phishing,
             "final_decision": final_decision_message,
         }

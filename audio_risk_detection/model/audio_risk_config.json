@@ -25,7 +25,31 @@
     "random_seed": 42,
     "lr_scheduler_patience": 2,
     "lr_scheduler_factor": 0.5,
-    "early_stopping_patience": 3
+    "early_stopping_patience": 3,
+    "min_real_recall_for_threshold": 0.85,
+    "min_fake_recall_for_threshold": 0.85,
+    "max_recall_gap_for_threshold": 0.1,
+    "deployment_min_macro_f1": 0.82,
+    "deployment_min_class_f1": 0.75,
+    "deployment_min_ood_macro_f1": 0.86,
+    "deployment_min_ood_real_recall": 0.86,
+    "deployment_min_balanced_fake_recall": 0.85,
+    "deployment_min_asvspoof_fake_recall": 0.84,
+    "checkpoint_min_inwild_real_recall": 0.85,
+    "checkpoint_min_asvspoof_fake_recall": 0.84,
+    "asvspoof_spoof_sampling_ratio": 1.25,
+    "in_the_wild_spoof_sampling_ratio": 1.0,
+    "selection_asvspoof_val_per_class": 1200
+  },
+  "decision_params": {
+    "decision_threshold": 0.7495130300521851,
+    "threshold_source": "balanced_validation_macro_f1_constraints",
+    "min_real_recall_for_threshold": 0.85,
+    "min_fake_recall_for_threshold": 0.85,
+    "max_recall_gap_for_threshold": 0.1,
+    "class_0": "real/bonafide",
+    "class_1": "fake/spoof",
+    "score_mapping": "threshold_linear_50_at_decision_threshold"
   },
   "output_paths": {
     "log_csv_path": "static/csv/train_deepfake_metrics_log.csv",

@@ -43,7 +43,12 @@ if ML_DIR.as_posix() not in sys.path:
 # 包导入和直接脚本导入都做兼容
 try:
     from .ChineseBERTModel.ensemble_utils import ensemble_inference
-    from .audio_risk_detection.predict_audio_risk import audio_risk_predict
+    from .audio_risk_detection.predict_audio_risk import (
+        audio_risk_predict,
+        audio_risk_predict_with_decision,
+        get_decision_threshold,
+        probability_to_voice_score,
+    )
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
     from .speaker_analysis.whisper_stt import transcribe_segment
     from .streaming_analysis.window_pipeline import (
@@ -55,7 +60,12 @@ try:
 except Exception:
     try:
         from ML.ChineseBERTModel.ensemble_utils import ensemble_inference
-        from ML.audio_risk_detection.predict_audio_risk import audio_risk_predict
+        from ML.audio_risk_detection.predict_audio_risk import (
+            audio_risk_predict,
+            audio_risk_predict_with_decision,
+            get_decision_threshold,
+            probability_to_voice_score,
+        )
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from ML.speaker_analysis.whisper_stt import transcribe_segment
         from ML.streaming_analysis.window_pipeline import (
@@ -66,7 +76,12 @@ except Exception:
         )
     except Exception:
         from ChineseBERTModel.ensemble_utils import ensemble_inference
-        from audio_risk_detection.predict_audio_risk import audio_risk_predict
+        from audio_risk_detection.predict_audio_risk import (
+            audio_risk_predict,
+            audio_risk_predict_with_decision,
+            get_decision_threshold,
+            probability_to_voice_score,
+        )
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from speaker_analysis.whisper_stt import transcribe_segment
         from streaming_analysis.window_pipeline import (
@@ -126,6 +141,27 @@ if not AUDIO_RISK_CONFIG_PATH.exists():
 if critical_error:
     app.logger.error("Essential model or config files are missing (audio risk). "
                      "Audio-related features may be disabled.")
+
+AUDIO_RISK_DECISION_THRESHOLD = 0.5
+AUDIO_RISK_THRESHOLD_SOURCE = "default_0_5"
+if AUDIO_RISK_CONFIG_PATH.exists():
+    try:
+        AUDIO_RISK_DECISION_THRESHOLD = get_decision_threshold(AUDIO_RISK_CONFIG_PATH.as_posix())
+        with AUDIO_RISK_CONFIG_PATH.open("r", encoding="utf-8") as config_handle:
+            config_payload = json.load(config_handle)
+        AUDIO_RISK_THRESHOLD_SOURCE = (
+            config_payload.get("decision_params", {}).get("threshold_source")
+            or AUDIO_RISK_THRESHOLD_SOURCE
+        )
+        app.logger.info(
+            "Audio risk model configured: model=%s config=%s decision_threshold=%.4f source=%s",
+            AUDIO_RISK_MODEL_PATH,
+            AUDIO_RISK_CONFIG_PATH,
+            AUDIO_RISK_DECISION_THRESHOLD,
+            AUDIO_RISK_THRESHOLD_SOURCE,
+        )
+    except Exception:
+        app.logger.warning("Failed to load audio risk decision threshold; using 0.5.", exc_info=True)
 
 UPLOAD_DIR = ML_DIR / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -367,7 +403,7 @@ def api_stream_audio_analysis():
                 audio_risk_model_path=AUDIO_RISK_MODEL_PATH.as_posix() if audio_risk_ok else None,
                 audio_risk_config_path=AUDIO_RISK_CONFIG_PATH.as_posix() if audio_risk_ok else None,
                 text_inference=ensemble_inference,
-                audio_risk_inference=audio_risk_predict,
+                audio_risk_inference=audio_risk_predict_with_decision,
                 transcribe_segment=transcribe_segment,
                 window_seconds=window_seconds,
                 step_seconds=step_seconds,
@@ -462,9 +498,10 @@ def api_live_audio_chunk():
 
         text_score = 0.0
         text_result: Dict[str, Any] = {}
-        if cumulative_text:
+        text_model_input = window_text.strip()
+        if text_model_input:
             try:
-                text_result = ensemble_inference(cumulative_text) or {}
+                text_result = ensemble_inference(text_model_input) or {}
                 text_score = safe_float(text_result.get("llm_score", 0.0))
             except Exception:
                 app.logger.error("实时音频分片文本风险推理失败", exc_info=True)
@@ -472,17 +509,17 @@ def api_live_audio_chunk():
 
         deepfake_probability = 0.0
         voice_score = 0.0
+        voice_decision: Dict[str, Any] = {}
         voice_error = None
         if audio_risk_ok:
             try:
-                deepfake_probability = safe_float(
-                    audio_risk_predict(
-                        wav_path.as_posix(),
-                        AUDIO_RISK_MODEL_PATH.as_posix(),
-                        AUDIO_RISK_CONFIG_PATH.as_posix(),
-                    )
+                voice_decision = audio_risk_predict_with_decision(
+                    wav_path.as_posix(),
+                    AUDIO_RISK_MODEL_PATH.as_posix(),
+                    AUDIO_RISK_CONFIG_PATH.as_posix(),
                 )
-                voice_score = round(deepfake_probability * 100.0, 2)
+                deepfake_probability = safe_float(voice_decision.get("deepfake_probability", 0.0))
+                voice_score = safe_float(voice_decision.get("voice_score", 0.0))
             except Exception:
                 app.logger.error("实时音频分片声学风险推理失败", exc_info=True)
                 voice_error = "Voice inference failed."
@@ -508,11 +545,16 @@ def api_live_audio_chunk():
             "text_score": round(text_score, 2),
             "voice_score": voice_score,
             "deepfake_score": round(deepfake_probability, 4),
+            "deepfake_detected_voice": bool(voice_decision.get("deepfake_detected_voice", False)),
             "fused_score": fused_score,
             "smoothed_score": smoothed_score,
             "risk_level": risk_level(smoothed_score),
             "source": "microphone",
         }
+        if voice_decision.get("decision_threshold") is not None:
+            point["voice_decision_threshold"] = round(safe_float(voice_decision.get("decision_threshold")), 4)
+        if voice_decision.get("threshold_source"):
+            point["voice_threshold_source"] = voice_decision["threshold_source"]
         if text_error:
             point["text_error"] = text_error
         if voice_error:
@@ -651,13 +693,16 @@ def api_audio_result():
                     llm_s  = safe_float(data.get("text_score", 0.0))     # 0~100
                     dv_prob = safe_float(data.get("deepfake_score", 0.0)) # 0~1
 
-                    # 统一到 0-100 分制并做 8:2 融合
-                    voice_s = round(dv_prob * 100, 2)
+                    # 统一到校准后的 0-100 风险分并做 8:2 融合
+                    voice_s = safe_float(
+                        data.get("voice_score"),
+                        probability_to_voice_score(dv_prob, AUDIO_RISK_DECISION_THRESHOLD),
+                    )
                     total_s = round((0.8 * llm_s) + (0.2 * voice_s), 2)
 
                     # 优先使用 pipeline 原始标记，缺失时按阈值补齐
                     text_flag  = bool(data.get("phishing_detected_text", llm_s >= 70))
-                    voice_flag = bool(data.get("deepfake_detected_voice", dv_prob >= 0.5))
+                    voice_flag = bool(data.get("deepfake_detected_voice", dv_prob > AUDIO_RISK_DECISION_THRESHOLD))
 
                     # 最终二分类判定：70 分以上视为高风险
                     final_label = "Fraud Risk Detected" if total_s >= 70 else "No High Risk Detected"
@@ -668,6 +713,11 @@ def api_audio_result():
                         "text_score": round(llm_s, 2),
                         "deepfake_score": round(dv_prob, 4),
                         "deepfake_detected_voice": voice_flag,
+                        "voice_decision_threshold": safe_float(
+                            data.get("voice_decision_threshold"),
+                            AUDIO_RISK_DECISION_THRESHOLD,
+                        ),
+                        "voice_threshold_source": data.get("voice_threshold_source", AUDIO_RISK_THRESHOLD_SOURCE),
                         "phishing": (total_s >= 70),
                         "final_decision": final_label,
 
@@ -704,20 +754,22 @@ def api_audio_result():
             is_text_phishing = bool(text_risk_result.get("phishing_detected", llm_s > 50))
 
             # --- 音频深伪风险 ---
+            voice_s = 0.0
+            is_voice_deepfake = False
+            voice_decision: Dict[str, Any] = {}
             if audio_risk_ok:
-                deep_prob = audio_risk_predict(
+                voice_decision = audio_risk_predict_with_decision(
                     audio_path.as_posix(),
                     AUDIO_RISK_MODEL_PATH.as_posix(),
                     AUDIO_RISK_CONFIG_PATH.as_posix()
                 )
-                deep_prob = 0.0 if deep_prob is None else safe_float(deep_prob, 0.0)
+                deep_prob = safe_float(voice_decision.get("deepfake_probability", 0.0))
+                voice_s = safe_float(voice_decision.get("voice_score", 0.0))
+                is_voice_deepfake = bool(voice_decision.get("deepfake_detected_voice", False))
             else:
                 deep_prob = 0.0
 
-            is_voice_deepfake = deep_prob > 0.5
-
             # 0-100 分制 + 8:2 融合
-            voice_s = round(deep_prob * 100, 2)                 # 0~100
             total_s = round((0.8 * llm_s) + (0.2 * voice_s), 2) # 0~100
 
             # 最终标签，70 分为高风险阈值
@@ -733,6 +785,11 @@ def api_audio_result():
                     "voice_score": voice_s,
                     "phishing_detected_text": is_text_phishing,
                     "deepfake_detected_voice": is_voice_deepfake,
+                    "voice_decision_threshold": safe_float(
+                        voice_decision.get("decision_threshold"),
+                        AUDIO_RISK_DECISION_THRESHOLD,
+                    ),
+                    "voice_threshold_source": voice_decision.get("threshold_source", AUDIO_RISK_THRESHOLD_SOURCE),
                     "phishing": (total_s >= 70),
                     "final_decision": final_label,
                 }

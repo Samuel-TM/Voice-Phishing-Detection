@@ -37,6 +37,30 @@ def _safe_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def _normalize_audio_risk_result(result: Any) -> Dict[str, Any]:
+    """兼容旧的 float 概率输出和新的校准风险输出。"""
+    if isinstance(result, dict):
+        probability = _safe_float(
+            result.get("deepfake_probability", result.get("deepfake_score", 0.0))
+        )
+        return {
+            "deepfake_probability": probability,
+            "voice_score": _safe_float(result.get("voice_score"), round(probability * 100.0, 2)),
+            "deepfake_detected_voice": bool(result.get("deepfake_detected_voice", False)),
+            "decision_threshold": result.get("decision_threshold"),
+            "threshold_source": result.get("threshold_source"),
+        }
+
+    probability = _safe_float(result)
+    return {
+        "deepfake_probability": probability,
+        "voice_score": round(probability * 100.0, 2),
+        "deepfake_detected_voice": probability > 0.5,
+        "decision_threshold": 0.5,
+        "threshold_source": "default_0_5",
+    }
+
+
 def _clamp_seconds(value: Any, default: float, minimum: float, maximum: float) -> float:
     """限制窗口参数范围，避免过小窗口或过大窗口拖垮演示流程。"""
     try:
@@ -51,7 +75,7 @@ def analyze_audio_stream(
     audio_risk_model_path: Optional[str],
     audio_risk_config_path: Optional[str],
     text_inference: Callable[[str], Dict[str, Any]],
-    audio_risk_inference: Callable[[str, str, str], float],
+    audio_risk_inference: Callable[[str, str, str], Any],
     transcribe_segment: Callable[[str], str],
     window_seconds: Any = 10,
     step_seconds: Any = 5,
@@ -111,7 +135,7 @@ def iter_audio_stream_analysis(
     audio_risk_model_path: Optional[str],
     audio_risk_config_path: Optional[str],
     text_inference: Callable[[str], Dict[str, Any]],
-    audio_risk_inference: Callable[[str, str, str], float],
+    audio_risk_inference: Callable[[str, str, str], Any],
     transcribe_segment: Callable[[str], str],
     window_seconds: Any = 10,
     step_seconds: Any = 5,
@@ -186,9 +210,10 @@ def iter_audio_stream_analysis(
 
             text_score = 0.0
             text_result: Dict[str, Any] = {}
-            if cumulative_text:
+            text_model_input = window_text.strip()
+            if text_model_input:
                 try:
-                    text_result = text_inference(cumulative_text) or {}
+                    text_result = text_inference(text_model_input) or {}
                     text_score = _safe_float(text_result.get("llm_score", 0.0))
                 except Exception as exc:
                     logger.error("窗口文本风险推理失败: %s", exc, exc_info=True)
@@ -196,17 +221,19 @@ def iter_audio_stream_analysis(
 
             deepfake_probability = 0.0
             voice_score = 0.0
+            audio_decision: Dict[str, Any] = {}
             voice_error = None
             if audio_risk_model_path and audio_risk_config_path:
                 try:
-                    deepfake_probability = _safe_float(
+                    audio_decision = _normalize_audio_risk_result(
                         audio_risk_inference(
                             segment_path.as_posix(),
                             audio_risk_model_path,
                             audio_risk_config_path,
                         )
                     )
-                    voice_score = round(deepfake_probability * 100.0, 2)
+                    deepfake_probability = _safe_float(audio_decision.get("deepfake_probability"))
+                    voice_score = _safe_float(audio_decision.get("voice_score"))
                 except Exception as exc:
                     logger.error("窗口音频风险推理失败: %s", exc, exc_info=True)
                     voice_error = "Voice inference failed."
@@ -232,10 +259,15 @@ def iter_audio_stream_analysis(
                 "text_score": round(text_score, 2),
                 "voice_score": voice_score,
                 "deepfake_score": round(deepfake_probability, 4),
+                "deepfake_detected_voice": bool(audio_decision.get("deepfake_detected_voice", False)),
                 "fused_score": fused_score,
                 "smoothed_score": smoothed_score,
                 "risk_level": risk_level(smoothed_score),
             }
+            if audio_decision.get("decision_threshold") is not None:
+                point["voice_decision_threshold"] = round(_safe_float(audio_decision.get("decision_threshold")), 4)
+            if audio_decision.get("threshold_source"):
+                point["voice_threshold_source"] = audio_decision["threshold_source"]
             if text_error:
                 point["text_error"] = text_error
             if voice_error:
