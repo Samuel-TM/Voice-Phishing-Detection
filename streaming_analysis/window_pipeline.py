@@ -8,25 +8,17 @@ from typing import Any, Callable, Dict, Iterator, List, Optional
 
 from pydub import AudioSegment
 
+from .risk_scoring import (
+    RiskScoringState,
+    final_label_from_score,
+    normalize_scoring_mode,
+    risk_level,
+    score_window,
+)
+
 logger = logging.getLogger(__name__)
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 STREAM_WINDOW_CACHE_DIR = PROJECT_DIR / ".cache" / "stream_windows"
-
-
-def risk_level(score: float) -> str:
-    """将 0-100 风险分数映射为英文前端展示等级。"""
-    if score >= 90:
-        return "Critical"
-    if score >= 70:
-        return "High Risk"
-    if score >= 50:
-        return "Suspicious"
-    return "Normal"
-
-
-def final_label_from_score(score: float) -> str:
-    """根据最终平滑风险生成英文判定。"""
-    return "Fraud Risk Detected" if score >= 70 else "No High Risk Detected"
 
 
 def _safe_float(value: Any, default: float = 0.0) -> float:
@@ -82,6 +74,8 @@ def analyze_audio_stream(
     text_weight: float = 0.8,
     voice_weight: float = 0.2,
     smoothing_previous_weight: float = 0.65,
+    scoring_mode: Any = None,
+    case_type: str = "",
 ) -> Dict[str, Any]:
     """
     使用滑动窗口模拟实时通话流分析。
@@ -105,6 +99,8 @@ def analyze_audio_stream(
         text_weight=text_weight,
         voice_weight=voice_weight,
         smoothing_previous_weight=smoothing_previous_weight,
+        scoring_mode=scoring_mode,
+        case_type=case_type,
     ):
         if event.get("event") == "point":
             timeline.append(event["point"])
@@ -119,6 +115,8 @@ def analyze_audio_stream(
         "max_score": metadata.get("max_score", 0.0),
         "final_label": metadata.get("final_label", final_label_from_score(0.0)),
         "highest_risk_window": metadata.get("highest_risk_window"),
+        "scoring_mode": metadata.get("scoring_mode", normalize_scoring_mode(scoring_mode)),
+        "case_type": metadata.get("case_type", case_type),
         "window_seconds": metadata.get("window_seconds", window_seconds),
         "step_seconds": metadata.get("step_seconds", step_seconds),
         "weights": metadata.get("weights", {
@@ -142,6 +140,8 @@ def iter_audio_stream_analysis(
     text_weight: float = 0.8,
     voice_weight: float = 0.2,
     smoothing_previous_weight: float = 0.65,
+    scoring_mode: Any = None,
+    case_type: str = "",
 ) -> Iterator[Dict[str, Any]]:
     """逐窗口分析音频，并在每个窗口完成后立即 yield 风险点。"""
     source_path = Path(audio_path)
@@ -150,6 +150,7 @@ def iter_audio_stream_analysis(
 
     window_seconds = _clamp_seconds(window_seconds, default=10, minimum=2, maximum=60)
     step_seconds = _clamp_seconds(step_seconds, default=5, minimum=1, maximum=window_seconds)
+    scoring_mode = normalize_scoring_mode(scoring_mode)
     current_weight = 1.0 - smoothing_previous_weight
 
     audio = AudioSegment.from_file(source_path.as_posix())
@@ -178,7 +179,7 @@ def iter_audio_stream_analysis(
 
     timeline: List[Dict[str, Any]] = []
     transcript_parts: List[str] = []
-    previous_smoothed: Optional[float] = None
+    scoring_state = RiskScoringState()
 
     STREAM_WINDOW_CACHE_DIR.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="stream_windows_", dir=STREAM_WINDOW_CACHE_DIR.as_posix()) as temp_dir:
@@ -240,15 +241,17 @@ def iter_audio_stream_analysis(
             else:
                 voice_error = "Voice model or config is missing."
 
-            fused_score = round((text_weight * text_score) + (voice_weight * voice_score), 2)
-            if previous_smoothed is None:
-                smoothed_score = fused_score
-            else:
-                smoothed_score = round(
-                    smoothing_previous_weight * previous_smoothed + current_weight * fused_score,
-                    2,
-                )
-            previous_smoothed = smoothed_score
+            scoring = score_window(
+                raw_text_score=text_score,
+                voice_score=voice_score,
+                text=window_text,
+                state=scoring_state,
+                scoring_mode=scoring_mode,
+                case_type=case_type,
+                text_weight=text_weight,
+                voice_weight=voice_weight,
+                smoothing_previous_weight=smoothing_previous_weight,
+            )
 
             point: Dict[str, Any] = {
                 "index": index,
@@ -256,14 +259,16 @@ def iter_audio_stream_analysis(
                 "end_sec": round(end_ms / 1000.0, 2),
                 "text": window_text,
                 "cumulative_text": cumulative_text,
-                "text_score": round(text_score, 2),
-                "voice_score": voice_score,
+                "case_type": case_type,
+                "text_score": scoring["text_score"],
+                "voice_score": scoring["voice_score"],
                 "deepfake_score": round(deepfake_probability, 4),
                 "deepfake_detected_voice": bool(audio_decision.get("deepfake_detected_voice", False)),
-                "fused_score": fused_score,
-                "smoothed_score": smoothed_score,
-                "risk_level": risk_level(smoothed_score),
+                "fused_score": scoring["fused_score"],
+                "smoothed_score": scoring["smoothed_score"],
+                "risk_level": scoring["risk_level"],
             }
+            point.update({key: value for key, value in scoring.items() if key not in point})
             if audio_decision.get("decision_threshold") is not None:
                 point["voice_decision_threshold"] = round(_safe_float(audio_decision.get("decision_threshold")), 4)
             if audio_decision.get("threshold_source"):
@@ -293,6 +298,8 @@ def iter_audio_stream_analysis(
         "max_score": round(max_point["smoothed_score"], 2) if max_point else 0.0,
         "final_label": final_label_from_score(final_score),
         "highest_risk_window": max_point,
+        "scoring_mode": scoring_mode,
+        "case_type": case_type,
         "window_seconds": window_seconds,
         "step_seconds": step_seconds,
         "weights": {

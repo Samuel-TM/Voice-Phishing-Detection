@@ -52,10 +52,13 @@ try:
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
     from .speaker_analysis.whisper_stt import transcribe_segment
     from .streaming_analysis.window_pipeline import (
+        RiskScoringState,
         analyze_audio_stream,
         final_label_from_score,
         iter_audio_stream_analysis,
+        normalize_scoring_mode,
         risk_level,
+        score_window,
     )
 except Exception:
     try:
@@ -69,10 +72,13 @@ except Exception:
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from ML.speaker_analysis.whisper_stt import transcribe_segment
         from ML.streaming_analysis.window_pipeline import (
+            RiskScoringState,
             analyze_audio_stream,
             final_label_from_score,
             iter_audio_stream_analysis,
+            normalize_scoring_mode,
             risk_level,
+            score_window,
         )
     except Exception:
         from ChineseBERTModel.ensemble_utils import ensemble_inference
@@ -85,10 +91,13 @@ except Exception:
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
         from speaker_analysis.whisper_stt import transcribe_segment
         from streaming_analysis.window_pipeline import (
+            RiskScoringState,
             analyze_audio_stream,
             final_label_from_score,
             iter_audio_stream_analysis,
+            normalize_scoring_mode,
             risk_level,
+            score_window,
         )
 
 # -----------------------------------------------------------------------------
@@ -253,18 +262,30 @@ def get_live_session(session_id: Optional[str] = None) -> Dict[str, Any]:
             "updated_at": now,
             "transcript_parts": [],
             "previous_smoothed": None,
+            "consecutive_risk_windows": 0,
+            "alert_latched": False,
+            "scoring_mode": None,
             "timeline": [],
         }
         LIVE_STREAM_SESSIONS[new_id] = session
         return session
 
 
-def update_live_session_point(session_id: str, point: Dict[str, Any], transcript_parts: List[str], previous_smoothed: float) -> None:
+def update_live_session_point(
+    session_id: str,
+    point: Dict[str, Any],
+    transcript_parts: List[str],
+    scoring_state: RiskScoringState,
+) -> None:
     with LIVE_STREAM_LOCK:
         session = LIVE_STREAM_SESSIONS[session_id]
         session["timeline"].append(point)
         session["transcript_parts"] = transcript_parts
-        session["previous_smoothed"] = previous_smoothed
+        session["previous_smoothed"] = scoring_state.previous_smoothed
+        session["consecutive_risk_windows"] = scoring_state.consecutive_risk
+        session["alert_latched"] = scoring_state.alert_latched
+        session["scoring_mode"] = point.get("scoring_mode")
+        session["case_type"] = point.get("case_type", session.get("case_type", ""))
         session["updated_at"] = time.time()
 
 
@@ -385,6 +406,8 @@ def api_stream_audio_analysis():
     audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
     window_seconds = request.form.get("window_seconds", 10)
     step_seconds = request.form.get("step_seconds", 5)
+    scoring_mode = normalize_scoring_mode(request.form.get("scoring_mode"))
+    case_type = (request.form.get("case_type") or "").strip()
 
     def encode_event(payload: Dict[str, Any]) -> str:
         return json.dumps(payload, ensure_ascii=False) + "\n"
@@ -407,6 +430,8 @@ def api_stream_audio_analysis():
                 transcribe_segment=transcribe_segment,
                 window_seconds=window_seconds,
                 step_seconds=step_seconds,
+                scoring_mode=scoring_mode,
+                case_type=case_type,
             ):
                 yield encode_event(event)
         except Exception:
@@ -459,6 +484,8 @@ def api_live_audio_chunk():
         maximum=0.95,
     )
     smoothing_current_weight = 1.0 - smoothing_previous_weight
+    scoring_mode = normalize_scoring_mode(request.form.get("scoring_mode") or session.get("scoring_mode"))
+    case_type = (request.form.get("case_type") or session.get("case_type") or "").strip()
 
     filename = secure_filename(audio_chunk.filename or f"chunk_{int(chunk_index):04d}.webm")
     ext = live_extension_from_upload(filename, audio_chunk.mimetype)
@@ -469,7 +496,11 @@ def api_live_audio_chunk():
 
     audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
     transcript_parts: List[str] = list(session.get("transcript_parts", []))
-    previous_smoothed = session.get("previous_smoothed")
+    scoring_state = RiskScoringState(
+        previous_smoothed=session.get("previous_smoothed"),
+        consecutive_risk=int(safe_float(session.get("consecutive_risk_windows"), 0)),
+        alert_latched=bool(session.get("alert_latched", False)),
+    )
 
     try:
         wav_path = prepare_live_chunk_wav(
@@ -526,15 +557,17 @@ def api_live_audio_chunk():
         else:
             voice_error = "Voice model or config is missing."
 
-        fused_score = round((text_weight * text_score) + (voice_weight * voice_score), 2)
-        if previous_smoothed is None:
-            smoothed_score = fused_score
-        else:
-            smoothed_score = round(
-                smoothing_previous_weight * safe_float(previous_smoothed)
-                + smoothing_current_weight * fused_score,
-                2,
-            )
+        scoring = score_window(
+            raw_text_score=text_score,
+            voice_score=voice_score,
+            text=window_text,
+            state=scoring_state,
+            scoring_mode=scoring_mode,
+            case_type=case_type,
+            text_weight=text_weight,
+            voice_weight=voice_weight,
+            smoothing_previous_weight=smoothing_previous_weight,
+        )
 
         point: Dict[str, Any] = {
             "index": int(chunk_index),
@@ -542,15 +575,17 @@ def api_live_audio_chunk():
             "end_sec": round(max(end_sec, start_sec), 2),
             "text": window_text,
             "cumulative_text": cumulative_text,
-            "text_score": round(text_score, 2),
-            "voice_score": voice_score,
+            "text_score": scoring["text_score"],
+            "voice_score": scoring["voice_score"],
             "deepfake_score": round(deepfake_probability, 4),
             "deepfake_detected_voice": bool(voice_decision.get("deepfake_detected_voice", False)),
-            "fused_score": fused_score,
-            "smoothed_score": smoothed_score,
-            "risk_level": risk_level(smoothed_score),
+            "fused_score": scoring["fused_score"],
+            "smoothed_score": scoring["smoothed_score"],
+            "risk_level": scoring["risk_level"],
             "source": "microphone",
+            "case_type": case_type,
         }
+        point.update({key: value for key, value in scoring.items() if key not in point})
         if voice_decision.get("decision_threshold") is not None:
             point["voice_decision_threshold"] = round(safe_float(voice_decision.get("decision_threshold")), 4)
         if voice_decision.get("threshold_source"):
@@ -562,7 +597,7 @@ def api_live_audio_chunk():
         if text_result.get("error"):
             point["text_model_error"] = text_result["error"]
 
-        update_live_session_point(session_id, point, transcript_parts, smoothed_score)
+        update_live_session_point(session_id, point, transcript_parts, scoring_state)
         return jsonify({
             "event": "point",
             "session_id": session_id,
@@ -574,6 +609,7 @@ def api_live_audio_chunk():
                 "smoothing_previous": smoothing_previous_weight,
                 "smoothing_current": smoothing_current_weight,
             },
+            "scoring_mode": scoring_mode,
             "warning": None if audio_risk_ok else "Voice model or config is missing. Voice scores are set to zero.",
         }), 200
     except Exception:

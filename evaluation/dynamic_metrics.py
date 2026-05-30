@@ -164,7 +164,10 @@ def summarize_dynamic_metrics(rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     y_pred = [safe_int(row["prediction"]) for row in rows]
     metrics = classification_metrics(y_true, y_pred)
     fraud_rows = [row for row in rows if safe_int(row["label"]) == 1]
+    normal_rows = [row for row in rows if safe_int(row["label"]) == 0]
     alert_rows = [row for row in fraud_rows if row["alert_time_sec"] is not None]
+    normal_alert_rows = [row for row in normal_rows if row["alert_time_sec"] is not None]
+    normal_final_fp_rows = [row for row in normal_rows if safe_int(row["prediction"]) == 1]
     lead_times = [
         safe_float(row["early_warning_lead_time_sec"])
         for row in fraud_rows
@@ -179,7 +182,13 @@ def summarize_dynamic_metrics(rows: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
         **{key: round(value, 4) for key, value in metrics.items()},
         "samples": len(rows),
         "fraud_samples": len(fraud_rows),
+        "normal_samples": len(normal_rows),
         "fraud_alert_rate": round(len(alert_rows) / max(len(fraud_rows), 1), 4),
+        "fraud_alert_recall": round(len(alert_rows) / max(len(fraud_rows), 1), 4),
+        "normal_alert_false_positive_rate": round(len(normal_alert_rows) / max(len(normal_rows), 1), 4),
+        "normal_final_false_positive_rate": round(len(normal_final_fp_rows) / max(len(normal_rows), 1), 4),
+        "normal_alert_false_positives": len(normal_alert_rows),
+        "normal_final_false_positives": len(normal_final_fp_rows),
         "mean_time_to_alert_sec": round(mean([safe_float(row["alert_time_sec"]) for row in alert_rows]), 4)
         if alert_rows else None,
         "mean_early_warning_lead_time_sec": round(mean(lead_times), 4) if lead_times else None,

@@ -32,6 +32,7 @@ MANIFEST
 # Data
 *.wav
 test_samples/
+output/
 
 # macOS Finder metadata
 .DS_Store
