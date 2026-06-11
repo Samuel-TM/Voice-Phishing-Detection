@@ -21,6 +21,7 @@ import os
 from pathlib import Path
 import re
 from typing import Any, Dict, Optional
+import wave
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ os.environ.setdefault("MODELSCOPE_CACHE", (PROJECT_CACHE_DIR / "modelscope").as_
 DEFAULT_SENSEVOICE_MODEL = "FunAudioLLM/SenseVoiceSmall"
 DEFAULT_PARAFORMER_MODEL = "paraformer-zh"
 DEFAULT_ASR_BACKEND = "funasr_paraformer"
+MIN_ASR_AUDIO_DURATION_MS = 1000
 LOCAL_MODELSCOPE_DIR = PROJECT_CACHE_DIR / "modelscope" / "models"
 LOCAL_MODELSCOPE_ALIASES = {
     "paraformer-zh": "iic/speech_seaco_paraformer_large_asr_nat-zh-cn-16k-common-vocab8404-pytorch",
@@ -99,6 +101,44 @@ def _failure_result(audio_path: str, backend: str, model_name: str, message: str
             error=message,
         )
     )
+
+
+def _empty_audio_result(audio_path: str, backend: str, model_name: str, duration_ms: float) -> ASRResult:
+    logger.info(
+        "Skipping ASR for too-short audio segment '%s' with backend '%s': duration_ms=%.2f",
+        audio_path,
+        backend,
+        duration_ms,
+    )
+    return _set_last_result(
+        ASRResult(
+            text="",
+            backend=backend,
+            model_name=model_name,
+            metadata={
+                "skipped": "audio_too_short",
+                "duration_ms": round(duration_ms, 2),
+            },
+        )
+    )
+
+
+def _wav_duration_ms(audio_path: str) -> Optional[float]:
+    try:
+        with wave.open(audio_path, "rb") as handle:
+            frame_rate = float(handle.getframerate())
+            if frame_rate <= 0:
+                return None
+            return handle.getnframes() / frame_rate * 1000.0
+    except Exception:
+        return None
+
+
+def _min_asr_audio_duration_ms() -> int:
+    try:
+        return int(os.environ.get("ASR_MIN_AUDIO_MS", MIN_ASR_AUDIO_DURATION_MS))
+    except Exception:
+        return MIN_ASR_AUDIO_DURATION_MS
 
 
 def _parse_sensevoice_tokens(raw_text: str) -> Dict[str, str]:
@@ -209,6 +249,10 @@ def _transcribe_with_funasr(audio_path: str, backend: str) -> ASRResult:
     model_name = _funasr_model_name(backend)
     if not os.path.exists(audio_path):
         return _failure_result(audio_path, backend, model_name, "file not found")
+
+    duration_ms = _wav_duration_ms(audio_path)
+    if duration_ms is not None and duration_ms < _min_asr_audio_duration_ms():
+        return _empty_audio_result(audio_path, backend, model_name, duration_ms)
 
     try:
         model = _load_funasr_model(backend, model_name)

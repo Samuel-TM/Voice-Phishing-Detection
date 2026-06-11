@@ -4,8 +4,18 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from pathlib import Path
 from typing import Tuple, Dict, Any, List, Optional
+
+# ---------------------------------------------------------------------
+# 路径固定：以当前文件为基准定位权重，避免受启动目录影响
+# 必须在 transformers import 之前设置缓存环境变量。
+# ---------------------------------------------------------------------
+THIS_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = THIS_DIR.parent
+os.environ.setdefault("HF_HOME", (PROJECT_DIR / ".cache" / "huggingface").as_posix())
+os.environ.setdefault("TRANSFORMERS_CACHE", (PROJECT_DIR / ".cache" / "huggingface" / "hub").as_posix())
 
 import torch
 import torch.nn as nn
@@ -16,20 +26,33 @@ from transformers import AutoTokenizer, AutoModel
 logger = logging.getLogger(__name__)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ---------------------------------------------------------------------
-# 路径固定：以当前文件为基准定位权重，避免受启动目录影响
-# ---------------------------------------------------------------------
-THIS_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = THIS_DIR.parent
-os.environ.setdefault("HF_HOME", (PROJECT_DIR / ".cache" / "huggingface").as_posix())
-os.environ.setdefault("TRANSFORMERS_CACHE", (PROJECT_DIR / ".cache" / "huggingface" / "hub").as_posix())
-MODEL_PATH = THIS_DIR / "model" / "train.pt"
+MODEL_PATH = THIS_DIR / "model" / "best_model.pt"
+FALLBACK_MODEL_PATH = THIS_DIR / "model" / "train.pt"
 OLD_MODEL_PATH = PROJECT_DIR / "KoBERTModel" / "model" / "train.pt"
-if not MODEL_PATH.exists() and OLD_MODEL_PATH.exists():
+if not MODEL_PATH.exists() and FALLBACK_MODEL_PATH.exists():
+    MODEL_PATH = FALLBACK_MODEL_PATH
+elif not MODEL_PATH.exists() and OLD_MODEL_PATH.exists():
     MODEL_PATH = OLD_MODEL_PATH
 MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
 CHINESE_BERT_MODEL_NAME = "bert-base-chinese"
 MAX_LEN = 256
+
+
+def _clean_decoded_text(text: str) -> str:
+    text = re.sub(r"\s+", " ", str(text or "")).strip()
+    return re.sub(r"(?<=[\u4e00-\u9fff0-9])\s+(?=[\u4e00-\u9fff0-9])", "", text)
+
+
+def _encode_without_special_tokens(tokenizer, text: str) -> List[int]:
+    encoding = tokenizer(
+        str(text or ""),
+        add_special_tokens=False,
+        truncation=False,
+        return_attention_mask=False,
+        return_token_type_ids=False,
+        verbose=False,
+    )
+    return list(encoding.get("input_ids", []))
 
 # ---------------------------------------------------------------------
 # 与中文 BERT 训练脚本兼容的分类器定义
@@ -133,7 +156,7 @@ def load_text_model_once() -> bool:
         if not MODEL_PATH.exists():
             bert_model_load_error_global = (
                 "Chinese BERT classifier file not found. "
-                f"Checked: {THIS_DIR / 'model' / 'train.pt'} and {OLD_MODEL_PATH}"
+                f"Checked: {THIS_DIR / 'model' / 'best_model.pt'}, {FALLBACK_MODEL_PATH}, and {OLD_MODEL_PATH}"
             )
             logger.critical(bert_model_load_error_global)
             return False
@@ -154,6 +177,47 @@ def load_text_model_once() -> bool:
         bert_model_load_error_global = f"Error loading Chinese BERT model: {e_load}"
         logger.critical(bert_model_load_error_global, exc_info=True)
         return False
+
+
+def get_text_tokenizer_once():
+    """Return the local tokenizer used by ChineseBERT without poisoning model state."""
+    global bert_tokenizer_global
+    if bert_tokenizer_global is not None:
+        return bert_tokenizer_global
+    try:
+        bert_tokenizer_global = AutoTokenizer.from_pretrained(CHINESE_BERT_MODEL_NAME, local_files_only=True)
+    except Exception as exc:
+        logger.warning("Local Chinese BERT tokenizer unavailable for token budgeting: %s", exc)
+        return None
+    return bert_tokenizer_global
+
+
+def count_text_tokens(text: str) -> int:
+    """Count tokenizer tokens excluding BERT special tokens."""
+    tokenizer = get_text_tokenizer_once()
+    if tokenizer is None:
+        return len(str(text or ""))
+    return len(_encode_without_special_tokens(tokenizer, text))
+
+
+def trim_text_to_token_budget(text: str, token_budget: int, keep: str = "first") -> str:
+    """Trim text to a tokenizer-level budget while excluding special tokens."""
+    text = str(text or "").strip()
+    if not text or token_budget <= 0:
+        return ""
+
+    tokenizer = get_text_tokenizer_once()
+    if tokenizer is None:
+        return text[:token_budget] if keep == "first" else text[-token_budget:]
+
+    token_ids = _encode_without_special_tokens(tokenizer, text)
+    if len(token_ids) <= token_budget:
+        return text
+    if keep == "last":
+        token_ids = token_ids[-token_budget:]
+    else:
+        token_ids = token_ids[:token_budget]
+    return _clean_decoded_text(tokenizer.decode(token_ids, skip_special_tokens=True))
 
 # ---------------------------------------------------------------------
 # 内部预测函数

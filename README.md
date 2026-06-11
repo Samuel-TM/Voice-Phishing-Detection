@@ -2,13 +2,13 @@
 
 ## Project Overview
 This project is a **multimodal framework for detecting voice phishing by jointly analyzing text and audio information**.
-It integrates a Chinese BERT-based text classifier and a CNN–BiLSTM-based synthetic voice detector, combined with speaker diarization (Resemblyzer + K-Means), Whisper STT, and weighted score fusion (Text:Voice = 8:2) to achieve reliable detection in real-world call environments.
+It integrates a Chinese BERT-based text classifier and a CNN–BiLSTM-based synthetic voice detector, combined with speaker diarization (Resemblyzer + K-Means), FunASR Paraformer Chinese ASR, and weighted score fusion (Text:Voice = 8:2) to achieve reliable detection in real-world call environments.
 
 Traditional **keyword-based detection models** often misclassified conversations as normal when phishing-specific keywords were absent. To overcome this limitation, our system adopts a **context-aware text analysis** combined with **synthetic voice detection**, achieving more accurate and robust phishing detection.
 
 
 ## Key Features
-- **Text Analysis**: Whisper STT → Chinese BERT classification
+- **Text Analysis**: FunASR Paraformer Chinese ASR → Chinese BERT classification
 - **Voice Analysis**: MFCC → CNN–BiLSTM synthetic voice detection
 - **Speaker Diarization**: Resemblyzer embeddings + K-Means clustering
 - **Multimodal Fusion**: 0.8 × Text + 0.2 × Voice final score
@@ -31,6 +31,22 @@ ML/
 ├── shared_model_loader.py
 ├── requirements.txt
 └── Dockerfile
+```
+
+## ASR Backend
+
+The default speech-to-text backend is FunASR `paraformer-zh`, selected through `speaker_analysis/asr_backend.py`.
+
+```bash
+conda activate dissertation
+ASR_BACKEND=funasr_paraformer PORT=5050 python server.py
+```
+
+For fallback comparison with the previous ASR path:
+
+```bash
+conda activate dissertation
+ASR_BACKEND=whisper WHISPER_MODEL_NAME=small PORT=5050 python server.py
 ```
 
 ## Performance Results

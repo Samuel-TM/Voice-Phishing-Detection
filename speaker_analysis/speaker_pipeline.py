@@ -2,12 +2,12 @@
 
 try:
     from .diarization_utils import split_speakers
-    from .whisper_stt import transcribe_segment
+    from .asr_backend import transcribe_segment
     from ..audio_risk_detection.predict_audio_risk import audio_risk_predict_with_decision
     from ..ChineseBERTModel.ensemble_utils import ensemble_inference
 except Exception:
     from speaker_analysis.diarization_utils import split_speakers
-    from speaker_analysis.whisper_stt import transcribe_segment
+    from speaker_analysis.asr_backend import transcribe_segment
     from audio_risk_detection.predict_audio_risk import audio_risk_predict_with_decision
     from ChineseBERTModel.ensemble_utils import ensemble_inference
 

@@ -1,0 +1,2161 @@
+﻿sample_id,case_type,text_label,split,source,source_metadata,scenario,risk_terms,input_view,notes,text
+NFHN_0001,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用微信支付，主要是买车票的时候比较省事。
+乙：对，我觉得它最大的好处就是安全性这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0002,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用支付宝多吗？
+乙：挺多的，尤其是给家里买东西，手机一点就好了。
+甲：我之前还担心额度，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0003,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得花呗跟以前现金支付比起来变化挺大的。
+乙：是啊，学校缴费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到还款这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0004,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用借呗，主要是公司报销的时候比较省事。
+乙：对，我觉得它最大的好处就是付款速度这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0005,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用云闪付多吗？
+乙：挺多的，尤其是吃饭结账，手机一点就好了。
+甲：我之前还担心账单记录，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0006,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得银行App跟以前现金支付比起来变化挺大的。
+乙：是啊，交水电费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到方便这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0007,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用微信支付，主要是买车票的时候比较省事。
+乙：对，我觉得它最大的好处就是安全性这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0008,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用支付宝多吗？
+乙：挺多的，尤其是给家里买东西，手机一点就好了。
+甲：我之前还担心额度，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0009,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得花呗跟以前现金支付比起来变化挺大的。
+乙：是啊，学校缴费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到还款这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0010,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用借呗，主要是公司报销的时候比较省事。
+乙：对，我觉得它最大的好处就是付款速度这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0011,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用云闪付多吗？
+乙：挺多的，尤其是吃饭结账，手机一点就好了。
+甲：我之前还担心账单记录，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0012,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得银行App跟以前现金支付比起来变化挺大的。
+乙：是啊，交水电费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到方便这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0013,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用微信支付，主要是买车票的时候比较省事。
+乙：对，我觉得它最大的好处就是安全性这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0014,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用支付宝多吗？
+乙：挺多的，尤其是给家里买东西，手机一点就好了。
+甲：我之前还担心额度，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0015,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得花呗跟以前现金支付比起来变化挺大的。
+乙：是啊，学校缴费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到还款这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0016,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用借呗，主要是公司报销的时候比较省事。
+乙：对，我觉得它最大的好处就是付款速度这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0017,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用云闪付多吗？
+乙：挺多的，尤其是吃饭结账，手机一点就好了。
+甲：我之前还担心账单记录，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0018,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得银行App跟以前现金支付比起来变化挺大的。
+乙：是啊，交水电费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到方便这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0019,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用微信支付，主要是买车票的时候比较省事。
+乙：对，我觉得它最大的好处就是安全性这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0020,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用支付宝多吗？
+乙：挺多的，尤其是给家里买东西，手机一点就好了。
+甲：我之前还担心额度，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0021,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得花呗跟以前现金支付比起来变化挺大的。
+乙：是啊，学校缴费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到还款这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0022,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用借呗，主要是公司报销的时候比较省事。
+乙：对，我觉得它最大的好处就是付款速度这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0023,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用云闪付多吗？
+乙：挺多的，尤其是吃饭结账，手机一点就好了。
+甲：我之前还担心账单记录，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0024,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得银行App跟以前现金支付比起来变化挺大的。
+乙：是啊，交水电费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到方便这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0025,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用微信支付，主要是买车票的时候比较省事。
+乙：对，我觉得它最大的好处就是安全性这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0026,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用支付宝多吗？
+乙：挺多的，尤其是给家里买东西，手机一点就好了。
+甲：我之前还担心额度，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0027,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得花呗跟以前现金支付比起来变化挺大的。
+乙：是啊，学校缴费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到还款这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0028,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我现在基本都用借呗，主要是公司报销的时候比较省事。
+乙：对，我觉得它最大的好处就是付款速度这一块做得顺。
+甲：不过我也不会乱花，账单我每个月都会看一下。
+乙：嗯，工具本身方便，关键还是看自己怎么用。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0029,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你平时用云闪付多吗？
+乙：挺多的，尤其是吃饭结账，手机一点就好了。
+甲：我之前还担心账单记录，后来发现只要按时看账单就还好。
+乙：对，正常消费就是图方便，不是说有额度就一定要用完。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0030,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_payment_app_discussion,支付宝;微信支付;花呗;借呗;额度;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我觉得银行App跟以前现金支付比起来变化挺大的。
+乙：是啊，交水电费的时候不用找零，也能查到每一笔。
+甲：就是有时候看到方便这些功能，会忍不住研究一下。
+乙：研究可以，别超出自己承受范围就行。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0031,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说微信有账号安全的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得我一般会把通知打开，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0032,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些银行App的支付密码，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0033,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于防火墙的帖子，里面提到校园卡系统。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0034,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说公司财务系统有盗号新闻的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得双重验证有时候麻烦但有必要，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0035,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些购物平台的手机丢失，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0036,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于登录提醒的帖子，里面提到支付宝。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0037,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说微信有账号安全的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得现在平台做得比以前严，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0038,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些银行App的支付密码，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0039,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于防火墙的帖子，里面提到校园卡系统。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0040,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说公司财务系统有盗号新闻的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得只要不是自己操作就先查一下，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0041,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些购物平台的手机丢失，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0042,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于登录提醒的帖子，里面提到支付宝。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0043,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说微信有账号安全的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得我一般会把通知打开，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0044,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些银行App的支付密码，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0045,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于防火墙的帖子，里面提到校园卡系统。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0046,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说公司财务系统有盗号新闻的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得双重验证有时候麻烦但有必要，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0047,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些购物平台的手机丢失，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0048,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于登录提醒的帖子，里面提到支付宝。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0049,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说微信有账号安全的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得现在平台做得比以前严，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0050,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些银行App的支付密码，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0051,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于防火墙的帖子，里面提到校园卡系统。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0052,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说公司财务系统有盗号新闻的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得只要不是自己操作就先查一下，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0053,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些购物平台的手机丢失，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0054,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于登录提醒的帖子，里面提到支付宝。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0055,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说微信有账号安全的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得我一般会把通知打开，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0056,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些银行App的支付密码，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0057,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于防火墙的帖子，里面提到校园卡系统。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0058,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：上次听人说公司财务系统有盗号新闻的问题，我还专门去看了设置。
+乙：现在大家都比较在意这个。
+甲：我觉得双重验证有时候麻烦但有必要，至少自己心里有数。
+乙：对，平时聊这些更多是提醒自己注意。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0059,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你说这些购物平台的手机丢失，是不是年轻人反而更懂一点？
+乙：不一定，有些人天天用也不看设置。
+甲：我一般看到登录提醒会确认一下，不会随便改密码。
+乙：这就是正常使用习惯，谈不上什么大事。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0060,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_account_security_discussion,账号;安全;防火墙;盗号;支付密码,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我刚才看到一个关于登录提醒的帖子，里面提到支付宝。
+乙：这种帖子很多，有些讲得夸张。
+甲：嗯，我主要就是了解一下，毕竟日常付款都离不开它。
+乙：了解规则挺好，别被标题吓到就行。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0061,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看花呗的提前还款规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是每个月要算清楚。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0062,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得借呗这种工具到底好不好？
+乙：看怎么用吧，利息这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0063,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得信用卡只是方便，现在才知道还款日也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0064,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看车贷的额度规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是急用时周转一下还可以。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0065,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房贷这种工具到底好不好？
+乙：看怎么用吧，征信这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0066,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得助学贷款只是方便，现在才知道分期也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0067,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看花呗的提前还款规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是能不用就少用。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0068,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得借呗这种工具到底好不好？
+乙：看怎么用吧，利息这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0069,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得信用卡只是方便，现在才知道还款日也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0070,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看车贷的额度规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是不能这个月花下个月的钱。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0071,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房贷这种工具到底好不好？
+乙：看怎么用吧，征信这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0072,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得助学贷款只是方便，现在才知道分期也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0073,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看花呗的提前还款规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是每个月要算清楚。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0074,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得借呗这种工具到底好不好？
+乙：看怎么用吧，利息这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0075,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得信用卡只是方便，现在才知道还款日也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0076,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看车贷的额度规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是急用时周转一下还可以。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0077,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房贷这种工具到底好不好？
+乙：看怎么用吧，征信这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0078,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得助学贷款只是方便，现在才知道分期也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0079,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看花呗的提前还款规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是能不用就少用。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0080,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得借呗这种工具到底好不好？
+乙：看怎么用吧，利息这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0081,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得信用卡只是方便，现在才知道还款日也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0082,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看车贷的额度规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是不能这个月花下个月的钱。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0083,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房贷这种工具到底好不好？
+乙：看怎么用吧，征信这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0084,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得助学贷款只是方便，现在才知道分期也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0085,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看花呗的提前还款规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是每个月要算清楚。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0086,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得借呗这种工具到底好不好？
+乙：看怎么用吧，利息这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0087,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得信用卡只是方便，现在才知道还款日也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0088,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近在看车贷的额度规则，发现细节还挺多。
+乙：这些东西最好看清楚，不然容易超预算。
+甲：对，我现在的想法是急用时周转一下还可以。
+乙：正常消费可以，关键是别形成恶性循环。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0089,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房贷这种工具到底好不好？
+乙：看怎么用吧，征信这些规则要搞明白。
+甲：我身边有人用得很随意，我就不太敢。
+乙：谨慎点没错，毕竟最后都是要自己还。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0090,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_credit_repayment_discussion,花呗;借呗;信用卡;贷款;还款;征信;额度,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我以前觉得助学贷款只是方便，现在才知道分期也会影响判断。
+乙：对，尤其是金额积累起来以后。
+甲：所以我一般只拿它当临时工具。
+乙：这样比较稳。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0091,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论工资结构，里面的骑手工资要不要写细一点？
+乙：我觉得要写，像六百一项这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0092,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个项目预算，合同金额是不是偏低？
+乙：如果按市场行情，一单多一块可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0093,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算项目提成，我听得有点乱。
+乙：其实就是把福利政策拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0094,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论报销流程，里面的社保要不要写细一点？
+乙：我觉得要写，像两千二底薪这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0095,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个招聘方案，五险一金是不是偏低？
+乙：如果按市场行情，年底统一结算可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0096,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算外包费用，我听得有点乱。
+乙：其实就是把合作合同拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0097,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论工资结构，里面的骑手工资要不要写细一点？
+乙：我觉得要写，像六百一项这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0098,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个项目预算，合同金额是不是偏低？
+乙：如果按市场行情，一单多一块可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0099,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算项目提成，我听得有点乱。
+乙：其实就是把福利政策拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0100,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论报销流程，里面的社保要不要写细一点？
+乙：我觉得要写，像两千二底薪这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0101,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个招聘方案，五险一金是不是偏低？
+乙：如果按市场行情，年底统一结算可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0102,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算外包费用，我听得有点乱。
+乙：其实就是把合作合同拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0103,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论工资结构，里面的骑手工资要不要写细一点？
+乙：我觉得要写，像六百一项这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0104,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个项目预算，合同金额是不是偏低？
+乙：如果按市场行情，一单多一块可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0105,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算项目提成，我听得有点乱。
+乙：其实就是把福利政策拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0106,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论报销流程，里面的社保要不要写细一点？
+乙：我觉得要写，像两千二底薪这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0107,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个招聘方案，五险一金是不是偏低？
+乙：如果按市场行情，年底统一结算可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0108,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算外包费用，我听得有点乱。
+乙：其实就是把合作合同拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0109,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论工资结构，里面的骑手工资要不要写细一点？
+乙：我觉得要写，像六百一项这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0110,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个项目预算，合同金额是不是偏低？
+乙：如果按市场行情，一单多一块可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0111,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算项目提成，我听得有点乱。
+乙：其实就是把福利政策拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0112,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论报销流程，里面的社保要不要写细一点？
+乙：我觉得要写，像两千二底薪这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0113,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个招聘方案，五险一金是不是偏低？
+乙：如果按市场行情，年底统一结算可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0114,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算外包费用，我听得有点乱。
+乙：其实就是把合作合同拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0115,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论工资结构，里面的骑手工资要不要写细一点？
+乙：我觉得要写，像六百一项这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0116,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个项目预算，合同金额是不是偏低？
+乙：如果按市场行情，一单多一块可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0117,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算项目提成，我听得有点乱。
+乙：其实就是把福利政策拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0118,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我们刚才讨论报销流程，里面的社保要不要写细一点？
+乙：我觉得要写，像两千二底薪这种数字最好有依据。
+甲：对，不然后面审核的时候容易来回改。
+乙：合同和工资这些事情就是要说清楚。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0119,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你看这个招聘方案，五险一金是不是偏低？
+乙：如果按市场行情，年底统一结算可能只是基础水平。
+甲：那我们要不要把社保和补贴也算进去？
+乙：可以，这样员工看起来更直观。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0120,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_contract_salary_discussion,合同;金额;工资;提成;社保;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：今天会里一直在算外包费用，我听得有点乱。
+乙：其实就是把合作合同拆开算，底薪、提成、社保分开。
+甲：嗯，金额不大但是项目多。
+乙：这种正常财务核算就很琐碎。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0121,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说彩礼要二十万，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得还是要量力而行，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0122,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到婚礼预算，大家第一反应就是金额。
+乙：是啊，像每月五千这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0123,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房租花到十几万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得压力确实不小。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0124,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说装修要六百块，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得普通家庭很难一下拿出来，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0125,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到学费，大家第一反应就是金额。
+乙：是啊，像三千多这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0126,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得家庭开销花到四十万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得双方最好提前商量。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0127,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说彩礼要二十万，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得压力确实不小，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0128,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到婚礼预算，大家第一反应就是金额。
+乙：是啊，像每月五千这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0129,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房租花到十几万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得还是要量力而行。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0130,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说装修要六百块，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得双方最好提前商量，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0131,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到学费，大家第一反应就是金额。
+乙：是啊，像三千多这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0132,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得家庭开销花到四十万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得普通家庭很难一下拿出来。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0133,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说彩礼要二十万，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得还是要量力而行，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0134,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到婚礼预算，大家第一反应就是金额。
+乙：是啊，像每月五千这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0135,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房租花到十几万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得压力确实不小。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0136,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说装修要六百块，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得普通家庭很难一下拿出来，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0137,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到学费，大家第一反应就是金额。
+乙：是啊，像三千多这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0138,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得家庭开销花到四十万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得双方最好提前商量。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0139,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说彩礼要二十万，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得压力确实不小，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0140,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到婚礼预算，大家第一反应就是金额。
+乙：是啊，像每月五千这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0141,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房租花到十几万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得还是要量力而行。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0142,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说装修要六百块，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得双方最好提前商量，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0143,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到学费，大家第一反应就是金额。
+乙：是啊，像三千多这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0144,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得家庭开销花到四十万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得普通家庭很难一下拿出来。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0145,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说彩礼要二十万，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得还是要量力而行，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0146,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到婚礼预算，大家第一反应就是金额。
+乙：是啊，像每月五千这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0147,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得房租花到十几万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得压力确实不小。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0148,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我昨天看到一个帖子，说装修要六百块，评论区吵得很厉害。
+乙：这种事情很容易引发争议。
+甲：我觉得普通家庭很难一下拿出来，不能只看一个数字。
+乙：对，生活里的钱不是单纯越多越有面子。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0149,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：现在聊到学费，大家第一反应就是金额。
+乙：是啊，像三千多这种数字听起来就很重。
+甲：但具体还要看家庭情况和城市。
+乙：没错，正常聊天也只能说说自己的看法。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0150,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_life_expense_discussion,彩礼;金额;家庭;开销;付款,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你觉得家庭开销花到四十万合理吗？
+乙：不好一概而论，有些地方习俗就是这样。
+甲：我还是觉得双方最好提前商量。
+乙：嗯，钱的事情最好别勉强。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0151,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在淘宝上办运费险，页面一直显示客服排队慢。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0152,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次京东的售后多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着金额没对上，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0153,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个拼多多发票我研究半天，发现规则挺复杂。
+乙：特别是系统显示处理中这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0154,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在美团上办订单取消，页面一直显示发票抬头写错。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0155,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次携程的理赔多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着原路退回，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0156,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个抖音商城退款我研究半天，发现规则挺复杂。
+乙：特别是审核两天这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0157,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在淘宝上办运费险，页面一直显示客服排队慢。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0158,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次京东的售后多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着金额没对上，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0159,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个拼多多发票我研究半天，发现规则挺复杂。
+乙：特别是系统显示处理中这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0160,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在美团上办订单取消，页面一直显示发票抬头写错。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0161,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次携程的理赔多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着原路退回，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0162,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个抖音商城退款我研究半天，发现规则挺复杂。
+乙：特别是审核两天这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0163,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在淘宝上办运费险，页面一直显示客服排队慢。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0164,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次京东的售后多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着金额没对上，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0165,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个拼多多发票我研究半天，发现规则挺复杂。
+乙：特别是系统显示处理中这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0166,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在美团上办订单取消，页面一直显示发票抬头写错。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0167,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次携程的理赔多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着原路退回，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0168,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个抖音商城退款我研究半天，发现规则挺复杂。
+乙：特别是审核两天这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0169,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在淘宝上办运费险，页面一直显示客服排队慢。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0170,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次京东的售后多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着金额没对上，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0171,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个拼多多发票我研究半天，发现规则挺复杂。
+乙：特别是系统显示处理中这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0172,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在美团上办订单取消，页面一直显示发票抬头写错。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0173,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次携程的理赔多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着原路退回，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0174,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个抖音商城退款我研究半天，发现规则挺复杂。
+乙：特别是审核两天这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0175,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在淘宝上办运费险，页面一直显示客服排队慢。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0176,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次京东的售后多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着金额没对上，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0177,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个拼多多发票我研究半天，发现规则挺复杂。
+乙：特别是系统显示处理中这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0178,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我在美团上办订单取消，页面一直显示发票抬头写错。
+乙：这种售后有时候就是慢。
+甲：我准备晚上再看一下，不行就找平台客服。
+乙：嗯，订单里的流程走完就行。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0179,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你上次携程的理赔多久到账？
+乙：好像两三天吧，主要看支付渠道。
+甲：我这个写着原路退回，所以有点不确定。
+乙：正常售后经常这样，等等看。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0180,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_ecommerce_refund_discussion,退款;理赔;客服;订单;金额,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：这个抖音商城退款我研究半天，发现规则挺复杂。
+乙：特别是审核两天这种情况，页面提示不太清楚。
+甲：对，不过最后应该还是按订单记录来。
+乙：是的。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0181,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄银行卡限额，在政务App上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是审核时间比较长，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0182,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道公积金提取要不要去银行柜台吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0183,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看社保缴费，他说公司系统不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0184,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄个税申报，在社区窗口上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是办完才放心，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0185,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道医保报销要不要去官方网站吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0186,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看跨行转账，他说手机银行不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0187,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄银行卡限额，在政务App上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是审核时间比较长，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0188,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道公积金提取要不要去银行柜台吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0189,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看社保缴费，他说公司系统不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0190,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄个税申报，在社区窗口上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是办完才放心，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0191,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道医保报销要不要去官方网站吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0192,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看跨行转账，他说手机银行不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0193,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄银行卡限额，在政务App上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是审核时间比较长，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0194,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道公积金提取要不要去银行柜台吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0195,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看社保缴费，他说公司系统不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0196,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄个税申报，在社区窗口上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是办完才放心，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0197,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道医保报销要不要去官方网站吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0198,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看跨行转账，他说手机银行不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0199,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄银行卡限额，在政务App上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是审核时间比较长，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0200,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道公积金提取要不要去银行柜台吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0201,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看社保缴费，他说公司系统不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0202,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄个税申报，在社区窗口上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是办完才放心，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0203,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道医保报销要不要去官方网站吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0204,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看跨行转账，他说手机银行不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0205,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄银行卡限额，在政务App上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是审核时间比较长，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0206,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道公积金提取要不要去银行柜台吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0207,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看社保缴费，他说公司系统不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0208,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我今天弄个税申报，在社区窗口上看了半天。
+乙：这些业务就是麻烦。
+甲：主要是办完才放心，不是特别熟的人很容易卡住。
+乙：正常，慢慢按页面做就行。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0209,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：你知道医保报销要不要去官方网站吗？
+乙：看地区吧，有的线上能办，有的还要线下。
+甲：我看说明写得挺细，但还是怕漏材料。
+乙：这种行政类业务多核对几遍就好。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0210,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_banking_admin_discussion,银行卡;限额;社保;公积金;转账;审核,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我爸让我帮他看跨行转账，他说手机银行不会用。
+乙：年纪大一点确实不习惯。
+甲：我就帮他把材料列表记下来，周末再陪他弄。
+乙：可以，别着急。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0211,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于欧洲的节目你看了吗？里面一直讲大资本。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到经济损失，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0212,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对议会预算有点兴趣，尤其是美国那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到风险控制，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0213,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论本地政府的时候，总喜欢把地方债和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，安全保障这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0214,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于企业的节目你看了吗？里面一直讲能源价格。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到利益分配，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0215,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对金融政策有点兴趣，尤其是市场那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到清除障碍，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0216,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论俄罗斯的时候，总喜欢把国际新闻和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，资金压力这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0217,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于欧洲的节目你看了吗？里面一直讲大资本。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到经济损失，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0218,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对议会预算有点兴趣，尤其是美国那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到风险控制，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0219,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论本地政府的时候，总喜欢把地方债和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，安全保障这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0220,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于企业的节目你看了吗？里面一直讲能源价格。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到利益分配，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0221,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对金融政策有点兴趣，尤其是市场那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到清除障碍，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0222,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论俄罗斯的时候，总喜欢把国际新闻和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，资金压力这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0223,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于欧洲的节目你看了吗？里面一直讲大资本。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到经济损失，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0224,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对议会预算有点兴趣，尤其是美国那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到风险控制，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0225,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论本地政府的时候，总喜欢把地方债和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，安全保障这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0226,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于企业的节目你看了吗？里面一直讲能源价格。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到利益分配，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0227,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对金融政策有点兴趣，尤其是市场那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到清除障碍，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0228,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论俄罗斯的时候，总喜欢把国际新闻和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，资金压力这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0229,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于欧洲的节目你看了吗？里面一直讲大资本。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到经济损失，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0230,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对议会预算有点兴趣，尤其是美国那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到风险控制，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0231,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论本地政府的时候，总喜欢把地方债和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，安全保障这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是一号晚上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0232,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于企业的节目你看了吗？里面一直讲能源价格。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到利益分配，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是二号周末，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0233,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对金融政策有点兴趣，尤其是市场那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到清除障碍，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是三号月初，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0234,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论俄罗斯的时候，总喜欢把国际新闻和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，资金压力这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是四号月底，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0235,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于欧洲的节目你看了吗？里面一直讲大资本。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到经济损失，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是五号发工资后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0236,normal_finance_hard_negative,0,val,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对议会预算有点兴趣，尤其是美国那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到风险控制，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是六号报销前，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0237,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论本地政府的时候，总喜欢把地方债和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，安全保障这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是七号开会后，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0238,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：昨天那个关于企业的节目你看了吗？里面一直讲能源价格。
+乙：看了一点，感觉背景挺复杂。
+甲：主持人还提到利益分配，但更多是在分析历史原因。
+乙：这种话题就是聊天了解一下。
+甲：我记得那次大概是八号早上，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0239,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：我最近对金融政策有点兴趣，尤其是市场那边的情况。
+乙：你怎么突然看这个？
+甲：刷到一个访谈，里面说到清除障碍，听起来挺有意思。
+乙：当知识听听还行。
+甲：我记得那次大概是九号中午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+NFHN_0240,normal_finance_hard_negative,0,train,semantic_contrast_normal_finance,generated_by_evaluation/generate_benign_finance_hard_negatives.py,normal_political_economy_discussion,资本;资金;经济损失;风险控制;安全保障,full_dialogue_text,Training/dev only; realistic oral normal-finance discussion without fraud action chain.,"甲：他们讨论俄罗斯的时候，总喜欢把国际新闻和普通生活联系起来。
+乙：确实，最后都绕到钱和政策。
+甲：不过我只是听个大概，资金压力这些词挺抽象的。
+乙：嗯，不是专业领域也不用太较真。
+甲：我记得那次大概是十号下午，所以印象比较深。
+乙：嗯，这种生活细节聊起来挺常见的。"
+FCFP_0001,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是支付宝安全中心，您名下出现额度冻结，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上打开共享屏幕我远程看一下，处理完就恢复。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0002,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的微信支付存在支付风控，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我点开链接更新资料。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0003,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个银行App风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先把银行卡号和余额确认一下，后面我再解释。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0004,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是花呗安全中心，您名下出现借贷记录异常，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上下载我们的安全插件，处理完就恢复。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0005,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的借呗存在交易拦截，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我把短信验证码读给我。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0006,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个云闪付风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先按我说的步骤转一笔验证金，后面我再解释。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0007,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是支付宝安全中心，您名下出现额度冻结，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上打开共享屏幕我远程看一下，处理完就恢复。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0008,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的微信支付存在支付风控，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我点开链接更新资料。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0009,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个银行App风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先把银行卡号和余额确认一下，后面我再解释。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0010,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是花呗安全中心，您名下出现借贷记录异常，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上下载我们的安全插件，处理完就恢复。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0011,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的借呗存在交易拦截，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我把短信验证码读给我。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0012,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个云闪付风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先按我说的步骤转一笔验证金，后面我再解释。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0013,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是支付宝安全中心，您名下出现额度冻结，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上打开共享屏幕我远程看一下，处理完就恢复。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0014,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的微信支付存在支付风控，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我点开链接更新资料。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0015,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个银行App风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先把银行卡号和余额确认一下，后面我再解释。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0016,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是花呗安全中心，您名下出现借贷记录异常，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上下载我们的安全插件，处理完就恢复。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0017,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的借呗存在交易拦截，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我把短信验证码读给我。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0018,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个云闪付风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先按我说的步骤转一笔验证金，后面我再解释。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0019,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是支付宝安全中心，您名下出现额度冻结，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上打开共享屏幕我远程看一下，处理完就恢复。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0020,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的微信支付存在支付风控，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我点开链接更新资料。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0021,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个银行App风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先把银行卡号和余额确认一下，后面我再解释。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0022,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，这里是花呗安全中心，您名下出现借贷记录异常，现在不处理会影响使用。
+乙：我刚才还正常付款啊。
+甲：系统刚触发的，您不要挂断，马上下载我们的安全插件，处理完就恢复。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0023,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们检测到您的借呗存在交易拦截，需要做实时核验。
+乙：我自己去App里看看可以吗？
+甲：不行，页面已经被限制了，您现在必须跟着我把短信验证码读给我。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0024,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_payment_app_impersonation,支付宝;微信支付;花呗;借呗;账户异常;验证码;转账,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个云闪付风险记录今天必须清掉。
+乙：为什么这么急？
+甲：超过十分钟会冻结，您先按我说的步骤转一笔验证金，后面我再解释。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0025,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在淘宝的理赔通道异常，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在点开我发的链接填写银行卡。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0026,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是京东售后，您的运费险赔付失败卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先按提示把余额转到安全账户。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0027,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把美团的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的马上完成支付验证，不然钱退不回去。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0028,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在携程的会员扣费错误，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在先转一笔保证金激活通道。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0029,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是快递公司售后，您的航班退费异常卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先把验证码发给我确认身份。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0030,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把保险平台的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的下载会议软件共享屏幕，不然钱退不回去。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0031,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在淘宝的理赔通道异常，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在点开我发的链接填写银行卡。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0032,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是京东售后，您的运费险赔付失败卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先按提示把余额转到安全账户。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0033,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把美团的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的马上完成支付验证，不然钱退不回去。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0034,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在携程的会员扣费错误，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在先转一笔保证金激活通道。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0035,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是快递公司售后，您的航班退费异常卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先把验证码发给我确认身份。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0036,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把保险平台的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的下载会议软件共享屏幕，不然钱退不回去。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0037,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在淘宝的理赔通道异常，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在点开我发的链接填写银行卡。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0038,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是京东售后，您的运费险赔付失败卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先按提示把余额转到安全账户。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0039,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把美团的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的马上完成支付验证，不然钱退不回去。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0040,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在携程的会员扣费错误，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在先转一笔保证金激活通道。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0041,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是快递公司售后，您的航班退费异常卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先把验证码发给我确认身份。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0042,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把保险平台的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的下载会议软件共享屏幕，不然钱退不回去。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0043,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在淘宝的理赔通道异常，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在点开我发的链接填写银行卡。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0044,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是京东售后，您的运费险赔付失败卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先按提示把余额转到安全账户。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0045,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把美团的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的马上完成支付验证，不然钱退不回去。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0046,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您在携程的会员扣费错误，现在可以给您双倍补偿。
+乙：我没看到平台消息。
+甲：这是人工绿色通道，名额马上关闭，您现在先转一笔保证金激活通道。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0047,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边是快递公司售后，您的航班退费异常卡住了。
+乙：那我在订单里申请就行吧？
+甲：订单里处理不了，必须电话里完成，您先把验证码发给我确认身份。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0048,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_refund_compensation,退款;理赔;保证金;验证码;链接;银行卡,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们要把保险平台的退款退给您，但是系统要求验证。
+乙：怎么验证？
+甲：很简单，您按照我说的下载会议软件共享屏幕，不然钱退不回去。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0049,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下花呗出现异常，今天不处理就会额度永久关闭。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上共享屏幕让我帮您关闭，不然系统自动提交。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0050,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的借呗风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先先交保证金恢复额度。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0051,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个信用卡要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须点击链接签署授权，处理完原路退回。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0052,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下网贷额度出现异常，今天不处理就会家属会收到通知。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上按我说的输入支付密码，不然系统自动提交。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0053,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的征信记录风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先转到指定账户做流水。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0054,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个消费贷要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须把验证码告诉我完成核验，处理完原路退回。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0055,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下花呗出现异常，今天不处理就会额度永久关闭。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上共享屏幕让我帮您关闭，不然系统自动提交。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0056,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的借呗风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先先交保证金恢复额度。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0057,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个信用卡要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须点击链接签署授权，处理完原路退回。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0058,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下网贷额度出现异常，今天不处理就会家属会收到通知。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上按我说的输入支付密码，不然系统自动提交。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0059,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的征信记录风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先转到指定账户做流水。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0060,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个消费贷要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须把验证码告诉我完成核验，处理完原路退回。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0061,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下花呗出现异常，今天不处理就会额度永久关闭。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上共享屏幕让我帮您关闭，不然系统自动提交。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0062,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的借呗风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先先交保证金恢复额度。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0063,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个信用卡要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须点击链接签署授权，处理完原路退回。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0064,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下网贷额度出现异常，今天不处理就会家属会收到通知。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上按我说的输入支付密码，不然系统自动提交。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0065,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的征信记录风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先转到指定账户做流水。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0066,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个消费贷要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须把验证码告诉我完成核验，处理完原路退回。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0067,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下花呗出现异常，今天不处理就会额度永久关闭。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上共享屏幕让我帮您关闭，不然系统自动提交。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0068,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的借呗风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先先交保证金恢复额度。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0069,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个信用卡要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须点击链接签署授权，处理完原路退回。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0070,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您名下网贷额度出现异常，今天不处理就会家属会收到通知。
+乙：我没有申请过啊。
+甲：所以才需要排查，您马上按我说的输入支付密码，不然系统自动提交。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0071,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是信贷处理中心，您的征信记录风险等级升高。
+乙：我去官方客服问一下。
+甲：来不及了，窗口只有五分钟，先转到指定账户做流水。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0072,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_loan_credit_pressure,花呗;借呗;贷款;征信;保证金;验证码;支付密码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个消费贷要做保护性关闭。
+乙：关闭为什么要操作钱？
+甲：这是系统流程，必须把验证码告诉我完成核验，处理完原路退回。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0073,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是审核老师，您这边的合同审核卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在远程协助您提交付款，否则今天过不了审。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0074,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于项目保证金，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先马上扫码补缴手续费。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0075,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个政府补贴涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的点链接确认收款账户，我这边马上放行。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0076,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是平台客服，您这边的外包结算卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在按我说的流程转一笔测试款，否则今天过不了审。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0077,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于采购尾款，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先先打款到临时监管账户。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0078,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个频道租用合同涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的把企业网银验证码发给我，我这边马上放行。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0079,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是审核老师，您这边的合同审核卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在远程协助您提交付款，否则今天过不了审。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0080,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于项目保证金，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先马上扫码补缴手续费。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0081,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个政府补贴涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的点链接确认收款账户，我这边马上放行。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0082,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是平台客服，您这边的外包结算卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在按我说的流程转一笔测试款，否则今天过不了审。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0083,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于采购尾款，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先先打款到临时监管账户。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0084,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个频道租用合同涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的把企业网银验证码发给我，我这边马上放行。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0085,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是审核老师，您这边的合同审核卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在远程协助您提交付款，否则今天过不了审。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0086,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于项目保证金，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先马上扫码补缴手续费。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0087,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个政府补贴涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的点链接确认收款账户，我这边马上放行。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0088,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是平台客服，您这边的外包结算卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在按我说的流程转一笔测试款，否则今天过不了审。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0089,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于采购尾款，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先先打款到临时监管账户。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0090,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个频道租用合同涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的把企业网银验证码发给我，我这边马上放行。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0091,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是审核老师，您这边的合同审核卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在远程协助您提交付款，否则今天过不了审。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0092,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于项目保证金，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先马上扫码补缴手续费。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0093,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个政府补贴涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的点链接确认收款账户，我这边马上放行。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0094,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我是平台客服，您这边的外包结算卡在最后一步。
+乙：我们不是已经提交了吗？
+甲：系统显示金额校验失败，您现在按我说的流程转一笔测试款，否则今天过不了审。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0095,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：关于采购尾款，审核部门要求补一个资金证明。
+乙：我问下同事。
+甲：不要耽误，名额今天截止，您先先打款到临时监管账户。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0096,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_contract_business_payment,合同;审核;金额;账户;转账;验证码;手续费,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您这个频道租用合同涉及对公风险，需要电话里处理。
+乙：能不能走正式邮件？
+甲：邮件太慢了，您按我说的把企业网银验证码发给我，我这边马上放行。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0097,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你孩子，我这边交通事故，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，马上扫码付款，晚点我再解释。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0098,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在学费补缴。
+乙：我先确认一下。
+甲：他不方便接电话，您现在把验证码告诉我，否则事情会变严重。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0099,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知彩礼临时加钱，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先先借钱周转一下，之后会有收据。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0100,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你老师，我这边住院押金，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，十分钟内处理，晚点我再解释。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0101,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在账号被冻结。
+乙：我先确认一下。
+甲：他不方便接电话，您现在先转两万到这个卡号，否则事情会变严重。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0102,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知手机坏了，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先不要打电话确认，之后会有收据。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0103,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你孩子，我这边交通事故，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，马上扫码付款，晚点我再解释。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0104,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在学费补缴。
+乙：我先确认一下。
+甲：他不方便接电话，您现在把验证码告诉我，否则事情会变严重。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0105,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知彩礼临时加钱，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先先借钱周转一下，之后会有收据。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0106,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你老师，我这边住院押金，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，十分钟内处理，晚点我再解释。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0107,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在账号被冻结。
+乙：我先确认一下。
+甲：他不方便接电话，您现在先转两万到这个卡号，否则事情会变严重。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0108,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知手机坏了，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先不要打电话确认，之后会有收据。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0109,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你孩子，我这边交通事故，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，马上扫码付款，晚点我再解释。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0110,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在学费补缴。
+乙：我先确认一下。
+甲：他不方便接电话，您现在把验证码告诉我，否则事情会变严重。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0111,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知彩礼临时加钱，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先先借钱周转一下，之后会有收据。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0112,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你老师，我这边住院押金，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，十分钟内处理，晚点我再解释。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0113,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在账号被冻结。
+乙：我先确认一下。
+甲：他不方便接电话，您现在先转两万到这个卡号，否则事情会变严重。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0114,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知手机坏了，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先不要打电话确认，之后会有收据。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0115,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你孩子，我这边交通事故，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，马上扫码付款，晚点我再解释。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0116,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在学费补缴。
+乙：我先确认一下。
+甲：他不方便接电话，您现在把验证码告诉我，否则事情会变严重。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0117,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知彩礼临时加钱，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先先借钱周转一下，之后会有收据。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0118,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：妈，我是你老师，我这边住院押金，现在很急。
+乙：你声音怎么不太一样？
+甲：我用别人手机打的，别问了，十分钟内处理，晚点我再解释。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0119,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，我是您家里人托我联系的，他现在账号被冻结。
+乙：我先确认一下。
+甲：他不方便接电话，您现在先转两万到这个卡号，否则事情会变严重。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0120,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_family_expense_emergency,彩礼;学费;押金;卡号;扫码;转账;验证码,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：这边学校通知手机坏了，名额马上截止。
+乙：我没收到正式通知。
+甲：系统可能延迟了，您先不要打电话确认，之后会有收据。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0121,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的银行账户出现资金风险，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在下载远程协助软件。
+甲：您这个工单尾号A17，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0122,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到支付宝账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先点击链接重新认证。
+甲：您这个工单尾号B29，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0123,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护微信账户。
+乙：我需要做什么？
+甲：不要挂断，马上按我说的步骤关闭拦截，否则资金损失由您自己承担。
+甲：您这个工单尾号C38，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0124,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的社保账户出现安全锁定，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在共享屏幕让我看操作界面。
+甲：您这个工单尾号D46，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0125,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到公积金账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先把验证码读出来。
+甲：您这个工单尾号E52，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0126,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护购物账户。
+乙：我需要做什么？
+甲：不要挂断，马上把资金转到安全账户，否则资金损失由您自己承担。
+甲：您这个工单尾号F61，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0127,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的银行账户出现资金风险，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在下载远程协助软件。
+甲：您这个工单尾号G73，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0128,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到支付宝账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先点击链接重新认证。
+甲：您这个工单尾号H84，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0129,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护微信账户。
+乙：我需要做什么？
+甲：不要挂断，马上按我说的步骤关闭拦截，否则资金损失由您自己承担。
+甲：您这个工单尾号J95，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0130,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的社保账户出现安全锁定，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在共享屏幕让我看操作界面。
+甲：您这个工单尾号K06，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0131,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到公积金账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先把验证码读出来。
+甲：您这个工单尾号A17，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0132,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护购物账户。
+乙：我需要做什么？
+甲：不要挂断，马上把资金转到安全账户，否则资金损失由您自己承担。
+甲：您这个工单尾号B29，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0133,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的银行账户出现资金风险，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在下载远程协助软件。
+甲：您这个工单尾号C38，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0134,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到支付宝账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先点击链接重新认证。
+甲：您这个工单尾号D46，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0135,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护微信账户。
+乙：我需要做什么？
+甲：不要挂断，马上按我说的步骤关闭拦截，否则资金损失由您自己承担。
+甲：您这个工单尾号E52，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0136,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的社保账户出现安全锁定，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在共享屏幕让我看操作界面。
+甲：您这个工单尾号F61，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0137,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到公积金账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先把验证码读出来。
+甲：您这个工单尾号G73，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0138,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护购物账户。
+乙：我需要做什么？
+甲：不要挂断，马上把资金转到安全账户，否则资金损失由您自己承担。
+甲：您这个工单尾号H84，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0139,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的银行账户出现资金风险，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在下载远程协助软件。
+甲：您这个工单尾号J95，处理窗口只剩八分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0140,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到支付宝账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先点击链接重新认证。
+甲：您这个工单尾号K06，处理窗口只剩十分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0141,finance_semantic_contrast_fraud,1,val,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护微信账户。
+乙：我需要做什么？
+甲：不要挂断，马上按我说的步骤关闭拦截，否则资金损失由您自己承担。
+甲：您这个工单尾号A17，处理窗口只剩十五分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0142,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：您好，您的社保账户出现安全锁定，需要立即排查。
+乙：我自己登录看看。
+甲：不能自己操作，容易触发冻结，您现在共享屏幕让我看操作界面。
+甲：您这个工单尾号B29，处理窗口只剩这一通电话内。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0143,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：系统检测到公积金账户被人尝试控制。
+乙：那我去网点行吗？
+甲：来不及，已经进入倒计时，您先把验证码读出来。
+甲：您这个工单尾号C38，处理窗口只剩三分钟。
+乙：那我是不是现在就得按你说的做？"
+FCFP_0144,finance_semantic_contrast_fraud,1,train,semantic_contrast_fraud,generated_by_evaluation/generate_benign_finance_hard_negatives.py,fraud_account_security_remote,账户;异常交易;黑客;验证码;共享屏幕;安全账户,full_dialogue_text,"Training/dev only; same finance vocabulary with inducement, pressure, verification, transfer, or remote-control intent.","甲：我们是安全处理组，正在帮您保护购物账户。
+乙：我需要做什么？
+甲：不要挂断，马上把资金转到安全账户，否则资金损失由您自己承担。
+甲：您这个工单尾号D46，处理窗口只剩五分钟。
+乙：那我是不是现在就得按你说的做？"

@@ -1034,7 +1034,7 @@
                 renderTimeline(latestTimeline);
                 showPoint(point);
                 drawChart(latestTimeline, 0);
-                setStatus("Text Analysis Complete", statusFromLevel(point.risk_level));
+                setStatus("Text Analysis Complete", statusFromLevel(levelForPoint(point)));
             } catch (error) {
                 setStatus("Analysis Error", "error");
                 document.getElementById("windowTranscript").innerHTML = `<span class="error-text">${escapeHtml(error.message)}</span>`;
@@ -1194,7 +1194,7 @@
             renderSummary(data);
             document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
             document.getElementById("replayButton").disabled = latestTimeline.length === 0;
-            setStatus("Live Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
+            setStatus("Live Analysis Complete", latestTimeline.length ? statusFromLevel(levelForPoint(latestTimeline[latestTimeline.length - 1])) : "success");
         }
 
         function pickRecorderMimeType() {
@@ -1258,7 +1258,7 @@
             }
 
             if (!completed) {
-                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
+                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(levelForPoint(latestTimeline[latestTimeline.length - 1])) : "success");
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
                 document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
             }
@@ -1280,7 +1280,7 @@
                 renderSummary(event);
                 document.getElementById("replayButton").disabled = latestTimeline.length === 0;
                 document.getElementById("micReplayButton").disabled = latestTimeline.length === 0;
-                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level) : "success");
+                setStatus("Analysis Complete", latestTimeline.length ? statusFromLevel(levelForPoint(latestTimeline[latestTimeline.length - 1])) : "success");
                 return true;
             }
             return false;
@@ -1296,14 +1296,12 @@
             drawChart(latestTimeline, latestTimeline.length - 1);
             markRow(point.index);
 
-            const peak = latestTimeline.reduce((max, item) => (
-                Number(item.smoothed_score || 0) > Number(max.smoothed_score || 0) ? item : max
-            ), latestTimeline[0]);
+            const peak = latestTimeline.reduce((max, item) => smoothedScore(item) > smoothedScore(max) ? item : max, latestTimeline[0]);
             document.getElementById("finalDecision").textContent = "Analyzing";
             document.getElementById("finalDecision").className = "kpi-value";
             document.getElementById("decisionIcon").className = "kpi-icon";
-            document.getElementById("finalRisk").textContent = formatScore(point.smoothed_score);
-            document.getElementById("peakRisk").textContent = formatScore(peak.smoothed_score);
+            document.getElementById("finalRisk").textContent = formatScore(smoothedScore(point));
+            document.getElementById("peakRisk").textContent = formatScore(smoothedScore(peak));
         }
 
         function renderSummary(data) {
@@ -1332,11 +1330,12 @@
         }
 
         function generateRowHtml(point) {
-            const assets = getLevelAssets(point.risk_level);
+            const level = levelForPoint(point);
+            const assets = getLevelAssets(level);
             return `
                 <tr id="row-${point.index}" onclick="jumpToPoint(${point.index})" style="cursor:pointer;">
                     <td style="font-variant-numeric: tabular-nums; font-weight:700;">${formatScore(point.start_sec)}-${formatScore(point.end_sec)}s</td>
-                    <td><span class="badge stat-${assets.className}">${escapeHtml(point.risk_level)}</span></td>
+                    <td><span class="badge stat-${assets.className}">${escapeHtml(pointDecision(point))}</span></td>
                     <td class="${scoreClass(point.text_score)}">${formatScore(point.text_score)}</td>
                     <td class="${scoreClass(point.voice_score)}">${formatScore(point.voice_score)}</td>
                     <td>${formatScore(point.fused_score)}</td>
@@ -1372,7 +1371,7 @@
                 if (index >= latestTimeline.length) {
                     clearInterval(playbackTimer);
                     playbackTimer = null;
-                    setStatus("Replay Complete", statusFromLevel(latestTimeline[latestTimeline.length - 1].risk_level));
+                    setStatus("Replay Complete", statusFromLevel(levelForPoint(latestTimeline[latestTimeline.length - 1])));
                     return;
                 }
                 showPoint(latestTimeline[index]);
@@ -1391,9 +1390,10 @@
             document.getElementById("fusedScore").textContent = formatScore(point.fused_score);
             document.getElementById("smoothScore").textContent = formatScore(point.smoothed_score);
 
-            const assets = getLevelAssets(point.risk_level);
+            const level = levelForPoint(point);
+            const assets = getLevelAssets(level);
             const levelEl = document.getElementById("currentLevel");
-            levelEl.textContent = point.risk_level;
+            levelEl.textContent = pointDecision(point);
             levelEl.className = `kpi-value value-${assets.className}`;
             document.getElementById("levelIcon").className = `kpi-icon stat-${assets.className}`;
 
@@ -1500,7 +1500,7 @@
 
             const points = timeline.map((point, i) => {
                 const x = timeline.length === 1 ? padLeft + chartW / 2 : padLeft + (i / (timeline.length - 1)) * chartW;
-                const y = scoreToY(Number(point.smoothed_score || 0), chartH, padTop);
+                const y = scoreToY(smoothedScore(point), chartH, padTop);
                 return { x, y, point };
             });
 
@@ -1565,7 +1565,7 @@
 
             points.forEach((point, i) => {
                 const isActive = i === activeIndex;
-                const level = levelFromScore(Number(point.point.smoothed_score || 0));
+                const level = levelForPoint(point.point);
                 let pointColor = riskLineColor;
                 if (level === "Critical") pointColor = criticalColor;
                 else if (level === "High Risk") pointColor = highColor;
@@ -1633,6 +1633,23 @@
                 return "warn";
             }
             return "success";
+        }
+
+        function smoothedScore(point) {
+            if (!point) return 0;
+            return Number(point.smoothed_score || 0);
+        }
+
+        function pointDecision(point) {
+            return String((point && point.risk_level) || "Normal");
+        }
+
+        function levelForPoint(point) {
+            const decision = pointDecision(point);
+            if (decision === "Critical" || decision === "High Risk" || decision === "Suspicious") {
+                return decision;
+            }
+            return levelFromScore(smoothedScore(point));
         }
 
         function scoreClass(value) {

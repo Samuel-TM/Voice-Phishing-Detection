@@ -166,3 +166,9 @@ PORT=5050 python server.py
 - 不要让单个静音窗口或 STT 失败中断整段音频分析。
 - 不要把旧的整段音频一次性分析误认为当前主研究贡献。
 - 不要将演示系统过早改成只能依赖真实麦克风输入，否则会增加答辩现场风险。
+
+## 最新样本集组成
+- normal_daily (正常基准) -> 真人清晰朗读录音（保证真实性，规避误报）：test_samples/audio_final/ND_long_01 到 ND_long_20
+- synthetic_voice (纯声学攻击) -> gTTS 生成的正常剧本（触发声学报警）：test_samples/audio_final/SV_long_01 到 SV_long_20
+- mixed_risk (多模态联合预警) -> gTTS 生成的诈骗剧本（双模态同时报警）：test_samples/audio_final/MR_long_01 到 MR_long_20
+- semantic_fraud (高级对抗攻击) -> mimo-v2.5 生成的诈骗剧本（声学失效，纯靠文本语义动态追踪报警）：test_samples/audio_final/SF_long_01 到 SF_long_20

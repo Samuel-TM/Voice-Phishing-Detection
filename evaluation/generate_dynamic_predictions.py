@@ -18,9 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if PROJECT_ROOT.as_posix() not in sys.path:
     sys.path.insert(0, PROJECT_ROOT.as_posix())
 DEFAULT_METADATA = PROJECT_ROOT / "test_samples/metadata.csv"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / ".cache/evaluation_reports"
-DEFAULT_PREDICTIONS = DEFAULT_OUTPUT_DIR / "dynamic_predictions.json"
-DEFAULT_SUMMARY = DEFAULT_OUTPUT_DIR / "dynamic_predictions_summary.csv"
+DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "evaluation" / "predictions"
 SUPPORTED_AUDIO_EXTENSIONS = {".wav", ".mp3", ".flac", ".m4a", ".ogg"}
 
 
@@ -109,6 +107,21 @@ def write_csv_rows(path: Path, rows: Sequence[Dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def format_number_for_name(value: float) -> str:
+    text = f"{value:g}".replace(".", "p")
+    return text
+
+
+def default_run_name(args: argparse.Namespace) -> str:
+    window = format_number_for_name(args.window_seconds)
+    step = format_number_for_name(args.step_seconds)
+    if args.scoring_mode == "progression_v1":
+        return f"progression_v1_w{window}_s{step}_ctx30"
+    text_weight = format_number_for_name(args.text_weight)
+    smoothing = format_number_for_name(args.smoothing_previous_weight)
+    return f"{args.scoring_mode}_w{window}_s{step}_tw{text_weight}_sm{smoothing}"
+
+
 def parse_stream_response(response_data: bytes) -> tuple[List[Dict[str, Any]], Dict[str, Any], str]:
     events: List[Dict[str, Any]] = []
     error = ""
@@ -128,9 +141,18 @@ def summarize_record(record: Dict[str, Any]) -> Dict[str, Any]:
     timeline = record.get("timeline") or []
     highest = record.get("highest_risk_window") or {}
     text_scores = [safe_float(point.get("text_score")) for point in timeline]
+    raw_window_text_scores = [safe_float(point.get("raw_window_text_score", point.get("text_score"))) for point in timeline]
+    short_context_text_scores = [safe_float(point.get("short_context_text_score")) for point in timeline]
     voice_scores = [safe_float(point.get("voice_score")) for point in timeline]
     fused_scores = [safe_float(point.get("fused_score")) for point in timeline]
     smoothed_scores = [safe_float(point.get("smoothed_score")) for point in timeline]
+    final_point = timeline[-1] if timeline else {}
+    high_risk_points = [
+        point for point in timeline
+        if str(point.get("alert_decision", "")) in {"High Risk", "Critical"}
+    ]
+    evidence_count = sum(len(point.get("evidence_events") or []) for point in timeline)
+    candidate_evidence_count = sum(len(point.get("candidate_evidence_events") or []) for point in timeline)
     return {
         "sample_id": record.get("sample_id", ""),
         "audio_path": record.get("audio_path", ""),
@@ -151,11 +173,25 @@ def summarize_record(record: Dict[str, Any]) -> Dict[str, Any]:
         "highest_voice_score": round(safe_float(highest.get("voice_score")), 2),
         "highest_fused_score": round(safe_float(highest.get("fused_score")), 2),
         "highest_smoothed_score": round(safe_float(highest.get("smoothed_score")), 2),
+        "highest_raw_window_text_score": round(safe_float(highest.get("raw_window_text_score", highest.get("text_score"))), 2),
+        "highest_short_context_text_score": round(safe_float(highest.get("short_context_text_score")), 2),
+        "highest_scam_stage": highest.get("scam_stage", ""),
+        "highest_alert_decision": highest.get("alert_decision", ""),
+        "highest_alert_reason": highest.get("alert_reason", ""),
+        "final_scam_stage": final_point.get("scam_stage", ""),
+        "final_alert_decision": final_point.get("alert_decision", ""),
+        "final_alert_reason": final_point.get("alert_reason", ""),
+        "first_high_risk_end_sec": high_risk_points[0].get("end_sec", "") if high_risk_points else "",
+        "confirmed_evidence_count": evidence_count,
+        "candidate_evidence_count": candidate_evidence_count,
         "mean_text_score": round(statistics.mean(text_scores), 2) if text_scores else 0.0,
+        "mean_raw_window_text_score": round(statistics.mean(raw_window_text_scores), 2) if raw_window_text_scores else 0.0,
+        "mean_short_context_text_score": round(statistics.mean(short_context_text_scores), 2) if short_context_text_scores else 0.0,
         "mean_voice_score": round(statistics.mean(voice_scores), 2) if voice_scores else 0.0,
         "mean_fused_score": round(statistics.mean(fused_scores), 2) if fused_scores else 0.0,
         "mean_smoothed_score": round(statistics.mean(smoothed_scores), 2) if smoothed_scores else 0.0,
         "highest_text": highest.get("text", ""),
+        "highest_short_context_text": highest.get("short_context_text", ""),
         "transcript_preview": str(record.get("full_transcript", ""))[:160],
     }
 
@@ -196,7 +232,12 @@ def build_prediction_record(
 
 def run_predictions(args: argparse.Namespace) -> List[Dict[str, Any]]:
     logging.getLogger().setLevel(logging.ERROR)
-    for name in ["werkzeug", "speaker_analysis.whisper_stt", "ChineseBERTModel.ensemble_utils"]:
+    for name in [
+        "werkzeug",
+        "speaker_analysis.asr_backend",
+        "speaker_analysis.whisper_stt",
+        "ChineseBERTModel.ensemble_utils",
+    ]:
         logging.getLogger(name).setLevel(logging.ERROR)
 
     from server import app
@@ -234,6 +275,8 @@ def run_predictions(args: argparse.Namespace) -> List[Dict[str, Any]]:
                         "step_seconds": str(args.step_seconds),
                         "scoring_mode": args.scoring_mode,
                         "case_type": row.get("case_type", ""),
+                        "text_weight": str(args.text_weight),
+                        "smoothing_previous_weight": str(args.smoothing_previous_weight),
                     },
                     content_type="multipart/form-data",
                     buffered=True,
@@ -268,11 +311,19 @@ def run_predictions(args: argparse.Namespace) -> List[Dict[str, Any]]:
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--metadata", type=Path, default=DEFAULT_METADATA)
-    parser.add_argument("--predictions", type=Path, default=DEFAULT_PREDICTIONS)
-    parser.add_argument("--summary", type=Path, default=DEFAULT_SUMMARY)
+    parser.add_argument("--output-dir", type=Path, help="Run output directory. Defaults to evaluation/predictions/<run-name>.")
+    parser.add_argument("--run-name", help="Stable run folder name used when --output-dir is omitted.")
+    parser.add_argument("--predictions", type=Path, help="Prediction JSON output path.")
+    parser.add_argument("--summary", type=Path, help="Prediction summary CSV output path.")
     parser.add_argument("--window-seconds", type=float, default=10)
     parser.add_argument("--step-seconds", type=float, default=5)
-    parser.add_argument("--scoring-mode", choices=["baseline", "gated_v1"], default="gated_v1")
+    parser.add_argument("--text-weight", type=float, default=0.8)
+    parser.add_argument("--smoothing-previous-weight", type=float, default=0.65)
+    parser.add_argument(
+        "--scoring-mode",
+        choices=["progression_v1", "baseline", "gated_v1", "gated_v2", "gated_v3"],
+        default="progression_v1",
+    )
     parser.add_argument("--sample-id", action="append", help="Run only this sample_id. Repeatable.")
     parser.add_argument("--case-type", action="append", help="Run only this case_type. Repeatable.")
     parser.add_argument("--limit", type=int)
@@ -283,6 +334,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
 def main() -> None:
     args = build_arg_parser().parse_args()
     args.metadata = args.metadata.resolve()
+    if args.output_dir is None:
+        run_name = args.run_name or default_run_name(args)
+        args.output_dir = DEFAULT_OUTPUT_ROOT / run_name
+    args.output_dir = args.output_dir.resolve()
+    if args.predictions is None:
+        filename = "progression_predictions.json" if args.scoring_mode == "progression_v1" else "dynamic_predictions.json"
+        args.predictions = args.output_dir / filename
+    if args.summary is None:
+        filename = "progression_predictions_summary.csv" if args.scoring_mode == "progression_v1" else "dynamic_predictions_summary.csv"
+        args.summary = args.output_dir / filename
     args.predictions = args.predictions.resolve()
     args.summary = args.summary.resolve()
     records = run_predictions(args)

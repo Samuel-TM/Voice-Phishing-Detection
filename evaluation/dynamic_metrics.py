@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import copy
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean
@@ -11,9 +13,10 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT_DIR = PROJECT_DIR / ".cache" / "evaluation_reports"
+if PROJECT_DIR.as_posix() not in sys.path:
+    sys.path.insert(0, PROJECT_DIR.as_posix())
+DEFAULT_REPORT_ROOT = PROJECT_DIR / "evaluation" / "reports"
 DEFAULT_ALERT_THRESHOLD = 70.0
-
 
 @dataclass(frozen=True)
 class MetricThresholds:
@@ -43,6 +46,17 @@ def normalize_label(value: Any) -> int:
         return 1 if value else 0
     text = str(value or "").strip().lower()
     return 1 if text in {"1", "true", "fraud", "phishing", "positive", "risk"} else 0
+
+
+def parse_float_list(value: Optional[str]) -> List[float]:
+    if not value:
+        return []
+    numbers: List[float] = []
+    for item in value.split(","):
+        item = item.strip()
+        if item:
+            numbers.append(float(item))
+    return numbers
 
 
 def load_prediction_records(path: Path) -> List[Dict[str, Any]]:
@@ -145,6 +159,9 @@ def evaluate_record(
     return {
         "sample_id": record.get("sample_id", record.get("id", "")),
         "label": label,
+        "case_type": record.get("case_type", ""),
+        "source": record.get("source", ""),
+        "scoring_mode": record.get("scoring_mode", ""),
         "prediction": prediction,
         "score_key": score_key,
         "final_score": round(sample_final_score, 4),
@@ -200,12 +217,7 @@ def build_ablation_report(
     records: Sequence[Dict[str, Any]],
     alert_threshold: float,
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
-    score_keys = [
-        ("text_only", "text_score"),
-        ("voice_only", "voice_score"),
-        ("fusion_without_smoothing", "fused_score"),
-        ("fusion_with_smoothing", "smoothed_score"),
-    ]
+    score_keys = score_key_variants(records)
     detail_rows: List[Dict[str, Any]] = []
     summary_rows: List[Dict[str, Any]] = []
 
@@ -223,6 +235,26 @@ def build_ablation_report(
     return detail_rows, summary_rows
 
 
+def has_timeline_score(records: Sequence[Dict[str, Any]], score_key: str) -> bool:
+    for record in records:
+        for point in get_timeline(record):
+            if score_key in point:
+                return True
+    return False
+
+
+def score_key_variants(records: Sequence[Dict[str, Any]]) -> List[Tuple[str, str]]:
+    variants = [
+        ("text_only", "text_score"),
+        ("voice_only", "voice_score"),
+        ("fusion_without_smoothing", "fused_score"),
+        ("fusion_with_smoothing", "smoothed_score"),
+    ]
+    if has_timeline_score(records, "learned_late_fusion_score"):
+        variants.append(("learned_late_fusion", "learned_late_fusion_score"))
+    return variants
+
+
 def build_window_report(records: Sequence[Dict[str, Any]], alert_threshold: float) -> List[Dict[str, Any]]:
     grouped: Dict[Tuple[Any, Any], List[Dict[str, Any]]] = {}
     for record in records:
@@ -236,6 +268,199 @@ def build_window_report(records: Sequence[Dict[str, Any]], alert_threshold: floa
         summary["window_seconds"] = window_seconds
         summary["step_seconds"] = step_seconds
         rows.append(summary)
+    return rows
+
+
+def build_case_type_report(records: Sequence[Dict[str, Any]], alert_threshold: float) -> List[Dict[str, Any]]:
+    score_keys = score_key_variants(records)
+    rows: List[Dict[str, Any]] = []
+    case_types = sorted({str(record.get("case_type") or "unknown") for record in records})
+
+    for case_type in case_types:
+        group = [record for record in records if str(record.get("case_type") or "unknown") == case_type]
+        for variant, score_key in score_keys:
+            evaluated = [evaluate_record(record, score_key, alert_threshold) for record in group]
+            summary = summarize_dynamic_metrics(evaluated)
+            summary["case_type"] = case_type
+            summary["variant"] = variant
+            rows.append(summary)
+    return rows
+
+
+def infer_record_scoring_mode(record: Dict[str, Any], fallback: str = "gated_v1") -> str:
+    mode = str(record.get("scoring_mode") or "").strip()
+    if mode:
+        return mode
+    timeline = get_timeline(record)
+    for point in timeline:
+        mode = str(point.get("scoring_mode") or "").strip()
+        if mode:
+            return mode
+    return fallback
+
+
+def rescore_record(
+    record: Dict[str, Any],
+    text_weight: float,
+    smoothing_previous_weight: float,
+    scoring_mode: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Recompute fusion and smoothing from cached per-window text/voice outputs."""
+    from streaming_analysis.risk_scoring import RiskScoringState, score_window
+
+    output = copy.deepcopy(record)
+    case_type = str(output.get("case_type") or "")
+    mode = scoring_mode or infer_record_scoring_mode(output)
+    voice_weight = round(1.0 - text_weight, 4)
+    state = RiskScoringState()
+    rescored_timeline: List[Dict[str, Any]] = []
+
+    for point in get_timeline(output):
+        raw_text_score = point.get("raw_text_score", point.get("original_text_score", point.get("text_score", 0.0)))
+        scoring = score_window(
+            raw_text_score=raw_text_score,
+            voice_score=point.get("voice_score", 0.0),
+            text=str(point.get("text") or ""),
+            state=state,
+            scoring_mode=mode,
+            case_type=str(point.get("case_type") or case_type),
+            text_weight=text_weight,
+            voice_weight=voice_weight,
+            smoothing_previous_weight=smoothing_previous_weight,
+        )
+        new_point = dict(point)
+        new_point.update(scoring)
+        new_point["weights"] = {
+            "text": round(text_weight, 4),
+            "voice": round(voice_weight, 4),
+            "smoothing_previous": round(smoothing_previous_weight, 4),
+            "smoothing_current": round(1.0 - smoothing_previous_weight, 4),
+        }
+        rescored_timeline.append(new_point)
+
+    output["timeline"] = rescored_timeline
+    output["scoring_mode"] = mode
+    output["weights"] = {
+        "text": round(text_weight, 4),
+        "voice": round(voice_weight, 4),
+        "smoothing_previous": round(smoothing_previous_weight, 4),
+        "smoothing_current": round(1.0 - smoothing_previous_weight, 4),
+    }
+    output["final_score"] = round(final_score(rescored_timeline, "smoothed_score"), 4)
+    highest = max(rescored_timeline, key=lambda point: safe_float(point.get("smoothed_score")), default=None)
+    output["max_score"] = round(safe_float(highest.get("smoothed_score")), 4) if highest else 0.0
+    output["highest_risk_window"] = highest
+    output["rescore_source"] = "dynamic_metrics_offline"
+    return output
+
+
+def rescore_records(
+    records: Sequence[Dict[str, Any]],
+    text_weight: float,
+    smoothing_previous_weight: float,
+    scoring_mode: Optional[str],
+) -> List[Dict[str, Any]]:
+    return [
+        rescore_record(
+            record,
+            text_weight=text_weight,
+            smoothing_previous_weight=smoothing_previous_weight,
+            scoring_mode=scoring_mode,
+        )
+        for record in records
+    ]
+
+
+def build_threshold_sweep_report(
+    records: Sequence[Dict[str, Any]],
+    alert_thresholds: Sequence[float],
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for threshold in alert_thresholds:
+        _, summary_rows = build_ablation_report(records, threshold)
+        for row in summary_rows:
+            enriched = dict(row)
+            enriched["alert_threshold"] = threshold
+            rows.append(enriched)
+    return rows
+
+
+def build_fusion_smoothing_sweep_report(
+    records: Sequence[Dict[str, Any]],
+    text_weights: Sequence[float],
+    smoothing_weights: Sequence[float],
+    alert_threshold: float,
+    scoring_mode: Optional[str],
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    summary_rows: List[Dict[str, Any]] = []
+    case_rows: List[Dict[str, Any]] = []
+
+    for text_weight in text_weights:
+        for smoothing_weight in smoothing_weights:
+            rescored = rescore_records(
+                records,
+                text_weight=text_weight,
+                smoothing_previous_weight=smoothing_weight,
+                scoring_mode=scoring_mode,
+            )
+            evaluated = [evaluate_record(record, "smoothed_score", alert_threshold) for record in rescored]
+            summary = summarize_dynamic_metrics(evaluated)
+            summary.update({
+                "variant": "fusion_with_smoothing",
+                "text_weight": round(text_weight, 4),
+                "voice_weight": round(1.0 - text_weight, 4),
+                "smoothing_previous_weight": round(smoothing_weight, 4),
+                "smoothing_current_weight": round(1.0 - smoothing_weight, 4),
+                "alert_threshold": alert_threshold,
+                "scoring_mode": scoring_mode or "from_records",
+            })
+            summary_rows.append(summary)
+
+            for case_summary in build_case_type_report(rescored, alert_threshold):
+                if case_summary.get("variant") != "fusion_with_smoothing":
+                    continue
+                case_summary.update({
+                    "text_weight": round(text_weight, 4),
+                    "voice_weight": round(1.0 - text_weight, 4),
+                    "smoothing_previous_weight": round(smoothing_weight, 4),
+                    "smoothing_current_weight": round(1.0 - smoothing_weight, 4),
+                    "alert_threshold": alert_threshold,
+                    "scoring_mode": scoring_mode or "from_records",
+                })
+                case_rows.append(case_summary)
+
+    return summary_rows, case_rows
+
+
+def build_high_raw_unalerted_report(
+    records: Sequence[Dict[str, Any]],
+    raw_threshold: float = 70.0,
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for record in records:
+        if normalize_label(record.get("label", record.get("is_fraud", 0))) != 0:
+            continue
+        for point in get_timeline(record):
+            raw_score = safe_float(point.get("raw_window_text_score", point.get("text_score", 0.0)))
+            decision = str(point.get("alert_decision", ""))
+            if raw_score < raw_threshold or decision in {"High Risk", "Critical"}:
+                continue
+            rows.append({
+                "sample_id": record.get("sample_id", record.get("id", "")),
+                "case_type": record.get("case_type", ""),
+                "source": record.get("source", ""),
+                "index": point.get("index", ""),
+                "start_sec": point.get("start_sec", ""),
+                "end_sec": point.get("end_sec", ""),
+                "raw_window_text_score": round(raw_score, 2),
+                "short_context_text_score": round(safe_float(point.get("short_context_text_score")), 2),
+                "alert_decision": decision,
+                "alert_reason": point.get("alert_reason", ""),
+                "scam_stage": point.get("scam_stage", ""),
+                "benign_finance_context": point.get("benign_finance_context", ""),
+                "text": point.get("text", ""),
+                "short_context_text": point.get("short_context_text", ""),
+            })
     return rows
 
 
@@ -306,25 +531,63 @@ def run_evaluation(
     output_dir: Path,
     alert_threshold: float,
     thresholds: MetricThresholds,
+    alert_thresholds: Sequence[float] = (),
+    fusion_text_weights: Sequence[float] = (),
+    smoothing_previous_weights: Sequence[float] = (),
+    sweep_scoring_mode: Optional[str] = None,
 ) -> Dict[str, Any]:
     records = load_prediction_records(prediction_path)
     detail_rows, ablation_summary = build_ablation_report(records, alert_threshold)
     window_summary = build_window_report(records, alert_threshold)
+    case_type_summary = build_case_type_report(records, alert_threshold)
+    threshold_sweep = build_threshold_sweep_report(records, alert_thresholds) if alert_thresholds else []
+    high_raw_unalerted = build_high_raw_unalerted_report(records, raw_threshold=alert_threshold)
+    fusion_smoothing_sweep: List[Dict[str, Any]] = []
+    fusion_smoothing_case_type_sweep: List[Dict[str, Any]] = []
+    if fusion_text_weights and smoothing_previous_weights:
+        fusion_smoothing_sweep, fusion_smoothing_case_type_sweep = build_fusion_smoothing_sweep_report(
+            records=records,
+            text_weights=fusion_text_weights,
+            smoothing_weights=smoothing_previous_weights,
+            alert_threshold=alert_threshold,
+            scoring_mode=sweep_scoring_mode,
+        )
     recommendation = retraining_recommendation(ablation_summary, thresholds)
 
     report = {
         "prediction_path": prediction_path.as_posix(),
         "alert_threshold": alert_threshold,
         "ablation_summary": ablation_summary,
+        "case_type_summary": case_type_summary,
+        "threshold_sweep": threshold_sweep,
+        "fusion_smoothing_sweep": fusion_smoothing_sweep,
+        "fusion_smoothing_case_type_sweep": fusion_smoothing_case_type_sweep,
         "window_parameter_summary": window_summary,
+        "high_raw_unalerted_count": len(high_raw_unalerted),
         "retraining_recommendation": recommendation,
     }
 
     write_csv(output_dir / "dynamic_eval_detail.csv", detail_rows)
     write_csv(output_dir / "dynamic_eval_ablation_summary.csv", ablation_summary)
+    write_csv(output_dir / "dynamic_eval_case_type_summary.csv", case_type_summary)
     write_csv(output_dir / "dynamic_eval_window_summary.csv", window_summary)
+    write_csv(output_dir / "dynamic_eval_high_raw_unalerted.csv", high_raw_unalerted)
+    if threshold_sweep:
+        write_csv(output_dir / "dynamic_eval_threshold_sweep.csv", threshold_sweep)
+    if fusion_smoothing_sweep:
+        write_csv(output_dir / "dynamic_eval_fusion_smoothing_sweep.csv", fusion_smoothing_sweep)
+    if fusion_smoothing_case_type_sweep:
+        write_csv(output_dir / "dynamic_eval_fusion_smoothing_case_type_sweep.csv", fusion_smoothing_case_type_sweep)
     write_json(output_dir / "dynamic_eval_report.json", report)
     return report
+
+
+def default_run_name(prediction_path: Path) -> str:
+    parent = prediction_path.parent.name
+    stem = prediction_path.stem
+    if parent and parent not in {".", "predictions", "evaluation"}:
+        return parent
+    return f"{stem}_metrics"
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
@@ -332,16 +595,37 @@ def build_arg_parser() -> argparse.ArgumentParser:
         description="Compute thesis-oriented dynamic risk tracking metrics from timeline predictions."
     )
     parser.add_argument("--predictions", required=True, type=Path, help="JSON/JSONL file containing sample timelines.")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR, help="Report output directory.")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Report output directory. Defaults to evaluation/reports/<run-name>.",
+    )
+    parser.add_argument(
+        "--run-name",
+        help="Stable run folder name used when --output-dir is omitted.",
+    )
     parser.add_argument("--alert-threshold", type=float, default=DEFAULT_ALERT_THRESHOLD)
     parser.add_argument("--min-final-f1", type=float, default=0.80)
     parser.add_argument("--min-mean-lead-time-sec", type=float, default=5.0)
     parser.add_argument("--max-mean-detection-delay-sec", type=float, default=15.0)
+    parser.add_argument("--alert-thresholds", help="Comma-separated alert threshold sweep, e.g. 50,60,70,80.")
+    parser.add_argument("--fusion-text-weights", help="Comma-separated text weights, e.g. 0.7,0.8,0.9.")
+    parser.add_argument("--smoothing-previous-weights", help="Comma-separated smoothing weights, e.g. 0.5,0.65,0.8.")
+    parser.add_argument(
+        "--sweep-scoring-mode",
+        choices=["baseline", "gated_v1", "gated_v2", "gated_v3"],
+        help="Force a scoring mode for offline fusion/smoothing sweep. Defaults to each record's mode.",
+    )
     return parser
 
 
 def main() -> None:
     args = build_arg_parser().parse_args()
+    args.predictions = args.predictions.resolve()
+    if args.output_dir is None:
+        run_name = args.run_name or default_run_name(args.predictions)
+        args.output_dir = DEFAULT_REPORT_ROOT / run_name
+    args.output_dir = args.output_dir.resolve()
     thresholds = MetricThresholds(
         final_f1=args.min_final_f1,
         mean_lead_time_sec=args.min_mean_lead_time_sec,
@@ -352,6 +636,10 @@ def main() -> None:
         output_dir=args.output_dir,
         alert_threshold=args.alert_threshold,
         thresholds=thresholds,
+        alert_thresholds=parse_float_list(args.alert_thresholds),
+        fusion_text_weights=parse_float_list(args.fusion_text_weights),
+        smoothing_previous_weights=parse_float_list(args.smoothing_previous_weights),
+        sweep_scoring_mode=args.sweep_scoring_mode,
     )
     print(json.dumps(report, ensure_ascii=False, indent=2))
 

@@ -33,6 +33,9 @@ MANIFEST
 *.wav
 test_samples/
 output/
+evaluation/predictions/
+evaluation/reports/
+evaluation/models/
 
 # macOS Finder metadata
 .DS_Store

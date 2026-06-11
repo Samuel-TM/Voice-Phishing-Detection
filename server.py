@@ -50,15 +50,17 @@ try:
         probability_to_voice_score,
     )
     from .speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
-    from .speaker_analysis.whisper_stt import transcribe_segment
-    from .streaming_analysis.window_pipeline import (
+    from .speaker_analysis.asr_backend import transcribe_segment
+    from .streaming_analysis.risk_scoring import (
         RiskScoringState,
-        analyze_audio_stream,
         final_label_from_score,
-        iter_audio_stream_analysis,
         normalize_scoring_mode,
-        risk_level,
         score_window,
+    )
+    from .streaming_analysis.window_pipeline import (
+        analyze_audio_stream,
+        build_rolling_context_fields,
+        iter_audio_stream_analysis,
     )
 except Exception:
     try:
@@ -70,15 +72,17 @@ except Exception:
             probability_to_voice_score,
         )
         from ML.speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
-        from ML.speaker_analysis.whisper_stt import transcribe_segment
-        from ML.streaming_analysis.window_pipeline import (
+        from ML.speaker_analysis.asr_backend import transcribe_segment
+        from ML.streaming_analysis.risk_scoring import (
             RiskScoringState,
-            analyze_audio_stream,
             final_label_from_score,
-            iter_audio_stream_analysis,
             normalize_scoring_mode,
-            risk_level,
             score_window,
+        )
+        from ML.streaming_analysis.window_pipeline import (
+            analyze_audio_stream,
+            build_rolling_context_fields,
+            iter_audio_stream_analysis,
         )
     except Exception:
         from ChineseBERTModel.ensemble_utils import ensemble_inference
@@ -89,15 +93,17 @@ except Exception:
             probability_to_voice_score,
         )
         from speaker_analysis.speaker_pipeline import analyze_multi_speaker_audio
-        from speaker_analysis.whisper_stt import transcribe_segment
-        from streaming_analysis.window_pipeline import (
+        from speaker_analysis.asr_backend import transcribe_segment
+        from streaming_analysis.risk_scoring import (
             RiskScoringState,
-            analyze_audio_stream,
             final_label_from_score,
-            iter_audio_stream_analysis,
             normalize_scoring_mode,
-            risk_level,
             score_window,
+        )
+        from streaming_analysis.window_pipeline import (
+            analyze_audio_stream,
+            build_rolling_context_fields,
+            iter_audio_stream_analysis,
         )
 
 # -----------------------------------------------------------------------------
@@ -262,9 +268,10 @@ def get_live_session(session_id: Optional[str] = None) -> Dict[str, Any]:
             "updated_at": now,
             "transcript_parts": [],
             "previous_smoothed": None,
-            "consecutive_risk_windows": 0,
+            "consecutive_risk": 0,
+            "consecutive_suspicious_evidence": 0,
             "alert_latched": False,
-            "scoring_mode": None,
+            "scoring_mode": "baseline",
             "timeline": [],
         }
         LIVE_STREAM_SESSIONS[new_id] = session
@@ -282,7 +289,8 @@ def update_live_session_point(
         session["timeline"].append(point)
         session["transcript_parts"] = transcript_parts
         session["previous_smoothed"] = scoring_state.previous_smoothed
-        session["consecutive_risk_windows"] = scoring_state.consecutive_risk
+        session["consecutive_risk"] = scoring_state.consecutive_risk
+        session["consecutive_suspicious_evidence"] = scoring_state.consecutive_suspicious_evidence
         session["alert_latched"] = scoring_state.alert_latched
         session["scoring_mode"] = point.get("scoring_mode")
         session["case_type"] = point.get("case_type", session.get("case_type", ""))
@@ -406,7 +414,15 @@ def api_stream_audio_analysis():
     audio_risk_ok = AUDIO_RISK_MODEL_PATH.exists() and AUDIO_RISK_CONFIG_PATH.exists()
     window_seconds = request.form.get("window_seconds", 10)
     step_seconds = request.form.get("step_seconds", 5)
-    scoring_mode = normalize_scoring_mode(request.form.get("scoring_mode"))
+    text_weight = clamp_number(request.form.get("text_weight"), default=0.8, minimum=0.0, maximum=1.0)
+    voice_weight = round(1.0 - text_weight, 4)
+    smoothing_previous_weight = clamp_number(
+        request.form.get("smoothing_previous_weight"),
+        default=0.65,
+        minimum=0.0,
+        maximum=0.95,
+    )
+    scoring_mode = normalize_scoring_mode(request.form.get("scoring_mode") or "baseline")
     case_type = (request.form.get("case_type") or "").strip()
 
     def encode_event(payload: Dict[str, Any]) -> str:
@@ -430,6 +446,9 @@ def api_stream_audio_analysis():
                 transcribe_segment=transcribe_segment,
                 window_seconds=window_seconds,
                 step_seconds=step_seconds,
+                text_weight=text_weight,
+                voice_weight=voice_weight,
+                smoothing_previous_weight=smoothing_previous_weight,
                 scoring_mode=scoring_mode,
                 case_type=case_type,
             ):
@@ -498,7 +517,10 @@ def api_live_audio_chunk():
     transcript_parts: List[str] = list(session.get("transcript_parts", []))
     scoring_state = RiskScoringState(
         previous_smoothed=session.get("previous_smoothed"),
-        consecutive_risk=int(safe_float(session.get("consecutive_risk_windows"), 0)),
+        consecutive_risk=int(safe_float(session.get("consecutive_risk"), 0)),
+        consecutive_suspicious_evidence=int(
+            safe_float(session.get("consecutive_suspicious_evidence"), 0)
+        ),
         alert_latched=bool(session.get("alert_latched", False)),
     )
 
@@ -523,10 +545,11 @@ def api_live_audio_chunk():
             app.logger.error("实时音频分片 STT 失败", exc_info=True)
             text_error = "STT failed for this chunk."
 
-        if window_text.strip():
-            transcript_parts.append(window_text.strip())
-        cumulative_text = " ".join(transcript_parts).strip()
-
+        previous_window_texts = transcript_parts[-3:]
+        rolling_context = build_rolling_context_fields(
+            previous_window_texts=previous_window_texts,
+            current_window_text=window_text,
+        )
         text_score = 0.0
         text_result: Dict[str, Any] = {}
         text_model_input = window_text.strip()
@@ -537,6 +560,25 @@ def api_live_audio_chunk():
             except Exception:
                 app.logger.error("实时音频分片文本风险推理失败", exc_info=True)
                 text_result = {"error": "Text inference failed."}
+
+        context_text_score = 0.0
+        context_text_result: Dict[str, Any] = {}
+        rolling_context_text = rolling_context["rolling_context_text"]
+        if text_model_input and rolling_context_text:
+            if rolling_context_text == text_model_input:
+                context_text_score = text_score
+                context_text_result = dict(text_result)
+            else:
+                try:
+                    context_text_result = ensemble_inference(rolling_context_text) or {}
+                    context_text_score = safe_float(context_text_result.get("llm_score", 0.0))
+                except Exception:
+                    app.logger.error("实时音频分片滚动上下文文本风险推理失败", exc_info=True)
+                    context_text_result = {"error": "Rolling-context text inference failed."}
+
+        if window_text.strip():
+            transcript_parts.append(window_text.strip())
+        cumulative_text = " ".join(transcript_parts).strip()
 
         deepfake_probability = 0.0
         voice_score = 0.0
@@ -559,6 +601,7 @@ def api_live_audio_chunk():
 
         scoring = score_window(
             raw_text_score=text_score,
+            context_text_score=context_text_score,
             voice_score=voice_score,
             text=window_text,
             state=scoring_state,
@@ -574,8 +617,14 @@ def api_live_audio_chunk():
             "start_sec": round(start_sec, 2),
             "end_sec": round(max(end_sec, start_sec), 2),
             "text": window_text,
+            "current_window_text": rolling_context["current_window_text"],
+            "recent_context_text": rolling_context["recent_context_text"],
+            "rolling_context_text": rolling_context["rolling_context_text"],
             "cumulative_text": cumulative_text,
             "text_score": scoring["text_score"],
+            "raw_text_score": scoring["raw_text_score"],
+            "raw_window_text_score": scoring["raw_window_text_score"],
+            "context_text_score": scoring["context_text_score"],
             "voice_score": scoring["voice_score"],
             "deepfake_score": round(deepfake_probability, 4),
             "deepfake_detected_voice": bool(voice_decision.get("deepfake_detected_voice", False)),
@@ -596,6 +645,8 @@ def api_live_audio_chunk():
             point["voice_error"] = voice_error
         if text_result.get("error"):
             point["text_model_error"] = text_result["error"]
+        if context_text_result.get("error"):
+            point["context_text_model_error"] = context_text_result["error"]
 
         update_live_session_point(session_id, point, transcript_parts, scoring_state)
         return jsonify({
@@ -636,7 +687,6 @@ def api_live_audio_finish():
 
     max_point = max(timeline, key=lambda item: safe_float(item.get("smoothed_score")), default=None)
     final_score = safe_float(timeline[-1].get("smoothed_score")) if timeline else 0.0
-
     return jsonify({
         "event": "done",
         "session_id": session_id,
@@ -774,9 +824,9 @@ def api_audio_result():
             # --- STT ---
             try:
                 # 延迟导入，减少非单说话人路径的初始化成本
-                from .speaker_analysis.whisper_stt import transcribe_segment
+                from .speaker_analysis.asr_backend import transcribe_segment
             except Exception:
-                from ML.speaker_analysis.whisper_stt import transcribe_segment  # fallback
+                from ML.speaker_analysis.asr_backend import transcribe_segment  # fallback
 
             try:
                 text = transcribe_segment(audio_path.as_posix())

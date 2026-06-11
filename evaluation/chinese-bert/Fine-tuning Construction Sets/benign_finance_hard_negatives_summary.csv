@@ -1,0 +1,15 @@
+﻿scope,key,value
+overall,samples,240
+split,train,192
+split,val,48
+label,0,240
+case_type,normal_finance_hard_negative,240
+source,semantic_contrast_normal_finance,240
+scenario,normal_account_security_discussion,30
+scenario,normal_banking_admin_discussion,30
+scenario,normal_contract_salary_discussion,30
+scenario,normal_credit_repayment_discussion,30
+scenario,normal_ecommerce_refund_discussion,30
+scenario,normal_life_expense_discussion,30
+scenario,normal_payment_app_discussion,30
+scenario,normal_political_economy_discussion,30
