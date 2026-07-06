@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import sys
 from dataclasses import dataclass
@@ -139,6 +140,35 @@ def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, ensure_ascii=False, indent=2)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def validate_frozen_artifact(artifact: Any) -> Dict[str, Any]:
+    if not isinstance(artifact, dict):
+        raise ValueError("Frozen late-fusion artifact must be a dictionary.")
+    required = {
+        "model",
+        "model_name",
+        "feature_names",
+        "decision_threshold_probability",
+        "alert_threshold_score",
+    }
+    missing = sorted(required - set(artifact))
+    if missing:
+        raise ValueError(f"Frozen late-fusion artifact is missing fields: {missing}")
+    if list(artifact["feature_names"]) != FEATURE_NAMES:
+        raise ValueError("Frozen model feature contract does not match the current feature extractor.")
+    threshold = float(artifact["decision_threshold_probability"])
+    if not 0.0 < threshold < 1.0:
+        raise ValueError(f"Invalid frozen decision threshold: {threshold}")
+    return artifact
 
 
 def get_timeline(record: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -787,6 +817,55 @@ def train_and_apply(args: argparse.Namespace) -> Dict[str, Any]:
     return report
 
 
+def apply_frozen_model(args: argparse.Namespace) -> Dict[str, Any]:
+    """Apply an existing model artifact without fitting or selecting a threshold."""
+    assert_feature_contract()
+    records = load_prediction_records(args.predictions)
+    if not records:
+        raise ValueError("No prediction records found.")
+    if not args.model_path.exists():
+        raise FileNotFoundError(f"Frozen model artifact not found: {args.model_path}")
+
+    model_sha256_before = sha256_file(args.model_path)
+    artifact = validate_frozen_artifact(joblib.load(args.model_path))
+    decision_threshold = float(artifact["decision_threshold_probability"])
+    alert_threshold_score = float(artifact["alert_threshold_score"])
+    probability_series = predict_window_probabilities(artifact["model"], records)
+    annotated_records = annotate_records(
+        records=records,
+        probability_series=probability_series,
+        decision_threshold=decision_threshold,
+        alert_threshold_score=alert_threshold_score,
+        model_name=str(artifact["model_name"]),
+    )
+    write_json(args.output_predictions, {"records": annotated_records})
+    model_sha256_after = sha256_file(args.model_path)
+    if model_sha256_after != model_sha256_before:
+        raise RuntimeError("Frozen model artifact changed during inference.")
+
+    report = {
+        "mode": "frozen_inference_no_fit_no_threshold_selection",
+        "input_predictions": args.predictions.as_posix(),
+        "input_predictions_sha256": sha256_file(args.predictions),
+        "output_predictions": args.output_predictions.as_posix(),
+        "model_path": args.model_path.as_posix(),
+        "model_sha256": model_sha256_before,
+        "model_name": str(artifact["model_name"]),
+        "feature_names": FEATURE_NAMES,
+        "forbidden_feature_tokens": sorted(FORBIDDEN_FEATURE_TOKENS),
+        "decision_threshold_probability": round(decision_threshold, 8),
+        "alert_threshold_score": alert_threshold_score,
+        "records": len(records),
+        "summary": summarize_score_decisions(
+            annotated_records,
+            LEARNED_SCORE_KEY,
+            alert_threshold_score,
+        ),
+    }
+    write_json(args.report_path, report)
+    return report
+
+
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--predictions", type=Path, default=DEFAULT_INPUT)
@@ -804,6 +883,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--min-overall-f1", type=float, default=0.80)
     parser.add_argument("--sample-level-cv", action="store_true")
     parser.add_argument("--sample-level-cv-only", action="store_true")
+    parser.add_argument(
+        "--apply-frozen-model",
+        action="store_true",
+        help="Load --model-path and apply its saved model and threshold without fitting or selection.",
+    )
     parser.add_argument("--allow-failed-acceptance", action="store_true")
     return parser
 
@@ -816,6 +900,13 @@ def main() -> None:
     args.report_path = args.report_path.resolve()
     args.cv_output_predictions = args.cv_output_predictions.resolve()
     args.cv_report_path = args.cv_report_path.resolve()
+
+    if args.apply_frozen_model:
+        if args.sample_level_cv or args.sample_level_cv_only:
+            raise SystemExit("--apply-frozen-model cannot be combined with CV modes.")
+        report = apply_frozen_model(args)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return
 
     if args.sample_level_cv_only:
         records = load_prediction_records(args.predictions)

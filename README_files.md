@@ -121,6 +121,9 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 | `evaluation/dynamic_metrics.py` | `evaluation/` | 从 prediction JSON/JSONL 计算 final metrics、alert metrics、lead time、detection delay、ablation summary、case-type summary、window summary。 | 论文表格和结果分析的主评估入口。 |
 | `evaluation/calibrated_late_fusion.py` | `evaluation/` | 从缓存 baseline timeline 训练/应用 calibrated learned late-fusion 层，输出 `learned_late_fusion_score`。只使用当前和过去窗口的数值特征，避免 metadata/keyword leakage。 | 可写为 offline learned fusion evaluation variant，用来修正固定 `0.8/0.2` fusion 的 failure mode；不要写成已证明 cross-dataset generalization。 |
 | `evaluation/test_calibrated_late_fusion.py` | `evaluation/` | learned late fusion 的 feature contract 测试。 | 写避免 leakage 的实现保障时可引用。 |
+| `evaluation/external_frozen_v1.py` | `evaluation/` | 固化100条 external stress 样本、执行重叠审计并拆分 core 80 prediction。 | 复现 frozen external evaluation 时使用。 |
+| `evaluation/external_frozen_v1_manifest.json` | `evaluation/` | external frozen v1 的样本、metadata/model 哈希和 freeze rules。 | 证明样本与模型在测试前已冻结。 |
+| `evaluation/README_external_frozen_v1.md` | `evaluation/` | core 80 与 expanded 100 的结果摘要、边界和复现命令。 | Chapter 5 external stress evidence 主索引。 |
 | `evaluation/generate_window20_text_predictions.py` | `evaluation/` | 生成 20 秒窗口级文本风险预测，用于测试 baseline ChineseBERT 在 simulated streaming 文本窗口上的行为。 | 文本分支动态/窗口级诊断。 |
 | `evaluation/generate_full_text_predictions.py` | `evaluation/` | 生成 post-hoc full-audio text-risk predictions。 | 可作为 “post-hoc full transcript” 对照，不应混同为实时动态主线。 |
 | `evaluation/build_cached_error_attribution.py` | `evaluation/` | 基于已有缓存结果做错误归因。 | 写 error analysis 时参考。 |
@@ -144,6 +147,9 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 | `evaluation/predictions/final_learned_late_fusion_w10_s5/` | learned late fusion 变体 prediction。 | offline variant 证据。 |
 | `evaluation/reports/final_learned_late_fusion_w10_s5/` | learned late fusion final-fit 报表。 | 可作为 controlled benchmark improvement，但需谨慎表述。 |
 | `evaluation/reports/final_learned_late_fusion_w10_s5_sample_cv/` | learned late fusion sample-level CV 报表。 | 用于 OOF diagnostics 和过拟合风险讨论。 |
+| `evaluation/reports/external_frozen_v1_core80/` | 四类各20条的 frozen matched stress 报表。 | 与 final benchmark 做 case-type 对照；结果显示 learned gain 未稳定迁移。 |
+| `evaluation/reports/external_frozen_v1_expanded100/` | core 80 加20条 normal_finance 的 frozen stress 报表。 | 报告 benign financial speech 的 false-positive 压力。 |
+| `evaluation/reports/baseline_route_equivalence_latency/` | baseline 双路由等价性与 browser 5 秒 chunk 延迟原始结果。 | 系统级实时可行性证据；结果目录被 Git 忽略。 |
 
 ### Window/Step 全量测试摘要
 
@@ -227,5 +233,7 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 - 写动态评估：先看 `evaluation/generate_dynamic_predictions.py`、`evaluation/dynamic_metrics.py`、`evaluation/reports/final_baseline_w10_s5/`。
 - 写 window/step 对比：先看 `evaluation/reports/final_baseline_w5_s2p5/`、`evaluation/reports/final_baseline_w10_s5/`、`evaluation/reports/final_baseline_w20_s10/`，对应 prediction timeline 在 `evaluation/predictions/` 下同名目录。
 - 写 learned fusion：先看 `evaluation/calibrated_late_fusion.py`、`evaluation/test_calibrated_late_fusion.py`、`evaluation/reports/final_learned_late_fusion_w10_s5_sample_cv/`。
+- 写系统级实时验证：先看 `evaluation/README_baseline_route_equivalence_latency.md`、`evaluation/baseline_route_equivalence_latency.py` 和 `evaluation/figures/route_equivalence_browser_latency.pdf`。
+- 写 ablation 与 window/step 答辩图：使用 `evaluation/generate_ablation_window_tradeoff_figure.py`，输出位于 `evaluation/figures/ablation_window_tradeoff.{pdf,png}`。
 - 写数据集：先看 `test_samples/metadata_final.csv`、`test_samples/audio_final/`、`evaluation/chinese-bert/External Evaluation Sets/`。
 - 写局限：重点讨论 audio branch 的辅助性质、fixed fusion/smoothing 的 failure mode、controlled benchmark 与 external generalization 的区别。

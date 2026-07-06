@@ -33,6 +33,27 @@ class CalibratedLateFusionFeatureTests(unittest.TestCase):
         score = clf.probability_to_score(probability=0.6099, decision_threshold=0.61, alert_threshold_score=70.0)
         self.assertLess(round(score, 2), 70.0)
 
+    def test_frozen_artifact_rejects_feature_contract_mismatch(self) -> None:
+        artifact = {
+            "model": object(),
+            "model_name": "test",
+            "feature_names": ["wrong_feature"],
+            "decision_threshold_probability": 0.61,
+            "alert_threshold_score": 70.0,
+        }
+        with self.assertRaisesRegex(ValueError, "feature contract"):
+            clf.validate_frozen_artifact(artifact)
+
+    def test_frozen_artifact_accepts_saved_contract(self) -> None:
+        artifact = {
+            "model": object(),
+            "model_name": "test",
+            "feature_names": list(clf.FEATURE_NAMES),
+            "decision_threshold_probability": 0.61,
+            "alert_threshold_score": 70.0,
+        }
+        self.assertIs(clf.validate_frozen_artifact(artifact), artifact)
+
     def test_balanced_folds_are_deterministic(self) -> None:
         records = []
         for case_type, prefix in [
