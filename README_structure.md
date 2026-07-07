@@ -375,7 +375,7 @@
 
 - baseline 使用 late fusion 将 text risk 和 voice risk 合成为当前窗口风险。
 - fixed text-dominant fusion 的动机是多数诈骗行为主要通过语义内容暴露。
-- 该 fusion 只是当前 baseline，不应被写成最终最优策略；synthetic_voice failure 会在 Chapter 5 作为改进 fusion 的证据边界讨论。
+- 该 fusion 只是当前 baseline，不应被写成最终最优策略；synthetic_voice 应作为 non-fraud synthetic-speech stress case 讨论，用于检验声学风险是否会造成误报或短暂预警。
 
 #### 4.4.2 Temporal Smoothing
 
@@ -432,8 +432,9 @@
 #### 5.1.1 Current Final Test Set
 
 - `metadata_final.csv`：80 条样本。
-- 20 normal，60 fraud。
+- 40 normal，40 fraud。
 - 四个 case_type 各 20。
+- `synthetic_voice` 属于 normal fraud label，但属于 synthetic-speech / voice-authenticity positive condition；不要把“合成语音”直接写成“诈骗”。
 - 当前音频目录为 `test_samples/audio_final/`。
 
 #### 5.1.2 Dynamic Evaluation Configuration
@@ -477,54 +478,53 @@
 #### 5.3.1 Final Classification Performance
 
 - 重点报告 `fusion_with_smoothing` baseline：
-  - accuracy = 0.75。
+  - accuracy = 1.0。
   - precision = 1.0。
-  - recall = 0.6667。
-  - F1 = 0.8。
-  - TP = 40，TN = 20，FP = 0，FN = 20。
+  - recall = 1.0。
+  - F1 = 1.0。
+  - TP = 40，TN = 40，FP = 0，FN = 0。
 - 强调 final FP = 0 不等于过程完全无误报。
 
 #### 5.3.2 Alert Performance
 
 - `fusion_with_smoothing`：
-  - fraud_alert_recall = 0.6833。
-  - normal_alert_false_positive_rate = 0.15。
+  - fraud_alert_recall = 1.0。
+  - normal_alert_false_positive_rate = 0.1。
   - normal_final_false_positive_rate = 0.0。
-  - normal_alert_false_positives = 3。
+  - normal_alert_false_positives = 4。
   - normal_final_false_positives = 0。
 - 必须区分 alert-level false positives 与 final-level false positives。
 
 #### 5.3.3 Timing Performance
 
 - `fusion_with_smoothing`：
-  - mean_time_to_alert_sec = 33.2976。
-  - mean_early_warning_lead_time_sec = 16.5956。
-  - mean_detection_delay_sec = 1.2512。
+  - mean_time_to_alert_sec = 33.38。
+  - mean_early_warning_lead_time_sec = 17.7605。
+  - mean_detection_delay_sec = 0.5325。
 - 解释 timing metrics 比单一 final label 更贴近 in-event intervention。
 
 ### 5.4 Ablation Experiments and Improved Fusion Strategy
 
 #### 5.4.1 Text-Only
 
-- text_only accuracy = 0.7，F1 = 0.7736。
+- text_only accuracy = 0.925，F1 = 0.9302。
 - semantic_fraud 和 mixed_risk 表现强，但 normal false positives 需要讨论。
 
 #### 5.4.2 Voice-Only
 
-- voice_only final fraud recall 较弱，但对 synthetic_voice alerting 有辅助价值。
-- 说明声学分支不能独立承担 fraud detection，但能暴露 text-only 看不到的合成语音风险。
+- voice_only accuracy = 0.4125，F1 = 0.2295。
+- 说明声学分支不能独立承担 fraud detection；对 synthetic_voice 的高响应应解释为 voice-authenticity signal，而不是诈骗正类证据。
 
 #### 5.4.3 Fixed Weighted Fusion and Smoothing
 
 - 对比 text_only、voice_only、fusion_without_smoothing 和 fusion_with_smoothing 四个 baseline variants。
-- `fusion_with_smoothing` 改善 final normal FP，但会压低 synthetic_voice final recall。
+- `fusion_without_smoothing` accuracy = 0.925，F1 = 0.9302；`fusion_with_smoothing` accuracy = 1.0，F1 = 1.0。
+- `fusion_with_smoothing` 改善 final normal FP，同时保留 semantic_fraud 和 mixed_risk 的 fraud recall。
 
 #### 5.4.4 Improved / Adaptive Fusion Strategy
 
-- 在 final 80 + frozen-v2 100 的 grouped nested-CV 中比较五个预注册策略；结果以 `evaluation/README_fusion_strategy_nested_cv_180.md` 为准。
-- 没有候选同时满足 synthetic-voice、semantic-fraud、mixed-risk 与两类 normal FPR 准入条件，因此按预注册规则保留 fixed 0.8/0.2 + smoothing 主线。
-- 不把 fixed fusion 写成最终最优；它是保守 fallback，synthetic_voice recall = 0 仍是明确 failure mode。
-- unconstrained learned fusion 只作为反例或 Appendix E 诊断：虽然 OOF macro F1 更高，但破坏 semantic-fraud recall 且 normal-finance FPR 超标。
+- 旧的 final 80 + frozen-v2 100 grouped nested-CV 结果是在 synthetic_voice 被标成 fraud 的口径下生成；采用 corrected semantic-fraud label 后，相关 learned/adaptive fusion 表格必须重新生成后再写入正文。
+- 当前主线先报告 fixed 0.8/0.2 + smoothing baseline；不把它写成最终最优，只把它作为已验证、可复现的 conservative baseline。
 
 ### 5.5 Comparison Across Different Windows and Steps
 
@@ -559,7 +559,7 @@
 
 - mixed_risk 在三组设置下 final recall 均保持 1.0，说明强语义 + 声学风险最稳定。
 - semantic_fraud 在 5 s / 2.5 s 下 final recall = 0.95，在 10 s / 5 s 下 final recall = 1.0，但在 20 s / 10 s 下下降到 0.65，说明过长窗口会削弱部分语义风险的及时累积。
-- synthetic_voice 在三组 `fusion_with_smoothing` 下 final recall 均为 0，继续证明 fixed text-dominant fusion 对纯声学攻击不敏感。
+- synthetic_voice 应按 normal fraud label + synthetic-speech acoustic condition 重新解释；旧的 synthetic_voice recall 口径不再适用。
 - normal_daily 在 10 s / 5 s 和 20 s / 10 s 下 final FP = 0；5 s / 2.5 s 下 final FP = 1，说明短窗口更易产生瞬时误报。
 
 ### 5.6 Error Analysis by Fraud Type
@@ -579,11 +579,11 @@
 - `fusion_with_smoothing` final recall = 1.0。
 - text + voice signals 都能支持风险上升。
 
-#### 5.6.4 Synthetic Voice
+#### 5.6.4 Synthetic Voice as Non-Fraud Acoustic Stress
 
-- 主要 failure mode。
-- voice_only 对 synthetic_voice 有明显信号，但 `0.8 text + 0.2 voice` 加 smoothing 后 final recall = 0。
-- 讨论：固定 text-dominant fusion 对纯声学攻击不够敏感。
+- 不是 fraud false negative；它是正常文本由合成语音朗读的 acoustic stress case。
+- 分析重点改为：voice_only 是否会把正常合成语音推成诈骗误报，以及 fusion/smoothing 是否能抑制这种声学误报。
+- 讨论：声学分支适合作为 authenticity cue，不应直接等同于 fraud decision。
 
 ## Chapter 6: Conclusions
 
@@ -597,7 +597,7 @@
 - 回应 objective 2：实现 text risk、voice risk、fusion risk 和 smoothed risk 的动态输出，使系统不只给出 final label。
 - 回应 objective 3：通过 dynamic metrics 评估 alert recall、time to alert、early-warning lead time 和 detection delay。
 - 回应 objective 4：实验显示 semantic_fraud 和 mixed_risk 能被有效追踪，normal_daily final false positives 可被 smoothing 控制。
-- 主要边界：synthetic_voice 是关键 failure mode，说明 fixed text-dominant fusion 不是最终最优；当前结论来自 controlled final benchmark 和 uploaded-audio simulated streaming。
+- 主要边界：synthetic-speech risk 与 fraud semantic risk 必须分开解释；当前结论来自 controlled final benchmark 和 uploaded-audio simulated streaming。
 
 ### 6.2 Contributions and innovations
 

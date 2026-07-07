@@ -119,6 +119,7 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 | --- | --- | --- | --- |
 | `evaluation/generate_dynamic_predictions.py` | `evaluation/` | 从 `test_samples/metadata_final.csv` 或指定 metadata 读取当前测试样本，调用真实 `/api/stream_audio_analysis` 生成 dynamic timeline，并写入 `evaluation/predictions/<run_name>/dynamic_predictions.json`。 | 论文动态系统评估的预测生成入口。 |
 | `evaluation/dynamic_metrics.py` | `evaluation/` | 从 prediction JSON/JSONL 计算 final metrics、alert metrics、lead time、detection delay、ablation summary、case-type summary、window summary。 | 论文表格和结果分析的主评估入口。 |
+| `evaluation/rerun_corrected_label_ablation.py` | `evaluation/` | 从 `test_samples/audio_all/` 构建 180 条 corrected-label metadata，调用真实 `/api/stream_audio_analysis` 生成 dynamic timeline，并产出 ablation、case-type breakdown、final/alert/timing metrics 和 0.50-1.00 fusion text-weight sweep。 | 答辩 PPT 数据复现实验入口；SV 按 non-fraud semantic label 处理，fixed fusion 作为主方法。 |
 | `evaluation/calibrated_late_fusion.py` | `evaluation/` | 从缓存 baseline timeline 训练/应用 calibrated learned late-fusion 层，输出 `learned_late_fusion_score`。只使用当前和过去窗口的数值特征，避免 metadata/keyword leakage。 | 仅作为 offline learned-fusion diagnostic；180 条 nested-CV 比较未达到主方法准入条件。 |
 | `evaluation/test_calibrated_late_fusion.py` | `evaluation/` | learned late fusion 的 feature contract 测试。 | 写避免 leakage 的实现保障时可引用。 |
 | `evaluation/compare_fusion_strategies_nested_cv.py` | `evaluation/` | 在 final 80 + frozen-v2 100 上执行 grouped nested CV，比较五个预注册 fusion 策略并应用五项准入条件。 | 当前 fusion 主线判断的正式比较入口。 |

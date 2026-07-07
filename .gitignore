@@ -222,3 +222,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+evaluation/compare_fusion_strategies_bottleneck_fix.py
+evaluation/README_fusion_strategy_bottleneck_fix.md
+.gitignore
+evaluation/test_compare_fusion_strategies_bottleneck_fix.py

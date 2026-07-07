@@ -319,8 +319,10 @@ def rescore_record(
 
     for point in get_timeline(output):
         raw_text_score = point.get("raw_text_score", point.get("original_text_score", point.get("text_score", 0.0)))
+        context_text_score = point.get("context_text_score", raw_text_score)
         scoring = score_window(
             raw_text_score=raw_text_score,
+            context_text_score=context_text_score,
             voice_score=point.get("voice_score", 0.0),
             text=str(point.get("text") or ""),
             state=state,
