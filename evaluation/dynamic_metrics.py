@@ -252,6 +252,8 @@ def score_key_variants(records: Sequence[Dict[str, Any]]) -> List[Tuple[str, str
     ]
     if has_timeline_score(records, "learned_late_fusion_score"):
         variants.append(("learned_late_fusion", "learned_late_fusion_score"))
+    if has_timeline_score(records, "causal_late_fusion_v2_score"):
+        variants.append(("causal_learned_late_fusion_v2", "causal_late_fusion_v2_score"))
     return variants
 
 

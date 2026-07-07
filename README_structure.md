@@ -521,9 +521,10 @@
 
 #### 5.4.4 Improved / Adaptive Fusion Strategy
 
-- fixed 0.8/0.2 fusion 只是当前 baseline，不写成最终最优。
-- 后续改进 fusion strategy 在此节报告；命名暂用 improved/adaptive fusion，等实验完成后再固定具体算法。
-- learned late fusion 只有在证据充分时才进入正文；否则放 Appendix 或 caveat。
+- 在 final 80 + frozen-v2 100 的 grouped nested-CV 中比较五个预注册策略；结果以 `evaluation/README_fusion_strategy_nested_cv_180.md` 为准。
+- 没有候选同时满足 synthetic-voice、semantic-fraud、mixed-risk 与两类 normal FPR 准入条件，因此按预注册规则保留 fixed 0.8/0.2 + smoothing 主线。
+- 不把 fixed fusion 写成最终最优；它是保守 fallback，synthetic_voice recall = 0 仍是明确 failure mode。
+- unconstrained learned fusion 只作为反例或 Appendix E 诊断：虽然 OOF macro F1 更高，但破坏 semantic-fraud recall 且 normal-finance FPR 超标。
 
 ### 5.5 Comparison Across Different Windows and Steps
 

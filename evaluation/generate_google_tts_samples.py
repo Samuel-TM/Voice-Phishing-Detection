@@ -17,6 +17,7 @@ DEFAULT_AUDIO_DIR = PROJECT_ROOT / "test_samples/audio_final"
 PROJECT_CACHE_DIR = PROJECT_ROOT / ".cache/google_tts"
 ACTION_MARKER = "【ACTION_START】"
 DEFAULT_CASE_TYPES = ("mixed_risk",)
+SUPPORTED_CASE_TYPES = ("mixed_risk", "synthetic_voice")
 DEFAULT_SAMPLE_IDS: tuple[str, ...] = ()
 
 
@@ -172,7 +173,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--case-type",
         action="append",
-        choices=DEFAULT_CASE_TYPES,
+        choices=SUPPORTED_CASE_TYPES,
         help="Allowed case_type. Defaults to mixed_risk.",
     )
     parser.add_argument(

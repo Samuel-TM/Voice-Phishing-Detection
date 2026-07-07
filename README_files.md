@@ -119,8 +119,11 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 | --- | --- | --- | --- |
 | `evaluation/generate_dynamic_predictions.py` | `evaluation/` | 从 `test_samples/metadata_final.csv` 或指定 metadata 读取当前测试样本，调用真实 `/api/stream_audio_analysis` 生成 dynamic timeline，并写入 `evaluation/predictions/<run_name>/dynamic_predictions.json`。 | 论文动态系统评估的预测生成入口。 |
 | `evaluation/dynamic_metrics.py` | `evaluation/` | 从 prediction JSON/JSONL 计算 final metrics、alert metrics、lead time、detection delay、ablation summary、case-type summary、window summary。 | 论文表格和结果分析的主评估入口。 |
-| `evaluation/calibrated_late_fusion.py` | `evaluation/` | 从缓存 baseline timeline 训练/应用 calibrated learned late-fusion 层，输出 `learned_late_fusion_score`。只使用当前和过去窗口的数值特征，避免 metadata/keyword leakage。 | 可写为 offline learned fusion evaluation variant，用来修正固定 `0.8/0.2` fusion 的 failure mode；不要写成已证明 cross-dataset generalization。 |
+| `evaluation/calibrated_late_fusion.py` | `evaluation/` | 从缓存 baseline timeline 训练/应用 calibrated learned late-fusion 层，输出 `learned_late_fusion_score`。只使用当前和过去窗口的数值特征，避免 metadata/keyword leakage。 | 仅作为 offline learned-fusion diagnostic；180 条 nested-CV 比较未达到主方法准入条件。 |
 | `evaluation/test_calibrated_late_fusion.py` | `evaluation/` | learned late fusion 的 feature contract 测试。 | 写避免 leakage 的实现保障时可引用。 |
+| `evaluation/compare_fusion_strategies_nested_cv.py` | `evaluation/` | 在 final 80 + frozen-v2 100 上执行 grouped nested CV，比较五个预注册 fusion 策略并应用五项准入条件。 | 当前 fusion 主线判断的正式比较入口。 |
+| `evaluation/test_compare_fusion_strategies_nested_cv.py` | `evaluation/` | 检查 paired-script grouping、causal prefix features、monotonic text preservation 和准入边界。 | 证明比较流程的防泄漏与约束实现。 |
+| `evaluation/README_fusion_strategy_nested_cv_180.md` | `evaluation/` | 汇总 180 条 controlled pool 的 OOF 结果、阈值敏感性和主线结论。 | Chapter 5.4 与 Appendix E 的优先证据索引。 |
 | `evaluation/external_frozen_v1.py` | `evaluation/` | 固化100条 external stress 样本、执行重叠审计并拆分 core 80 prediction。 | 复现 frozen external evaluation 时使用。 |
 | `evaluation/external_frozen_v1_manifest.json` | `evaluation/` | external frozen v1 的样本、metadata/model 哈希和 freeze rules。 | 证明样本与模型在测试前已冻结。 |
 | `evaluation/README_external_frozen_v1.md` | `evaluation/` | core 80 与 expanded 100 的结果摘要、边界和复现命令。 | Chapter 5 external stress evidence 主索引。 |
@@ -145,8 +148,9 @@ evaluation/predictions/final_baseline_w20_s10/dynamic_predictions.json
 | `evaluation/predictions/final_baseline_w20_s10/` | final controlled set 的 20 s window / 10 s step prediction timeline。 | Chapter 5.5 长窗口 sensitivity 证据；更平滑但召回和 lead time 下降。 |
 | `evaluation/reports/final_baseline_w20_s10/` | 20 s / 10 s 的 dynamic metrics 报表。 | 可取 window/step comparison、case type、ablation、window summary。 |
 | `evaluation/predictions/final_learned_late_fusion_w10_s5/` | learned late fusion 变体 prediction。 | offline variant 证据。 |
-| `evaluation/reports/final_learned_late_fusion_w10_s5/` | learned late fusion final-fit 报表。 | 可作为 controlled benchmark improvement，但需谨慎表述。 |
+| `evaluation/reports/final_learned_late_fusion_w10_s5/` | learned late fusion final-fit 报表。 | 仅作历史诊断；不能覆盖 180 条 nested-CV 的否定性结论。 |
 | `evaluation/reports/final_learned_late_fusion_w10_s5_sample_cv/` | learned late fusion sample-level CV 报表。 | 用于 OOF diagnostics 和过拟合风险讨论。 |
+| `evaluation/reports/fusion_strategy_nested_cv_180/` | 五种预注册 fusion 策略的 grouped nested-CV 汇总与完整报告。 | 主线策略选择的机器可读证据；当前无候选通过全部准入条件。 |
 | `evaluation/reports/external_frozen_v1_core80/` | 四类各20条的 frozen matched stress 报表。 | 与 final benchmark 做 case-type 对照；结果显示 learned gain 未稳定迁移。 |
 | `evaluation/reports/external_frozen_v1_expanded100/` | core 80 加20条 normal_finance 的 frozen stress 报表。 | 报告 benign financial speech 的 false-positive 压力。 |
 | `evaluation/reports/baseline_route_equivalence_latency/` | baseline 双路由等价性与 browser 5 秒 chunk 延迟原始结果。 | 系统级实时可行性证据；结果目录被 Git 忽略。 |

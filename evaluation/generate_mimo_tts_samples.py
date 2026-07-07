@@ -24,6 +24,7 @@ MIMO_BASE_URL = "https://token-plan-sgp.xiaomimimo.com/v1"
 MIMO_MODEL = "mimo-v2.5-tts-voicedesign"
 ACTION_MARKER = "【ACTION_START】"
 DEFAULT_CASE_TYPES = ("semantic_fraud",)
+SUPPORTED_CASE_TYPES = ("semantic_fraud", "normal_daily")
 FINAL_SAMPLE_GROUPS = (
     ("normal_daily", "ND_long"),
     ("semantic_fraud", "SF_long"),
@@ -142,7 +143,7 @@ def filter_samples(
     selected: List[TtsSample] = []
     normalized_ids = {normalize_sample_id(item) for item in sample_ids}
     for sample in samples:
-        number_match = re.fullmatch(r"[A-Za-z]+(?:_[A-Za-z]+)*_(\d+)", sample.sample_id)
+        number_match = re.fullmatch(r"[A-Za-z0-9]+(?:_[A-Za-z0-9]+)*_(\d+)", sample.sample_id)
         sample_number = int(number_match.group(1)) if number_match else None
         if normalized_ids and sample.sample_id not in normalized_ids:
             continue
@@ -219,10 +220,7 @@ def make_metadata_row(sample: TtsSample, audio_path: Path, duration: str) -> Dic
     source = "mimo_tts_voicedesign"
     source_wav = MIMO_MODEL
     suffix = audio_path.suffix.lower()
-    if sample.case_type == "normal_daily":
-        source = "real_recording"
-        source_wav = audio_path.name
-    elif suffix == ".mp3":
+    if suffix == ".mp3":
         source = "google_tts"
         source_wav = "gTTS zh-CN"
 
@@ -369,8 +367,10 @@ def generate_samples(args: argparse.Namespace) -> Dict[str, Any]:
         duration = wav_duration_seconds(output_path)
         generated_rows.append(make_metadata_row(sample, output_path, duration))
 
-    final_rows = build_final_metadata_rows(samples, args.source_metadata, args.audio_dir)
-    write_metadata(args.metadata, final_rows)
+    final_rows: List[Dict[str, str]] = []
+    if not args.skip_metadata:
+        final_rows = build_final_metadata_rows(samples, args.source_metadata, args.audio_dir)
+        write_metadata(args.metadata, final_rows)
     return {"generated_rows": generated_rows, "metadata_rows": final_rows}
 
 
@@ -386,7 +386,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--case-type",
         action="append",
-        choices=DEFAULT_CASE_TYPES,
+        choices=SUPPORTED_CASE_TYPES,
         help="Generate one case_type. Defaults to semantic_fraud.",
     )
     parser.add_argument("--min-number", type=int, help="Generate sample IDs with numeric suffix >= this value.")
@@ -394,6 +394,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--metadata-only", action="store_true", help="Update metadata for existing generated audio only.")
+    parser.add_argument(
+        "--skip-metadata",
+        action="store_true",
+        help="Generate selected audio without rebuilding metadata_final.csv; use for isolated external sets.",
+    )
     parser.add_argument(
         "--optimize-text-preview",
         action="store_true",
