@@ -13,6 +13,7 @@ import json
 import os
 import subprocess
 import sys
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Sequence
@@ -23,6 +24,7 @@ if PROJECT_ROOT.as_posix() not in sys.path:
     sys.path.insert(0, PROJECT_ROOT.as_posix())
 
 from evaluation import dynamic_metrics
+from evaluation import causal_late_fusion_v2
 
 
 GENERATE_PREDICTIONS = PROJECT_ROOT / "evaluation" / "generate_dynamic_predictions.py"
@@ -33,6 +35,7 @@ EXTERNAL_V2_METADATA = PROJECT_ROOT / "test_samples" / "metadata_external_frozen
 AUDIO_ALL_DIR = PROJECT_ROOT / "test_samples" / "audio_all"
 ALL180_METADATA = PROJECT_ROOT / "test_samples" / "metadata_all_corrected.csv"
 DEFAULT_FUSION_TEXT_WEIGHTS = "0.50,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1.00"
+LEARNED_OOF_RUN_NAME = "defense_all180_causal_learned_oof_w10_s5"
 
 CASE_FRAUD_LABELS = {
     "normal_daily": "normal",
@@ -403,12 +406,211 @@ def run_predictions(config: DatasetConfig, args: argparse.Namespace) -> dict[str
     return {"force_rerun_marked_records": touched, "prediction_path": prediction_path.relative_to(PROJECT_ROOT).as_posix()}
 
 
-def run_metrics_for_prediction(prediction_path: Path, report_name: str, args: argparse.Namespace) -> dict[str, Any]:
+def learned_oof_prediction_path_for(config: DatasetConfig) -> Path:
+    return PREDICTION_ROOT / LEARNED_OOF_RUN_NAME / "dynamic_predictions.json"
+
+
+def learned_oof_report_path_for(config: DatasetConfig) -> Path:
+    return PREDICTION_ROOT / LEARNED_OOF_RUN_NAME / "nested_oof_report.json"
+
+
+def metadata_group_id(row: dict[str, str], sample_id: str) -> str:
+    origin = str(row.get("origin_metadata") or "unknown_origin")
+    script_id = str(row.get("script_id") or "").strip()
+    if script_id:
+        return f"{origin}:script:{script_id}"
+    return f"{origin}:sample:{sample_id}"
+
+
+def grouped_metadata_folds(
+    records: Sequence[dict[str, Any]],
+    metadata: dict[str, dict[str, str]],
+    n_splits: int,
+) -> list[list[int]]:
+    """Build sample-level folds and keep paired script variants together."""
+    groups: dict[str, list[int]] = defaultdict(list)
+    for index, record in enumerate(records):
+        sample_id = str(record.get("sample_id") or "")
+        row = metadata.get(sample_id, {})
+        groups[metadata_group_id(row, sample_id)].append(index)
+
+    buckets: dict[tuple[tuple[str, str], ...], list[tuple[str, list[int]]]] = defaultdict(list)
+    for group_id, indices in groups.items():
+        signature = tuple(sorted(
+            (
+                str(records[index].get("case_type") or "unknown"),
+                str(records[index].get("label", records[index].get("is_fraud", 0))),
+            )
+            for index in indices
+        ))
+        buckets[signature].append((group_id, indices))
+
+    folds: list[list[int]] = [[] for _ in range(n_splits)]
+    for signature in sorted(buckets, key=str):
+        for offset, (group_id, indices) in enumerate(sorted(buckets[signature], key=lambda item: item[0])):
+            folds[offset % n_splits].extend(indices)
+    return [sorted(fold) for fold in folds]
+
+
+def subset_records(records: Sequence[dict[str, Any]], indices: Iterable[int]) -> list[dict[str, Any]]:
+    return [records[index] for index in indices]
+
+
+def select_learned_candidate(
+    train_records: Sequence[dict[str, Any]],
+    inner_splits: int,
+    random_state: int,
+) -> dict[str, Any]:
+    selected: dict[str, Any] | None = None
+    candidate_reports: list[dict[str, Any]] = []
+    for candidate in causal_late_fusion_v2.candidates(random_state):
+        series = causal_late_fusion_v2.oof_probability_series(candidate, train_records, inner_splits)
+        threshold, summary = causal_late_fusion_v2.select_threshold(train_records, series)
+        score = (causal_late_fusion_v2.threshold_score(summary), -candidate.preference_rank)
+        candidate_report = {
+            "model_name": candidate.name,
+            "threshold_probability": round(float(threshold), 8),
+            "inner_oof_summary": summary,
+        }
+        candidate_reports.append(candidate_report)
+        payload = {
+            "candidate": candidate,
+            "threshold": threshold,
+            "summary": summary,
+            "score": score,
+        }
+        if selected is None or payload["score"] > selected["score"]:
+            selected = payload
+    if selected is None:
+        raise RuntimeError("No learned fusion candidate selected.")
+    selected["candidate_reports"] = candidate_reports
+    return selected
+
+
+def build_learned_oof_predictions(
+    config: DatasetConfig,
+    prediction_path: Path,
+    args: argparse.Namespace,
+) -> dict[str, Any]:
+    payload, records = load_prediction_records(prediction_path)
+    metadata = metadata_by_sample_id(config.metadata)
+    if len(records) != config.expected_records:
+        raise ValueError(f"Expected {config.expected_records} records for learned OOF, found {len(records)}")
+    for record in records:
+        if not record.get("timeline"):
+            raise ValueError(f"Missing timeline for learned OOF: {record.get('sample_id')}")
+
+    outer_splits = args.learned_outer_splits
+    inner_splits = args.learned_inner_splits
+    folds = grouped_metadata_folds(records, metadata, outer_splits)
+    all_indices = set(range(len(records)))
+    oof_records: list[dict[str, Any] | None] = [None for _ in records]
+    fold_reports: list[dict[str, Any]] = []
+
+    causal_late_fusion_v2.assert_feature_contract()
+    for outer_fold, test_indices in enumerate(folds, start=1):
+        train_indices = sorted(all_indices - set(test_indices))
+        train_records = subset_records(records, train_indices)
+        test_records = subset_records(records, test_indices)
+        selected = select_learned_candidate(
+            train_records,
+            inner_splits=inner_splits,
+            random_state=args.learned_random_state + outer_fold * 100,
+        )
+        candidate = selected["candidate"]
+        model = causal_late_fusion_v2.fit_model(
+            candidate,
+            train_records,
+            calibration_splits=min(3, max(2, inner_splits - 1)),
+        )
+        test_series = causal_late_fusion_v2.predict_probability_series(model, test_records)
+        annotated = causal_late_fusion_v2.annotate(
+            test_records,
+            test_series,
+            selected["threshold"],
+            f"nested_oof_{candidate.name}",
+        )
+        for record_index, annotated_record in zip(test_indices, annotated):
+            annotated_record["causal_late_fusion_v2_cv_protocol"] = (
+                f"{outer_splits}-fold outer / {inner_splits}-fold inner grouped OOF on corrected 180"
+            )
+            annotated_record["causal_late_fusion_v2_outer_fold"] = outer_fold
+            oof_records[record_index] = annotated_record
+        fold_reports.append({
+            "outer_fold": outer_fold,
+            "train_samples": len(train_records),
+            "test_samples": len(test_records),
+            "test_case_counts": {
+                case_type: sum(1 for record in test_records if str(record.get("case_type") or "") == case_type)
+                for case_type in sorted({str(record.get("case_type") or "") for record in test_records})
+            },
+            "selected_model": candidate.name,
+            "decision_threshold_probability": round(float(selected["threshold"]), 8),
+            "inner_selected_summary": selected["summary"],
+            "candidate_reports": selected["candidate_reports"],
+        })
+
+    final_records = [record for record in oof_records if record is not None]
+    if len(final_records) != len(records):
+        raise RuntimeError("Incomplete learned OOF predictions.")
+
+    output_path = learned_oof_prediction_path_for(config)
+    report_path = learned_oof_report_path_for(config)
+    write_prediction_payload(output_path, payload, final_records)
+
+    learned_rows = [
+        dynamic_metrics.evaluate_record(record, causal_late_fusion_v2.SCORE_KEY, args.alert_threshold)
+        for record in final_records
+    ]
+    learned_summary = dynamic_metrics.summarize_dynamic_metrics(learned_rows)
+    learned_case_summary = {
+        case_type: dynamic_metrics.summarize_dynamic_metrics(
+            [row for row in learned_rows if row["case_type"] == case_type]
+        )
+        for case_type in sorted({row["case_type"] for row in learned_rows})
+    }
+    report = {
+        "mode": "corrected_180_nested_grouped_oof_causal_late_fusion_v2",
+        "input_predictions": prediction_path.relative_to(PROJECT_ROOT).as_posix(),
+        "output_predictions": output_path.relative_to(PROJECT_ROOT).as_posix(),
+        "outer_splits": outer_splits,
+        "inner_splits": inner_splits,
+        "random_state": args.learned_random_state,
+        "feature_contract_version": causal_late_fusion_v2.FEATURE_CONTRACT_VERSION,
+        "feature_names": causal_late_fusion_v2.FEATURE_NAMES,
+        "threshold_selection": "inner grouped OOF within each outer training fold",
+        "final_evaluation": "outer grouped OOF predictions only",
+        "summary": learned_summary,
+        "case_type_summary": learned_case_summary,
+        "fold_reports": fold_reports,
+    }
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    return {
+        "prediction_path": output_path.relative_to(PROJECT_ROOT).as_posix(),
+        "report_path": report_path.relative_to(PROJECT_ROOT).as_posix(),
+        "summary": learned_summary,
+    }
+
+
+def metric_prediction_path_for(config: DatasetConfig, prediction_path: Path, args: argparse.Namespace) -> tuple[Path, dict[str, Any] | None]:
+    if config.name != "defense_all180" or args.skip_learned_fusion_oof:
+        return prediction_path, None
+    learned_result = build_learned_oof_predictions(config, prediction_path, args)
+    return PROJECT_ROOT / learned_result["prediction_path"], learned_result
+
+
+def run_metrics_for_prediction(prediction_path: Path, report_name: str, args: argparse.Namespace, config: DatasetConfig | None = None) -> dict[str, Any]:
+    metric_prediction_path = prediction_path
+    learned_result = None
+    if config is not None:
+        metric_prediction_path, learned_result = metric_prediction_path_for(config, prediction_path, args)
     fusion_text_weights = args.fusion_text_weights or DEFAULT_FUSION_TEXT_WEIGHTS
     smoothing_previous_weights = args.smoothing_previous_weights or str(args.smoothing_previous_weight)
+    output_dir = REPORT_ROOT / report_name
     report = dynamic_metrics.run_evaluation(
-        prediction_path=prediction_path,
-        output_dir=REPORT_ROOT / report_name,
+        prediction_path=metric_prediction_path,
+        output_dir=output_dir,
         alert_threshold=args.alert_threshold,
         thresholds=dynamic_metrics.MetricThresholds(
             final_f1=args.min_final_f1,
@@ -420,13 +622,160 @@ def run_metrics_for_prediction(prediction_path: Path, report_name: str, args: ar
         smoothing_previous_weights=dynamic_metrics.parse_float_list(smoothing_previous_weights),
         sweep_scoring_mode=args.sweep_scoring_mode or "baseline",
     )
+    strategy_comparison_path = build_fusion_strategy_comparison(output_dir)
     return {
-        "report_dir": (REPORT_ROOT / report_name).relative_to(PROJECT_ROOT).as_posix(),
+        "report_dir": output_dir.relative_to(PROJECT_ROOT).as_posix(),
         "ablation_summary": report["ablation_summary"],
-        "case_type_summary": (REPORT_ROOT / report_name / "dynamic_eval_case_type_summary.csv").relative_to(PROJECT_ROOT).as_posix(),
-        "fusion_sweep": (REPORT_ROOT / report_name / "dynamic_eval_fusion_smoothing_sweep.csv").relative_to(PROJECT_ROOT).as_posix(),
-        "fusion_case_type_sweep": (REPORT_ROOT / report_name / "dynamic_eval_fusion_smoothing_case_type_sweep.csv").relative_to(PROJECT_ROOT).as_posix(),
+        "case_type_summary": (output_dir / "dynamic_eval_case_type_summary.csv").relative_to(PROJECT_ROOT).as_posix(),
+        "fusion_sweep": (output_dir / "dynamic_eval_fusion_smoothing_sweep.csv").relative_to(PROJECT_ROOT).as_posix(),
+        "fusion_case_type_sweep": (output_dir / "dynamic_eval_fusion_smoothing_case_type_sweep.csv").relative_to(PROJECT_ROOT).as_posix(),
+        "fusion_strategy_comparison": strategy_comparison_path.relative_to(PROJECT_ROOT).as_posix(),
+        "learned_oof": learned_result,
     }
+
+
+def read_report_csv(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def metric_value(row: dict[str, str], key: str) -> str:
+    value = row.get(key, "")
+    if value is None:
+        return ""
+    return str(value)
+
+
+def comparison_row(
+    row: dict[str, str],
+    strategy: str,
+    comparison_group: str,
+    text_weight: str,
+    voice_weight: str,
+    smoothing: str,
+    validation_protocol: str,
+    defense_role: str,
+    interpretation: str,
+    selected_mainline: bool = False,
+) -> dict[str, str]:
+    fields = [
+        "accuracy",
+        "precision",
+        "recall",
+        "f1",
+        "tp",
+        "tn",
+        "fp",
+        "fn",
+        "fraud_alert_recall",
+        "normal_alert_false_positive_rate",
+        "normal_final_false_positive_rate",
+        "mean_time_to_alert_sec",
+        "mean_early_warning_lead_time_sec",
+        "mean_detection_delay_sec",
+    ]
+    output = {
+        "comparison_group": comparison_group,
+        "strategy": strategy,
+        "text_weight": text_weight,
+        "voice_weight": voice_weight,
+        "smoothing_previous_weight": smoothing,
+        "validation_protocol": validation_protocol,
+        "selected_mainline": "yes" if selected_mainline else "no",
+        "defense_role": defense_role,
+        "interpretation": interpretation,
+    }
+    output.update({field: metric_value(row, field) for field in fields})
+    return output
+
+
+def build_fusion_strategy_comparison(report_dir: Path) -> Path:
+    """Write a slide-ready comparison of the fusion strategies used in the defense."""
+    ablation_rows = read_report_csv(report_dir / "dynamic_eval_ablation_summary.csv")
+    sweep_rows = read_report_csv(report_dir / "dynamic_eval_fusion_smoothing_sweep.csv")
+    by_variant = {row.get("variant", ""): row for row in ablation_rows}
+    by_weight = {row.get("text_weight", ""): row for row in sweep_rows}
+
+    rows: list[dict[str, str]] = []
+    if "text_only" in by_variant:
+        rows.append(comparison_row(
+            by_variant["text_only"],
+            strategy="text_only",
+            comparison_group="single_modality",
+            text_weight="1.00",
+            voice_weight="0.00",
+            smoothing="none",
+            validation_protocol="same corrected 180 cached predictions",
+            defense_role="semantic-risk reference",
+            interpretation="Strong semantic branch, but more final false positives than smoothed fusion.",
+        ))
+    if "voice_only" in by_variant:
+        rows.append(comparison_row(
+            by_variant["voice_only"],
+            strategy="voice_only",
+            comparison_group="single_modality",
+            text_weight="0.00",
+            voice_weight="1.00",
+            smoothing="none",
+            validation_protocol="same corrected 180 cached predictions",
+            defense_role="authenticity cue diagnostic",
+            interpretation="Not a standalone fraud detector; mainly shows the acoustic branch is auxiliary.",
+        ))
+    if "fusion_without_smoothing" in by_variant:
+        rows.append(comparison_row(
+            by_variant["fusion_without_smoothing"],
+            strategy="fixed_8_2_without_smoothing",
+            comparison_group="fixed_fusion",
+            text_weight="0.80",
+            voice_weight="0.20",
+            smoothing="none",
+            validation_protocol="same corrected 180 cached predictions",
+            defense_role="fusion ablation",
+            interpretation="Shows late fusion benefit before temporal stabilization.",
+        ))
+    if "causal_learned_late_fusion_v2" in by_variant:
+        rows.append(comparison_row(
+            by_variant["causal_learned_late_fusion_v2"],
+            strategy="learned_late_fusion_nested_oof",
+            comparison_group="learned_fusion",
+            text_weight="learned",
+            voice_weight="learned",
+            smoothing="learned",
+            validation_protocol="5-fold outer / 4-fold inner grouped OOF on corrected 180",
+            defense_role="diagnostic comparison, not selected mainline",
+            interpretation="Tests whether a learned decision layer should replace the interpretable fixed rule.",
+        ))
+
+    sweep_specs = [
+        ("0.7", "fixed_7_3_with_smoothing", "weight_sensitivity", "More voice-sensitive but loses fraud recall."),
+        ("0.8", "fixed_8_2_with_smoothing", "mainline", "Selected mainline: interpretable text-dominant fusion while preserving an acoustic cue."),
+        ("0.9", "fixed_9_1_with_smoothing", "weight_sensitivity", "Slightly higher recall, but reduces the practical role of the acoustic branch."),
+        ("1.0", "text_only_with_smoothing", "weight_sensitivity", "Upper text-dominant reference; useful but effectively removes multimodal fusion."),
+    ]
+    for weight, strategy, group, interpretation in sweep_specs:
+        row = by_weight.get(weight)
+        if not row:
+            continue
+        rows.append(comparison_row(
+            row,
+            strategy=strategy,
+            comparison_group=group,
+            text_weight=metric_value(row, "text_weight"),
+            voice_weight=metric_value(row, "voice_weight"),
+            smoothing=metric_value(row, "smoothing_previous_weight"),
+            validation_protocol="offline fixed-rule rescore on corrected 180",
+            defense_role="selected main method" if weight == "0.8" else "comparison point",
+            interpretation=interpretation,
+            selected_mainline=(weight == "0.8"),
+        ))
+
+    output_path = report_dir / "dynamic_eval_fusion_strategy_comparison.csv"
+    if rows:
+        fieldnames = list(rows[0].keys())
+        write_csv_rows(output_path, fieldnames, rows)
+    else:
+        write_csv_rows(output_path, ["strategy", "error"], [{"strategy": "", "error": "no comparison rows"}])
+    return output_path
 
 
 def selected_configs(dataset_names: Sequence[str]) -> list[DatasetConfig]:
@@ -480,6 +829,14 @@ def build_arg_parser() -> argparse.ArgumentParser:
         choices=["baseline", "gated_v1", "gated_v2", "gated_v3"],
         help="Optional scoring mode for offline fusion/smoothing sweep.",
     )
+    parser.add_argument(
+        "--skip-learned-fusion-oof",
+        action="store_true",
+        help="Skip corrected-180 nested OOF learned late-fusion comparison.",
+    )
+    parser.add_argument("--learned-outer-splits", type=int, default=5)
+    parser.add_argument("--learned-inner-splits", type=int, default=4)
+    parser.add_argument("--learned-random-state", type=int, default=42)
     return parser
 
 
@@ -505,7 +862,12 @@ def main() -> None:
         dataset_result["prediction_labels"] = sync_prediction_labels(config, dry_run=args.dry_run)
         dataset_result["prediction_ready"] = prediction_ready(config, allow_partial=args.limit is not None)
         if not args.dry_run and not args.skip_metrics and dataset_result["prediction_ready"]["ready"]:
-            dataset_result["metrics"] = run_metrics_for_prediction(prediction_path_for(config), config.report_name, args)
+            dataset_result["metrics"] = run_metrics_for_prediction(
+                prediction_path_for(config),
+                config.report_name,
+                args,
+                config=config,
+            )
             core_view = build_core_prediction_view(config, dry_run=args.dry_run)
             dataset_result["core_view"] = core_view
             if core_view.get("created") and config.core_report_name:
@@ -513,6 +875,7 @@ def main() -> None:
                     core_prediction_path_for(config),
                     config.core_report_name,
                     args,
+                    config=config,
                 )
         elif not args.dry_run and not args.skip_metrics:
             dataset_result["metrics"] = {

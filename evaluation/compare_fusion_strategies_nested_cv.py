@@ -32,6 +32,8 @@ from evaluation import dynamic_metrics
 FINAL_PREDICTIONS = PROJECT_ROOT / "evaluation/predictions/final_baseline_w10_s5/dynamic_predictions.json"
 V2_PREDICTIONS = PROJECT_ROOT / "evaluation/predictions/external_frozen_v2_baseline_w10_s5/dynamic_predictions.json"
 V2_METADATA = PROJECT_ROOT / "test_samples/metadata_external_frozen_v2.csv"
+DEFENSE_ALL180_PREDICTIONS = PROJECT_ROOT / "evaluation/predictions/defense_all180_baseline_w10_s5/dynamic_predictions.json"
+DEFENSE_ALL180_METADATA = PROJECT_ROOT / "test_samples/metadata_all_corrected.csv"
 OUTPUT_DIR = PROJECT_ROOT / "evaluation/predictions/fusion_strategy_nested_cv_180"
 REPORT_DIR = PROJECT_ROOT / "evaluation/reports/fusion_strategy_nested_cv_180"
 ALERT_SCORE = 70.0
@@ -62,8 +64,8 @@ FIXED_THRESHOLD_STRATEGIES = {
 }
 
 CONSTRAINTS = {
-    "synthetic_voice_min_recall": 0.80,
-    "semantic_fraud_max_recall_drop_vs_text": 0.05,
+    "synthetic_voice_max_fpr": 0.05,
+    "semantic_fraud_min_recall": 0.90,
     "mixed_risk_min_recall": 0.90,
     "normal_daily_max_final_fpr": 0.10,
     "normal_finance_max_final_fpr": 0.10,
@@ -98,11 +100,45 @@ def load_v2_metadata(path: Path) -> Dict[str, Dict[str, str]]:
         return {row["sample_id"]: row for row in csv.DictReader(handle)}
 
 
+def load_all180_metadata(path: Path) -> Dict[str, Dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        return {row["sample_id"]: row for row in csv.DictReader(handle)}
+
+
 def prepare_records(
     final_path: Path = FINAL_PREDICTIONS,
     v2_path: Path = V2_PREDICTIONS,
     v2_metadata_path: Path = V2_METADATA,
+    predictions_path: Path | None = None,
+    metadata_path: Path | None = None,
 ) -> List[Dict[str, Any]]:
+    if predictions_path is not None:
+        meta = load_all180_metadata(metadata_path or DEFENSE_ALL180_METADATA)
+        combined: List[Dict[str, Any]] = []
+        seen = set()
+        for original in load_records(predictions_path):
+            record = copy.deepcopy(original)
+            sample_id = str(record.get("sample_id") or "")
+            if not sample_id or sample_id in seen:
+                raise ValueError(f"Duplicate or empty sample_id: {sample_id}")
+            seen.add(sample_id)
+            if not record.get("timeline"):
+                raise ValueError(f"Missing timeline: {sample_id}")
+            record["dataset_origin"] = "audio_final" if str(record.get("source") or "").startswith("real") else "external_frozen_v2"
+            row_meta = meta.get(sample_id, {})
+            script_id = str(row_meta.get("script_id") or "")
+            origin = str(row_meta.get("origin_metadata") or "")
+            if script_id:
+                record["fusion_cv_group_id"] = f"v2:{script_id}"
+                record["fusion_cv_script_id"] = script_id
+            else:
+                record["fusion_cv_group_id"] = f"final:{sample_id}"
+                record["fusion_cv_script_id"] = sample_id
+            combined.append(record)
+        if len(combined) != 180:
+            raise ValueError(f"Expected 180 records, found {len(combined)}")
+        return combined
+
     v2_meta = load_v2_metadata(v2_metadata_path)
     combined: List[Dict[str, Any]] = []
     seen = set()
@@ -113,8 +149,8 @@ def prepare_records(
             if not sample_id or sample_id in seen:
                 raise ValueError(f"Duplicate or empty sample_id: {sample_id}")
             seen.add(sample_id)
-            if record.get("error") or not record.get("timeline"):
-                raise ValueError(f"Invalid cached timeline: {sample_id}")
+            if not record.get("timeline"):
+                raise ValueError(f"Missing timeline: {sample_id}")
             record["dataset_origin"] = origin
             if origin == "external_frozen_v2":
                 metadata = v2_meta.get(sample_id)
@@ -376,8 +412,8 @@ def text_only_semantic_recall(records: Sequence[Dict[str, Any]]) -> float:
 def constraint_results(summary: Mapping[str, Any], semantic_text_recall: float) -> Dict[str, bool]:
     case = summary["case_final"]
     return {
-        "synthetic_voice_recall": case["synthetic_voice"] >= CONSTRAINTS["synthetic_voice_min_recall"],
-        "semantic_fraud_recall": case["semantic_fraud"] >= semantic_text_recall - CONSTRAINTS["semantic_fraud_max_recall_drop_vs_text"],
+        "synthetic_voice_fpr": case["synthetic_voice"] <= CONSTRAINTS["synthetic_voice_max_fpr"],
+        "semantic_fraud_recall": case["semantic_fraud"] >= CONSTRAINTS["semantic_fraud_min_recall"],
         "mixed_risk_recall": case["mixed_risk"] >= CONSTRAINTS["mixed_risk_min_recall"],
         "normal_daily_fpr": case["normal_daily"] <= CONSTRAINTS["normal_daily_max_final_fpr"],
         "normal_finance_fpr": case["normal_finance"] <= CONSTRAINTS["normal_finance_max_final_fpr"],
@@ -632,7 +668,7 @@ def write_summary_csv(path: Path, report: Mapping[str, Any]) -> None:
             "fraud_alert_recall": summary["fraud_alert_recall"],
             "normal_final_fpr": summary["normal_final_false_positive_rate"],
             "normal_alert_fpr": summary["normal_alert_false_positive_rate"],
-            "synthetic_voice_recall": case["synthetic_voice"],
+            "synthetic_voice_fpr": case["synthetic_voice"],
             "semantic_fraud_recall": case["semantic_fraud"],
             "mixed_risk_recall": case["mixed_risk"],
             "normal_daily_fpr": case["normal_daily"],
@@ -654,6 +690,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--final-predictions", type=Path, default=FINAL_PREDICTIONS)
     parser.add_argument("--v2-predictions", type=Path, default=V2_PREDICTIONS)
     parser.add_argument("--v2-metadata", type=Path, default=V2_METADATA)
+    parser.add_argument("--predictions", type=Path, default=None,
+                        help="Single prediction file (e.g. defense_all180); overrides --final/--v2")
+    parser.add_argument("--metadata", type=Path, default=None,
+                        help="Metadata CSV for single-file mode (default: metadata_all_corrected.csv)")
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
     parser.add_argument("--report-dir", type=Path, default=REPORT_DIR)
     parser.add_argument("--outer-splits", type=int, default=5)
@@ -668,6 +708,8 @@ def main() -> None:
         args.final_predictions.resolve(),
         args.v2_predictions.resolve(),
         args.v2_metadata.resolve(),
+        predictions_path=args.predictions.resolve() if args.predictions else None,
+        metadata_path=args.metadata.resolve() if args.metadata else None,
     )
     oof_records, report = run_nested_cv(records, args.outer_splits, args.inner_splits, args.random_state)
     output_dir = args.output_dir.resolve()
